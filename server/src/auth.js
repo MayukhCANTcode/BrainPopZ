@@ -174,3 +174,4 @@ export function requireAuth(req, res, next) {
   req.user = user;
   next();
 }
+

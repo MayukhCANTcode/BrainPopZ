@@ -180,7 +180,7 @@ function App() {
           />
         );
       case 'analytics':
-        return <AnalyticsView />;
+        return <AnalyticsView decks={decksList} />;
       case 'settings':
         return <SettingsView />;
       default:

@@ -3,15 +3,46 @@ import { TrendingUp, Award, Clock, Flame } from 'lucide-react';
 import Card from '../common/Card';
 import Badge from '../common/Badge';
 
-export default function AnalyticsView() {
+export default function AnalyticsView({ decks = [] }) {
   const [period, setPeriod] = useState('month'); // week, month, all
 
-  const subjectMastery = [
-    { name: 'Computer Science & Systems', percentage: 95, color: 'bg-brand-lime' },
-    { name: 'Biology & Cognitive Neuroscience', percentage: 84, color: 'bg-brand-violet' },
-    { name: 'Artificial Intelligence & ML', percentage: 80, color: 'bg-brand-violet-light' },
-    { name: 'Organic Chemistry', percentage: 69, color: 'bg-brand-orange' },
-  ];
+  const subjectMastery = React.useMemo(() => {
+    if (!decks || decks.length === 0) {
+      return [
+        { name: 'Computer Science & Systems', percentage: 95, color: 'bg-brand-lime' },
+        { name: 'Biology & Cognitive Neuroscience', percentage: 84, color: 'bg-brand-violet' },
+        { name: 'Artificial Intelligence & ML', percentage: 80, color: 'bg-brand-violet-light' },
+        { name: 'Organic Chemistry', percentage: 69, color: 'bg-brand-orange' },
+      ];
+    }
+
+    const colorPalette = ['bg-brand-lime', 'bg-brand-violet', 'bg-brand-violet-light', 'bg-brand-orange'];
+    const subjectsMap = {};
+
+    decks.forEach((deck) => {
+      const subject = deck.subject || 'General Study';
+      if (!subjectsMap[subject]) {
+        subjectsMap[subject] = { total: 0, mastered: 0 };
+      }
+      subjectsMap[subject].total += deck.totalCards || deck.cards?.length || 1;
+      subjectsMap[subject].mastered += deck.masteredCards || 0;
+    });
+
+    const list = Object.entries(subjectsMap).map(([name, stats], idx) => ({
+      name,
+      percentage: Math.min(100, Math.round((stats.mastered / (stats.total || 1)) * 100)),
+      color: colorPalette[idx % colorPalette.length],
+    }));
+
+    return list.length > 0
+      ? list
+      : [
+          { name: 'Computer Science & Systems', percentage: 95, color: 'bg-brand-lime' },
+          { name: 'Biology & Cognitive Neuroscience', percentage: 84, color: 'bg-brand-violet' },
+          { name: 'Artificial Intelligence & ML', percentage: 80, color: 'bg-brand-violet-light' },
+          { name: 'Organic Chemistry', percentage: 69, color: 'bg-brand-orange' },
+        ];
+  }, [decks]);
 
   return (
     <div className="space-y-4">
