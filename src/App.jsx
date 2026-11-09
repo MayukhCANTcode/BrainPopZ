@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MainLayout from './components/layout/MainLayout';
+import LoginView from './components/auth/LoginView';
 import DashboardView from './components/views/DashboardView';
 import AIGeneratorView from './components/views/AIGeneratorView';
 import DecksView from './components/views/DecksView';
@@ -9,14 +10,47 @@ import SettingsView from './components/views/SettingsView';
 import StudyModal from './components/dashboard/StudyModal';
 import ShortcutsModal from './components/common/ShortcutsModal';
 import { recentDecks } from './data/mockData';
+import { getCurrentUser, loginWithGoogle, logoutUser } from './services/api';
 
 function App() {
+  const [user, setUser] = useState(null);
+  const [isRestoringSession, setIsRestoringSession] = useState(true);
   const [currentTab, setCurrentTab] = useState('dashboard');
   const [activeStudyDeck, setActiveStudyDeck] = useState(null);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
   const [activeCustomQuiz, setActiveCustomQuiz] = useState(null);
 
-  // Initialize with localStorage if available
+  // Restore authenticated session from HTTP-only cookie on application mount
+  useEffect(() => {
+    let isMounted = true;
+    getCurrentUser()
+      .then((existingUser) => {
+        if (isMounted) {
+          setUser(existingUser);
+          setIsRestoringSession(false);
+        }
+      })
+      .catch(() => {
+        if (isMounted) setIsRestoringSession(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const handleLoginSuccess = async (credential) => {
+    const authenticatedUser = await loginWithGoogle(credential);
+    setUser(authenticatedUser);
+    setCurrentTab('dashboard');
+  };
+
+  const handleLogout = async () => {
+    await logoutUser();
+    setUser(null);
+  };
+
+  // Initialize with localStorage if available (preserved across logins & reloads)
   const [decksList, setDecksList] = useState(() => {
     try {
       const saved = localStorage.getItem('brainpopz_decks');
@@ -161,6 +195,16 @@ function App() {
     }
   };
 
+  // If not authenticated, render the dedicated BrainPopZ Login screen
+  if (!user) {
+    return (
+      <LoginView
+        onLoginSuccess={handleLoginSuccess}
+        isRestoringSession={isRestoringSession}
+      />
+    );
+  }
+
   return (
     <>
       <MainLayout
@@ -169,6 +213,8 @@ function App() {
         onQuickGenerate={() => setCurrentTab('ai-generator')}
         onStudyDeck={handleStudyDeck}
         onOpenShortcuts={() => setIsShortcutsOpen(true)}
+        user={user}
+        onLogout={handleLogout}
       >
         {renderActiveView()}
       </MainLayout>
@@ -178,6 +224,7 @@ function App() {
         <StudyModal
           deck={activeStudyDeck}
           onClose={() => setActiveStudyDeck(null)}
+          onUpdateDeck={handleUpdateDeck}
         />
       )}
 

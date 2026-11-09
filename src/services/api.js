@@ -40,6 +40,7 @@ export async function generateContent({
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify({
         notes,
         mode,
@@ -86,5 +87,68 @@ export async function checkServerHealth() {
     return await res.json();
   } catch {
     return { healthy: false };
+  }
+}
+
+/**
+ * Authenticates with the backend using a Google ID token credential.
+ * Sets a secure HTTP-only cookie on the client.
+ */
+export async function loginWithGoogle(credential) {
+  let res;
+  try {
+    res = await fetch(`${API_BASE_URL}/auth/google`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ credential }),
+    });
+  } catch {
+    throw new APIError('Cannot connect to backend server for authentication.', 0);
+  }
+
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    throw new APIError('Authentication server returned an unparseable response.', res.status);
+  }
+
+  if (!res.ok || !data.success) {
+    throw new APIError(data.message || 'Google sign-in failed.', res.status);
+  }
+
+  return data.user;
+}
+
+/**
+ * Restores the active user session from the HTTP-only cookie.
+ */
+export async function getCurrentUser() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/auth/me`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.authenticated ? data.user : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Logs out the active user session by clearing the HTTP-only cookie.
+ */
+export async function logoutUser() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/auth/logout`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+    return res.ok;
+  } catch {
+    return false;
   }
 }

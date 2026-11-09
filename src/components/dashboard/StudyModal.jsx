@@ -3,10 +3,11 @@ import { X, RotateCw, ChevronRight, ChevronLeft, Award, RotateCcw } from 'lucide
 import Button from '../common/Button';
 import Badge from '../common/Badge';
 
-export default function StudyModal({ deck, onClose }) {
+export default function StudyModal({ deck, onClose, onUpdateDeck }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [cardRatings, setCardRatings] = useState({});
 
   // Use deck's specific cards or default high-yield cards
   const cards = deck?.cards && deck.cards.length > 0
@@ -26,8 +27,9 @@ export default function StudyModal({ deck, onClose }) {
 
   const currentCard = cards[currentIndex] || cards[0];
 
-  const handleNext = useCallback((_rating = 'good') => {
+  const handleNext = useCallback((rating = 'good') => {
     setIsFlipped(false);
+    setCardRatings((prev) => ({ ...prev, [currentIndex]: rating }));
     setCurrentIndex((prev) => {
       if (prev + 1 < cards.length) {
         return prev + 1;
@@ -36,7 +38,24 @@ export default function StudyModal({ deck, onClose }) {
         return prev;
       }
     });
-  }, [cards.length]);
+  }, [cards.length, currentIndex]);
+
+  // Persist updated mastery and study timestamp to deck on completion
+  useEffect(() => {
+    if (isCompleted && onUpdateDeck && deck) {
+      const goodOrEasyCount = Object.values(cardRatings).filter(
+        (r) => r === 'good' || r === 'easy'
+      ).length;
+      const effectiveMastered = Math.max(deck.masteredCards || 0, goodOrEasyCount);
+      const newPercentage = Math.round((effectiveMastered / (cards.length || 1)) * 100);
+      onUpdateDeck({
+        ...deck,
+        lastStudied: 'Just now',
+        masteredCards: effectiveMastered,
+        masteryPercentage: Math.min(100, newPercentage),
+      });
+    }
+  }, [isCompleted, onUpdateDeck, deck, cardRatings, cards.length]);
 
   const handlePrev = useCallback(() => {
     setIsFlipped(false);

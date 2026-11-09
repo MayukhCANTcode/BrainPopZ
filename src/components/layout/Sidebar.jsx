@@ -27,6 +27,8 @@ export default function Sidebar({
   onSelectTab,
   isMobileOpen = false,
   onCloseMobile,
+  user,
+  onLogout,
 }) {
   const handleNav = (id) => {
     onSelectTab(id);
@@ -156,34 +158,41 @@ export default function Sidebar({
 
         {/* Bottom User Profile Section */}
         <div className="p-3 border-t border-surface-border bg-midnight">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-2">
             <button
               onClick={() => handleNav('settings')}
               className="flex items-center gap-2.5 text-left group cursor-pointer focus:outline-none min-w-0"
               title="User Settings"
             >
               <img
-                src={currentUser.avatarUrl}
-                alt={currentUser.name}
-                className="w-7 h-7 rounded-full object-cover border border-surface-border shrink-0"
+                src={user?.picture || currentUser.avatarUrl}
+                alt={user?.name || currentUser.name}
+                className="w-7 h-7 rounded-full object-cover border border-surface-border shrink-0 bg-surface-elevated"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = currentUser.avatarUrl;
+                }}
               />
               <div className="truncate">
                 <p className="text-xs font-medium text-white truncate group-hover:text-brand-violet-light transition-colors">
-                  {currentUser.name}
+                  {user?.name || currentUser.name}
                 </p>
                 <p className="text-[10px] text-gray-400 truncate">
-                  {currentUser.email}
+                  {user?.email || currentUser.email}
                 </p>
               </div>
             </button>
 
-            <button
-              onClick={() => handleNav('settings')}
-              title="Account Settings"
-              className="p-1 text-gray-400 hover:text-white rounded-md transition-colors cursor-pointer shrink-0"
-            >
-              <LogOut className="w-3.5 h-3.5" />
-            </button>
+            {onLogout && (
+              <button
+                onClick={onLogout}
+                title="Sign out of Google"
+                className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-surface-elevated rounded-md transition-colors cursor-pointer shrink-0"
+                aria-label="Sign Out"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
         </div>
       </aside>

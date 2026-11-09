@@ -8,13 +8,14 @@ Built with a minimalist, dark-themed SaaS aesthetic inspired by shadcn/ui, Brain
 
 ## 🚀 Key Features
 
+- **🔐 Google Identity Services Authentication**: Full Google Sign-In authentication flow using Google's official GIS SDK, backend ID token validation via `google-auth-library`, and secure HTTP-only cookies.
 - **⚡ Real Google Gemini AI Synthesis**: Generates high-yield active recall flashcard decks and 4-option diagnostic quizzes directly from unstructured text.
 - **🛡️ Strict Runtime Zod Schema Validation**: Every AI response is validated on the backend against strict schemas before rendering. Zero unvalidated JSON or hallucinations pass to the UI.
 - **🔄 Automatic Model Fallback**: Primary synthesis on `gemini-2.5-flash` with graceful fallback to `gemini-3.5-flash` under model pressure or temporary server load.
 - **🗂️ Persistent Deck Management**: Save, browse, search, and export decks directly to Markdown. Decks are preserved across browser refreshes via `localStorage`.
 - **⏱️ Timed & Diagnostic Quiz Drills**: Take quizzes with an optional 15-second speed timer per question, immediate rationale feedback, dynamic scoring, and a **Retest Incorrect Answers** drill mode.
 - **🃏 3D Flippable Study Session**: Interactive active recall modal with flip transitions, keyboard shortcuts (Space, Arrow keys, 1-3 ratings), and progress tracking.
-- **🔒 Secure Architecture**: Zero API keys exposed to the client. Gemini API key resides solely in the backend environment.
+- **🔒 Secure Architecture**: Zero API keys or secrets exposed to the client. Gemini API key and session secrets reside solely in the backend environment.
 - **📱 Fully Responsive**: Custom Tailwind CSS design system with desktop, tablet, and mobile drawer navigation.
 
 ---
@@ -130,16 +131,27 @@ npm run dev
 
 ## ⚙️ Environment Variables
 
-The backend utilizes `server/.env`. A template is provided in `server/.env.example`:
+### Frontend (`.env`):
+A template is provided in `.env.example`:
+
+| Variable | Description | Default | Required |
+|---|---|---|---|
+| `VITE_GOOGLE_CLIENT_ID` | Google OAuth Client ID for GIS button initialization | - | Yes (in prod) |
+| `VITE_API_URL` | Express backend URL | `http://localhost:3001/api` | No |
+
+### Backend (`server/.env`):
+A template is provided in `server/.env.example`:
 
 | Variable | Description | Default | Required |
 |---|---|---|---|
 | `PORT` | Backend Express listening port | `3001` | No |
 | `GEMINI_API_KEY` | Google Gemini API Authentication Key | - | **Yes** |
+| `GOOGLE_CLIENT_ID` | Client ID for Google ID Token audience verification | - | **Yes** |
+| `SESSION_SECRET` | Cryptographic secret for HMAC-SHA256 session cookie signing | - | **Yes** |
 | `FRONTEND_URL` | Allowed CORS frontend origin | `http://localhost:5173` | No |
 
 > [!IMPORTANT]
-> `server/.env` is strictly listed in `.gitignore` and must **never** be committed to public version control. The client never receives or embeds this key.
+> Both `.env` and `server/.env` are strictly listed in `.gitignore` and are **never** committed to version control. The client never receives backend secrets or session signing keys.
 
 ---
 

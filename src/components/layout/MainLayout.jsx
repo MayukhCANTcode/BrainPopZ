@@ -9,6 +9,8 @@ export default function MainLayout({
   onQuickGenerate,
   onStudyDeck,
   onOpenShortcuts,
+  user,
+  onLogout,
 }) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
@@ -20,6 +22,8 @@ export default function MainLayout({
         onSelectTab={onSelectTab}
         isMobileOpen={isMobileOpen}
         onCloseMobile={() => setIsMobileOpen(false)}
+        user={user}
+        onLogout={onLogout}
       />
 
       {/* Main Content Area */}

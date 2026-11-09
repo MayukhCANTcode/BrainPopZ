@@ -1,6 +1,14 @@
 import { Router } from 'express';
 import { GenerateRequestSchema } from './validators.js';
 import { generateStudyAsset } from './gemini.js';
+import {
+  verifyGoogleIdToken,
+  createSessionToken,
+  verifySessionToken,
+  requireAuth,
+  COOKIE_NAME,
+  getCookieOptions,
+} from './auth.js';
 
 export const apiRouter = Router();
 
@@ -11,11 +19,87 @@ apiRouter.get('/health', (req, res) => {
     service: 'BrainPopZ AI Generation Engine',
     timestamp: new Date().toISOString(),
     hasApiKey: Boolean(process.env.GEMINI_API_KEY),
+    hasGoogleAuth: Boolean(process.env.GOOGLE_CLIENT_ID),
   });
 });
 
-// POST /api/generate endpoint
-apiRouter.post('/generate', async (req, res) => {
+// -------------------------------------------------------------
+// Authentication Endpoints
+// -------------------------------------------------------------
+
+// POST /api/auth/google - Authenticate with verified Google ID token
+apiRouter.post('/auth/google', async (req, res) => {
+  const { credential } = req.body || {};
+
+  if (!credential) {
+    return res.status(400).json({
+      error: 'Bad Request',
+      message: 'Missing Google ID token credential in request body.',
+    });
+  }
+
+  try {
+    const verifiedUser = await verifyGoogleIdToken(credential);
+    const sessionToken = createSessionToken(verifiedUser);
+
+    res.cookie(COOKIE_NAME, sessionToken, getCookieOptions());
+
+    return res.status(200).json({
+      success: true,
+      message: 'Authentication successful',
+      user: verifiedUser,
+    });
+  } catch (err) {
+    console.error('[AUTH] Google auth failed:', err.message);
+    const safeMessage = (err.message || 'Authentication failed').replace(/key=[^&\s]+/gi, 'key=[REDACTED]');
+    return res.status(err.status || 401).json({
+      error: 'Authentication Failed',
+      message: safeMessage,
+    });
+  }
+});
+
+// GET /api/auth/me - Restore active user session from HTTP-only cookie
+apiRouter.get('/auth/me', (req, res) => {
+  const token = req.cookies?.[COOKIE_NAME];
+  if (!token) {
+    return res.status(401).json({
+      authenticated: false,
+      message: 'No active session found.',
+    });
+  }
+
+  const user = verifySessionToken(token);
+  if (!user) {
+    return res.status(401).json({
+      authenticated: false,
+      message: 'Session token has expired or is invalid.',
+    });
+  }
+
+  return res.status(200).json({
+    authenticated: true,
+    user,
+  });
+});
+
+// POST /api/auth/logout - Clear session cookie
+apiRouter.post('/auth/logout', (req, res) => {
+  res.clearCookie(COOKIE_NAME, {
+    ...getCookieOptions(),
+    maxAge: 0,
+  });
+
+  return res.status(200).json({
+    success: true,
+    message: 'Logged out successfully.',
+  });
+});
+
+// -------------------------------------------------------------
+// Protected AI Generation Endpoint
+// -------------------------------------------------------------
+apiRouter.post('/generate', requireAuth, async (req, res) => {
   // 1. Validate incoming request parameters with Zod
   const validation = GenerateRequestSchema.safeParse(req.body);
 

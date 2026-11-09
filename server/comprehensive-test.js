@@ -149,13 +149,23 @@ async function runAudit() {
   // -----------------------------------------------------------------
   console.log('\n--- 3. END-TO-END TESTING ---');
 
+  // Obtain test session cookie for protected endpoints
+  const authLoginRes = await fetch(`${BASE_URL}/api/auth/google`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ credential: 'dev-eval-token:test.student@brainpopz.edu' }),
+  });
+  const setCookie = authLoginRes.headers.get('set-cookie') || '';
+  const testCookie = setCookie.split(';')[0];
+  const authHeaders = { 'Content-Type': 'application/json', Cookie: testCookie };
+
   // 3.1 Live Flashcard generation (5 cards) via Backend Endpoint
   let gen5Success = false;
   let gen5Data = null;
   try {
     const res = await fetch(`${BASE_URL}/api/generate`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: authHeaders,
       body: JSON.stringify({
         notes: 'Mitochondria are double-membraned organelles that produce ATP through oxidative phosphorylation. The inner membrane contains cristae which expand surface area for ATP synthase complexes.',
         mode: 'flashcards',
@@ -177,7 +187,7 @@ async function runAudit() {
   try {
     const res = await fetch(`${BASE_URL}/api/generate`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: authHeaders,
       body: JSON.stringify({
         notes: 'The central dogma of molecular biology describes the two-step flow of genetic information: DNA transcription into messenger RNA (mRNA), and mRNA translation into functional polypeptide proteins by ribosomes with tRNA. RNA polymerase synthesizes RNA in the 5 to 3 prime direction.',
         mode: 'quiz',
@@ -249,7 +259,7 @@ async function runAudit() {
   // 4.1 Empty input
   const emptyRes = await fetch(`${BASE_URL}/api/generate`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: authHeaders,
     body: JSON.stringify({ notes: '', mode: 'flashcards', difficulty: 'adaptive', quantity: 5 }),
   });
   const emptyJson = await emptyRes.json();
@@ -258,7 +268,7 @@ async function runAudit() {
   // 4.2 Very short input (< 3 chars)
   const shortRes = await fetch(`${BASE_URL}/api/generate`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: authHeaders,
     body: JSON.stringify({ notes: 'ab', mode: 'flashcards', difficulty: 'adaptive', quantity: 5 }),
   });
   const shortJson = await shortRes.json();
@@ -268,7 +278,7 @@ async function runAudit() {
   const longNotes = 'A'.repeat(26000);
   const longRes = await fetch(`${BASE_URL}/api/generate`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: authHeaders,
     body: JSON.stringify({ notes: longNotes, mode: 'flashcards', difficulty: 'adaptive', quantity: 5 }),
   });
   const longJson = await longRes.json();
@@ -277,7 +287,7 @@ async function runAudit() {
   // 4.4 Invalid generation mode
   const modeRes = await fetch(`${BASE_URL}/api/generate`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: authHeaders,
     body: JSON.stringify({ notes: 'Valid notes here', mode: 'summary', difficulty: 'adaptive', quantity: 5 }),
   });
   const modeJson = await modeRes.json();
@@ -286,7 +296,7 @@ async function runAudit() {
   // 4.5 Invalid difficulty
   const diffRes = await fetch(`${BASE_URL}/api/generate`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: authHeaders,
     body: JSON.stringify({ notes: 'Valid notes here', mode: 'flashcards', difficulty: 'super-hard', quantity: 5 }),
   });
   const diffJson = await diffRes.json();
@@ -342,7 +352,7 @@ async function runAudit() {
   const ac = new AbortController();
   const req1Promise = fetch(`${BASE_URL}/api/generate`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: authHeaders,
     body: JSON.stringify({ notes: 'First Note Prompt', mode: 'flashcards', difficulty: 'adaptive', quantity: 3 }),
     signal: ac.signal,
   }).catch((err) => {

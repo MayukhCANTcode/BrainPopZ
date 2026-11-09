@@ -154,12 +154,15 @@ export async function generateStudyAsset({ notes, mode, difficulty, quantity }) 
   } catch (err) {
     console.warn(`Primary model (${PRIMARY_MODEL}) error:`, err.message);
 
-    // If 503 or model error, attempt fallback model
+    // If 503, 429 quota exhaustion, or model error, attempt fallback model
     if (
       err.message.includes('503') ||
+      err.message.includes('429') ||
+      err.message.includes('quota') ||
       err.message.includes('not found') ||
       err.message.includes('temporarily') ||
       err.status === 503 ||
+      err.status === 429 ||
       err.status === 404
     ) {
       console.log(`Attempting fallback to ${FALLBACK_MODEL}...`);

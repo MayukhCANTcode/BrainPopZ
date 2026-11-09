@@ -10,12 +10,13 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 dotenv.config(); // fallback to current working directory if present
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import { apiRouter } from './routes.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// CORS configuration
+// CORS configuration supporting HTTP-only cookie credentials
 app.use(
   cors({
     origin: [
@@ -24,12 +25,14 @@ app.use(
       'http://127.0.0.1:5173',
       'http://127.0.0.1:3000',
     ],
+    credentials: true,
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
 
-// Body parsers
+// Cookie & Body parsers
+app.use(cookieParser());
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true, limit: '2mb' }));
 
