@@ -13,6 +13,7 @@ import {
   Zap,
 } from 'lucide-react';
 import Badge from '../common/Badge';
+import Logo from '../common/Logo';
 import { getGamificationState, getLevelInfo } from '../../services/gamification';
 
 export default function Sidebar({
@@ -87,18 +88,10 @@ export default function Sidebar({
           <div className="flex items-center justify-between mb-4 px-2">
             <button
               onClick={() => handleNav('dashboard')}
-              className="flex items-center gap-2.5 text-left group cursor-pointer focus:outline-none"
+              className="text-left group cursor-pointer focus:outline-none"
               title="Go to BrainPopZ Dashboard"
             >
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-brand-violet to-brand-lime text-midnight flex items-center justify-center font-bold shadow-md shadow-brand-violet/20">
-                <BrainCircuit className="w-4 h-4 stroke-[2.4]" />
-              </div>
-              <div className="flex items-baseline gap-1">
-                <span className="font-heading font-black text-sm tracking-tight text-white">
-                  BrainPop<span className="text-brand-lime">Z</span>
-                </span>
-                <span className="text-[9px] text-brand-orange font-mono font-bold">PRO</span>
-              </div>
+              <Logo size="sm" badge="PRO" />
             </button>
 
             {/* Mobile close button */}

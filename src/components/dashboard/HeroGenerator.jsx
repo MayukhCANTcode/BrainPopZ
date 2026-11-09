@@ -154,17 +154,26 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
       <div className="relative z-10 space-y-5">
         {/* Header Banner */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-brand-violet/15 border border-brand-violet/30 text-brand-violet-light text-[11px] font-medium mb-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-brand-lime" />
-              <span>Real Google Gemini AI Engine</span>
+          <div className="flex items-center gap-3.5">
+            <div className="w-12 h-12 rounded-2xl overflow-hidden border border-brand-violet/30 shadow-md shadow-brand-violet/15 bg-midnight shrink-0 hidden sm:block">
+              <img
+                src="/brainpopz-logo.png"
+                alt="BrainPopZ Mascot"
+                className="w-full h-full object-cover scale-105"
+              />
             </div>
-            <h2 className="text-xl sm:text-2xl font-heading font-extrabold text-white tracking-tight">
-              What are we learning today?
-            </h2>
-            <p className="text-xs text-gray-400">
-              Turn your notes, topics, or syllabi into interactive flashcards and diagnostic drills.
-            </p>
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-brand-violet/15 border border-brand-violet/30 text-brand-violet-light text-[11px] font-medium mb-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-brand-lime" />
+                <span>Real Google Gemini AI Engine</span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-heading font-extrabold text-white tracking-tight">
+                What are we learning today?
+              </h2>
+              <p className="text-xs text-gray-400">
+                Turn your notes, topics, or syllabi into interactive flashcards and diagnostic drills.
+              </p>
+            </div>
           </div>
 
           {/* Mode Selector Segmented Pill */}
@@ -482,3 +491,4 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
     </Card>
   );
 }
+

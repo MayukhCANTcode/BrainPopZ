@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { Brain, Sparkles, ShieldCheck, AlertCircle, ArrowRight, Layers, Award } from 'lucide-react';
+import { Sparkles, ShieldCheck, AlertCircle, ArrowRight, Layers, Award } from 'lucide-react';
 import Button from '../common/Button';
+import Logo from '../common/Logo';
 
 export default function LoginView({ onLoginSuccess, isRestoringSession }) {
   const [errorMessage, setErrorMessage] = useState('');
@@ -108,8 +109,8 @@ export default function LoginView({ onLoginSuccess, isRestoringSession }) {
     return (
       <div className="min-h-screen bg-midnight flex flex-col items-center justify-center p-4">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-surface border border-surface-border flex items-center justify-center text-brand-violet animate-pulse">
-            <Brain className="w-5 h-5" />
+          <div className="w-14 h-14 rounded-2xl overflow-hidden border border-brand-violet/30 shadow-xl shadow-brand-violet/20 animate-pulse bg-midnight p-0.5">
+            <img src="/brainpopz-logo.png" alt="BrainPopZ" className="w-full h-full object-cover rounded-xl" />
           </div>
           <span className="text-xs text-gray-400 font-medium">
             Verifying BrainPopZ session...
@@ -130,19 +131,7 @@ export default function LoginView({ onLoginSuccess, isRestoringSession }) {
       <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
         {/* Left Column: Product Branding & Features */}
         <div className="lg:col-span-6 space-y-6">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-surface border border-surface-border flex items-center justify-center shadow-inner">
-              <Brain className="w-5 h-5 text-brand-violet" />
-            </div>
-            <div>
-              <span className="font-heading font-extrabold text-lg text-white tracking-tight">
-                BrainPop<span className="text-brand-lime">Z</span>
-              </span>
-              <span className="block text-[10px] text-gray-500 uppercase tracking-widest font-mono">
-                AI Study Engine
-              </span>
-            </div>
-          </div>
+          <Logo size="lg" badge="AI ENGINE" />
 
           <div className="space-y-2">
             <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-brand-violet/10 border border-brand-violet/20 text-brand-violet-light text-[11px] font-medium">
@@ -193,7 +182,13 @@ export default function LoginView({ onLoginSuccess, isRestoringSession }) {
 
         {/* Right Column: Authentication Card */}
         <div className="lg:col-span-6">
-          <div className="bg-surface border border-surface-border rounded-2xl p-6 sm:p-8 shadow-2xl relative space-y-6">
+          <div className="bg-surface border border-surface-border rounded-2xl p-6 sm:p-8 shadow-2xl relative space-y-5">
+            <div className="flex justify-center -mt-1">
+              <div className="w-14 h-14 rounded-2xl overflow-hidden border border-brand-violet/30 shadow-lg shadow-brand-violet/20 bg-midnight p-0.5">
+                <img src="/brainpopz-logo.png" alt="BrainPopZ Mascot" className="w-full h-full object-cover rounded-xl" />
+              </div>
+            </div>
+
             <div className="space-y-1 text-center">
               <h2 className="text-lg font-heading font-bold text-white tracking-tight">
                 Sign in to BrainPopZ
