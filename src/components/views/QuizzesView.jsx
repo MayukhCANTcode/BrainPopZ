@@ -1,20 +1,44 @@
-import React, { useState } from 'react';
-import { CheckCircle2, XCircle, Play, RotateCcw, Award, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { CheckCircle2, XCircle, Play, RotateCcw, Award, ChevronRight, Timer } from 'lucide-react';
 import Card from '../common/Card';
 import Badge from '../common/Badge';
 import Button from '../common/Button';
 import { multiQuestionQuizzes, upcomingReviews } from '../../data/mockData';
 
-export default function QuizzesView() {
-  const [questions] = useState(multiQuestionQuizzes.default);
+export default function QuizzesView({ initialQuiz }) {
+  const [questions] = useState(
+    initialQuiz?.questions || multiQuestionQuizzes.default
+  );
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [score, setScore] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
-  const [activeQuizTitle, setActiveQuizTitle] = useState("Raft Consensus & Distributed Systems");
+  const [activeQuizTitle, setActiveQuizTitle] = useState(
+    initialQuiz?.title || "Raft Consensus & Distributed Systems"
+  );
+
+  // Speed Challenge Timer (15s per question)
+  const [isTimerMode, setIsTimerMode] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(15);
 
   const currentQ = questions[currentIdx] || questions[0];
+
+  useEffect(() => {
+    if (!isTimerMode || isSubmitted || isCompleted) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          setIsSubmitted(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isTimerMode, isSubmitted, isCompleted]);
 
   const handleSelectOption = (idx) => {
     if (isSubmitted) return;
@@ -34,6 +58,7 @@ export default function QuizzesView() {
       setCurrentIdx((prev) => prev + 1);
       setSelectedOption(null);
       setIsSubmitted(false);
+      setTimeLeft(15);
     } else {
       setIsCompleted(true);
     }
@@ -46,6 +71,7 @@ export default function QuizzesView() {
     setScore(0);
     setIsCompleted(false);
     setActiveQuizTitle(quizTitle);
+    setTimeLeft(15);
   };
 
   const handleStartSubjectQuiz = (quizItem) => {
@@ -66,13 +92,43 @@ export default function QuizzesView() {
           </p>
         </div>
 
-        <Badge variant="default" size="md">
-          Accuracy: 94.2%
-        </Badge>
+        <div className="flex items-center gap-2">
+          {/* Speed Challenge Toggle */}
+          <button
+            onClick={() => {
+              setIsTimerMode(!isTimerMode);
+              setTimeLeft(15);
+            }}
+            className={`px-2.5 py-1 rounded-md text-xs font-medium border flex items-center gap-1.5 transition-colors cursor-pointer ${
+              isTimerMode
+                ? 'bg-brand-orange/15 border-brand-orange/40 text-brand-orange'
+                : 'bg-surface border-surface-border text-gray-400 hover:text-white'
+            }`}
+          >
+            <Timer className="w-3.5 h-3.5" />
+            <span>{isTimerMode ? '15s Timer ON' : 'Untimed'}</span>
+          </button>
+
+          <Badge variant="default" size="md">
+            Accuracy: 94.2%
+          </Badge>
+        </div>
       </div>
 
       {/* Interactive Quiz Card */}
-      <Card padding="p-5 sm:p-6" className="border-surface-border">
+      <Card padding="p-5 sm:p-6" className="border-surface-border relative overflow-hidden">
+        {/* Countdown Timer Line (Speed Drill) */}
+        {isTimerMode && !isSubmitted && !isCompleted && (
+          <div className="absolute top-0 left-0 right-0 h-1 bg-surface-elevated">
+            <div
+              className={`h-full transition-all duration-1000 ${
+                timeLeft <= 5 ? 'bg-red-400' : 'bg-brand-orange'
+              }`}
+              style={{ width: `${(timeLeft / 15) * 100}%` }}
+            />
+          </div>
+        )}
+
         {!isCompleted ? (
           <>
             <div className="flex items-center justify-between mb-3 pb-3 border-b border-surface-border">
@@ -83,6 +139,15 @@ export default function QuizzesView() {
                 <span className="text-xs text-gray-400 hidden sm:inline">• {activeQuizTitle}</span>
               </div>
               <div className="flex items-center gap-3 text-xs text-gray-400">
+                {isTimerMode && (
+                  <span
+                    className={`font-mono font-medium ${
+                      timeLeft <= 5 ? 'text-red-400 animate-pulse' : 'text-brand-orange'
+                    }`}
+                  >
+                    ⏱ {timeLeft}s
+                  </span>
+                )}
                 <span className="font-mono">
                   {currentIdx + 1} of {questions.length}
                 </span>

@@ -14,6 +14,7 @@ function App() {
   const [currentTab, setCurrentTab] = useState('dashboard');
   const [activeStudyDeck, setActiveStudyDeck] = useState(null);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
+  const [activeCustomQuiz, setActiveCustomQuiz] = useState(null);
 
   // Initialize with localStorage if available
   const [decksList, setDecksList] = useState(() => {
@@ -53,6 +54,15 @@ function App() {
   };
 
   const handleStartQuiz = () => {
+    setActiveCustomQuiz(null);
+    setCurrentTab('quizzes');
+  };
+
+  const handleStartGeneratedQuiz = (quizQuestions, title) => {
+    setActiveCustomQuiz({
+      questions: quizQuestions,
+      title: title || 'Custom Gemini AI Quiz',
+    });
     setCurrentTab('quizzes');
   };
 
@@ -62,18 +72,24 @@ function App() {
     );
   };
 
+  const handleUpdateDeck = (updatedDeck) => {
+    setDecksList((prev) =>
+      prev.map((d) => (d.id === updatedDeck.id ? updatedDeck : d))
+    );
+  };
+
   const handleAddNewDeck = (newDeckOrTopic) => {
     if (typeof newDeckOrTopic === 'string') {
       const createdDeck = {
         id: `deck-${Date.now()}`,
         title: newDeckOrTopic,
-        subject: "General Studies",
-        totalCards: 15,
+        subject: "AI Generated",
+        totalCards: 5,
         masteredCards: 0,
         masteryPercentage: 0,
         lastStudied: "Just now",
         badgeColor: "violet",
-        tags: ["AI Generated", "New"],
+        tags: ["Gemini 2.5", "Adaptive"],
         isBookmarked: false,
         cards: [
           {
@@ -106,7 +122,12 @@ function App() {
           />
         );
       case 'ai-generator':
-        return <AIGeneratorView onSaveDeck={handleAddNewDeck} />;
+        return (
+          <AIGeneratorView
+            onSaveDeck={handleAddNewDeck}
+            onStartQuiz={handleStartGeneratedQuiz}
+          />
+        );
       case 'decks':
         return (
           <DecksView
@@ -114,10 +135,16 @@ function App() {
             onStudyDeck={handleStudyDeck}
             decks={decksList}
             onToggleBookmark={handleToggleBookmark}
+            onUpdateDeck={handleUpdateDeck}
           />
         );
       case 'quizzes':
-        return <QuizzesView />;
+        return (
+          <QuizzesView
+            key={activeCustomQuiz?.title || (activeCustomQuiz?.questions ? 'custom' : 'default')}
+            initialQuiz={activeCustomQuiz}
+          />
+        );
       case 'analytics':
         return <AnalyticsView />;
       case 'settings':

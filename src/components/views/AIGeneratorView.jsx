@@ -1,10 +1,23 @@
-import React, { useState } from 'react';
-import { Sparkles, Sliders, RotateCw, Layers, CheckCircle2, Brain, Plus } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import {
+  Sparkles,
+  Sliders,
+  RotateCw,
+  Layers,
+  CheckCircle2,
+  Brain,
+  Plus,
+  Loader2,
+  AlertCircle,
+  RotateCcw,
+  Play,
+} from 'lucide-react';
 import Card from '../common/Card';
 import Button from '../common/Button';
 import Badge from '../common/Badge';
+import { generateContent } from '../../services/api';
 
-const mockGeneratedCards = [
+const initialCards = [
   {
     id: 1,
     question: "What is the primary role of Long-Term Potentiation (LTP) in synaptic plasticity?",
@@ -28,71 +41,89 @@ const mockGeneratedCards = [
   }
 ];
 
-const mockGeneratedQuizQuestions = [
-  {
-    id: 101,
-    question: "Which enzyme is activated by calcium-calmodulin binding during LTP induction?",
-    options: ["CaMKII (Calcium/Calmodulin-dependent Protein Kinase II)", "Tyrosine Kinase", "DNA Polymerase III", "Phosphofructokinase-1"],
-    correctIndex: 0,
-    explanation: "CaMKII is autophosphorylated upon Ca2+/calmodulin binding and remains active even after calcium levels decline, locking in synaptic potentiation."
-  },
-  {
-    id: 102,
-    question: "What prevents split-brain conditions during Raft leader election?",
-    options: ["GPS synchronized clocks", "Requiring a strict majority (N/2 + 1) quorum for each term", "Heartbeat packets every 5ms", "Central arbitrator server"],
-    correctIndex: 1,
-    explanation: "Because any two majorities must share at least one node, at most one candidate can win the election for a given term."
-  }
-];
-
-export default function AIGeneratorView({ onSaveDeck }) {
+export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
   const [format, setFormat] = useState('flashcards'); // flashcards or quiz
-  const [deckSize, setDeckSize] = useState(15);
-  const [difficulty, setDifficulty] = useState('Adaptive');
+  const [deckSize, setDeckSize] = useState(5);
+  const [difficulty, setDifficulty] = useState('adaptive');
   const [inputText, setInputText] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
-  const [cards, setCards] = useState(mockGeneratedCards);
-  const [quizQuestions, setQuizQuestions] = useState(mockGeneratedQuizQuestions);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [generatedTitle, setGeneratedTitle] = useState('');
+  const [cards, setCards] = useState(initialCards);
+  const [quizQuestions, setQuizQuestions] = useState([]);
   const [flippedCardId, setFlippedCardId] = useState(null);
   const [savedSuccess, setSavedSuccess] = useState(false);
 
-  const handleGenerate = (e) => {
-    e.preventDefault();
-    const effectiveTopic = inputText.trim() || "Multivariable Calculus: Gradient Descent Optimization";
+  // Request race-condition prevention refs
+  const abortControllerRef = useRef(null);
+  const latestRequestIdRef = useRef(0);
+
+  const handleGenerate = async (e) => {
+    if (e) e.preventDefault();
+
+    const trimmedInput = inputText.trim();
+    if (!trimmedInput) {
+      setErrorMessage('Please enter notes or a concept prompt before generating.');
+      return;
+    }
+
+    // Abort previous in-flight request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
+    const currentRequestId = ++latestRequestIdRef.current;
+
     setIsGenerating(true);
+    setErrorMessage('');
+    setSavedSuccess(false);
 
-    setTimeout(() => {
-      setIsGenerating(false);
+    try {
+      const result = await generateContent({
+        notes: trimmedInput,
+        mode: format,
+        difficulty,
+        quantity: deckSize,
+        signal: controller.signal,
+      });
 
-      if (format === 'flashcards') {
-        setCards([
-          {
-            id: Date.now(),
-            question: `Core Definition: ${effectiveTopic}`,
-            answer: `Key theoretical formula and practical application for ${effectiveTopic} synthesized from textbook lecture material.`,
-            difficulty: difficulty,
-            topic: effectiveTopic.split(':')[0] || "Advanced Topic"
-          },
-          ...cards
-        ]);
-      } else {
-        setQuizQuestions([
-          {
-            id: Date.now(),
-            question: `Exam Question on ${effectiveTopic}: Which statement accurately describes the optimal constraint?`,
-            options: [
-              `The gradient vector points in the direction of greatest rate of increase`,
-              `The learning rate must approach infinity at local minima`,
-              `The Hessian matrix must be strictly negative definite for minima`,
-              `Convergence occurs regardless of step size parameter`
-            ],
-            correctIndex: 0,
-            explanation: `By definition, the gradient ∇f(x) points in the direction of steepest ascent; gradient descent takes steps in the negative direction.`
-          },
-          ...quizQuestions
-        ]);
+      // Ignore if a newer request was dispatched in the meantime
+      if (currentRequestId !== latestRequestIdRef.current) return;
+
+      setGeneratedTitle(result.title);
+
+      if (result.type === 'flashcards' && Array.isArray(result.cards)) {
+        const mappedCards = result.cards.map((c, idx) => ({
+          id: `card-${Date.now()}-${idx}`,
+          question: c.question,
+          answer: c.answer,
+          difficulty: difficulty,
+          topic: result.title,
+        }));
+        setCards(mappedCards);
+      } else if (result.type === 'quiz' && Array.isArray(result.questions)) {
+        const mappedQuestions = result.questions.map((q, idx) => ({
+          id: `quiz-q-${Date.now()}-${idx}`,
+          question: q.question,
+          options: q.options,
+          correctIndex: q.correctAnswer,
+          explanation: q.explanation,
+        }));
+        setQuizQuestions(mappedQuestions);
       }
-    }, 800);
+    } catch (err) {
+      if (err.name === 'AbortError') return;
+      if (currentRequestId !== latestRequestIdRef.current) return;
+
+      console.error('Generation error:', err);
+      setErrorMessage(err.message || 'An error occurred while generating study materials.');
+    } finally {
+      if (currentRequestId === latestRequestIdRef.current) {
+        setIsGenerating(false);
+      }
+    }
   };
 
   const toggleFlip = (id) => {
@@ -104,16 +135,16 @@ export default function AIGeneratorView({ onSaveDeck }) {
     if (onSaveDeck) {
       onSaveDeck({
         id: `deck-${Date.now()}`,
-        title: inputText.trim() || "AI Generated Study Deck",
-        subject: "General Studies",
+        title: generatedTitle || inputText.slice(0, 35) || 'Generated Study Deck',
+        subject: 'AI Generated',
         totalCards: cards.length,
         masteredCards: 0,
         masteryPercentage: 0,
-        lastStudied: "Just now",
-        badgeColor: "violet",
-        tags: ["AI Generated", difficulty],
+        lastStudied: 'Just now',
+        badgeColor: 'violet',
+        tags: ['Gemini AI', difficulty],
         isBookmarked: false,
-        cards: cards.map((c) => ({ q: c.question, a: c.answer, difficulty: c.difficulty }))
+        cards: cards.map((c) => ({ q: c.question, a: c.answer, difficulty: c.difficulty })),
       });
     }
     setTimeout(() => setSavedSuccess(false), 3500);
@@ -124,16 +155,21 @@ export default function AIGeneratorView({ onSaveDeck }) {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-surface-border">
         <div>
-          <h1 className="text-xl font-heading font-bold text-white tracking-tight">
-            AI Generator
-          </h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl font-heading font-bold text-white tracking-tight">
+              AI Generator
+            </h1>
+            <Badge variant="lime" size="sm">
+              Live Gemini 2.5
+            </Badge>
+          </div>
           <p className="text-xs text-gray-400">
-            Synthesize flashcards and quiz questions from syllabus topics or lecture notes.
+            Synthesize real interactive flashcards and quiz questions from syllabus topics or lecture notes using Google Gemini.
           </p>
         </div>
 
         <Badge variant="default" size="md">
-          84 / 100 AI Credits Remaining
+          Backend Connected
         </Badge>
       </div>
 
@@ -154,6 +190,7 @@ export default function AIGeneratorView({ onSaveDeck }) {
               <button
                 type="button"
                 onClick={() => setFormat('flashcards')}
+                disabled={isGenerating}
                 className={`py-1.5 px-2.5 rounded-md border text-center font-medium transition-colors cursor-pointer ${
                   format === 'flashcards'
                     ? 'bg-surface-elevated border-brand-violet/40 text-white'
@@ -165,6 +202,7 @@ export default function AIGeneratorView({ onSaveDeck }) {
               <button
                 type="button"
                 onClick={() => setFormat('quiz')}
+                disabled={isGenerating}
                 className={`py-1.5 px-2.5 rounded-md border text-center font-medium transition-colors cursor-pointer ${
                   format === 'quiz'
                     ? 'bg-surface-elevated border-brand-violet/40 text-white'
@@ -182,12 +220,13 @@ export default function AIGeneratorView({ onSaveDeck }) {
               Cognitive Level
             </label>
             <div className="grid grid-cols-3 gap-1 text-xs">
-              {['Foundational', 'Adaptive', 'Exam Prep'].map((lvl) => (
+              {['foundational', 'adaptive', 'exam prep'].map((lvl) => (
                 <button
                   key={lvl}
                   type="button"
                   onClick={() => setDifficulty(lvl)}
-                  className={`py-1 px-1.5 rounded border text-center text-[11px] transition-colors cursor-pointer ${
+                  disabled={isGenerating}
+                  className={`py-1 px-1.5 rounded border text-center text-[11px] capitalize transition-colors cursor-pointer ${
                     difficulty === lvl
                       ? 'bg-brand-lime/10 border-brand-lime/30 text-brand-lime font-medium'
                       : 'bg-transparent border-surface-border text-gray-400 hover:text-white'
@@ -203,15 +242,16 @@ export default function AIGeneratorView({ onSaveDeck }) {
           <div>
             <div className="flex justify-between text-xs text-gray-300 mb-1.5">
               <span className="text-[11px] text-gray-400">Quantity</span>
-              <span className="font-mono text-xs">{deckSize} cards</span>
+              <span className="font-mono text-xs">{deckSize} items</span>
             </div>
             <input
               type="range"
-              min="5"
-              max="50"
-              step="5"
+              min="3"
+              max="15"
+              step="1"
               value={deckSize}
               onChange={(e) => setDeckSize(Number(e.target.value))}
+              disabled={isGenerating}
               className="w-full accent-brand-violet cursor-pointer h-1 bg-surface-elevated rounded"
             />
           </div>
@@ -225,25 +265,71 @@ export default function AIGeneratorView({ onSaveDeck }) {
               rows={4}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              placeholder="Paste notes, syllabus items, or enter a core concept..."
+              disabled={isGenerating}
+              placeholder="Paste lecture notes, syllabus concepts, or enter a topic (e.g., Photosynthesis Calvin cycle, TCP handshakes, or Raft consensus)..."
               className="w-full bg-surface-elevated border border-surface-border rounded-lg p-2.5 text-xs text-white placeholder-gray-400 focus:outline-none focus:border-brand-violet/60 focus:ring-1 focus:ring-brand-violet/50 transition-colors"
             />
           </div>
 
+          {/* Quick preset chips */}
+          <div className="flex flex-wrap gap-1">
+            {['Photosynthesis Light Reactions', 'Raft Consensus Algorithm', 'Euler Identity & Proofs'].map((p) => (
+              <button
+                key={p}
+                type="button"
+                onClick={() => setInputText(p)}
+                disabled={isGenerating}
+                className="text-[10px] px-2 py-0.5 rounded bg-surface border border-surface-border text-gray-400 hover:text-white transition-colors cursor-pointer"
+              >
+                {p}
+              </button>
+            ))}
+          </div>
+
+          {/* Action button */}
           <Button
             variant="primary"
             fullWidth
-            leftIcon={Sparkles}
+            leftIcon={isGenerating ? Loader2 : Sparkles}
             onClick={handleGenerate}
-            disabled={isGenerating}
+            disabled={isGenerating || !inputText.trim()}
+            className={isGenerating ? 'opacity-80' : ''}
           >
-            {isGenerating ? 'Synthesizing...' : `Generate ${format === 'quiz' ? 'Quiz Questions' : 'Cards'}`}
+            {isGenerating ? (
+              <span className="flex items-center gap-1.5">
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                Synthesizing with Gemini...
+              </span>
+            ) : (
+              `Generate ${format === 'quiz' ? 'Quiz with AI' : 'Flashcards with AI'}`
+            )}
           </Button>
+
+          {/* Error message with retry */}
+          {errorMessage && (
+            <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-300 text-xs space-y-2 animate-fadeIn">
+              <div className="flex items-start gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0 text-red-400 mt-0.5" />
+                <span className="leading-snug">{errorMessage}</span>
+              </div>
+              <div className="flex justify-end">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  leftIcon={RotateCcw}
+                  onClick={handleGenerate}
+                  className="text-xs h-7 border-red-500/30 hover:bg-red-500/20 text-red-200"
+                >
+                  Retry
+                </Button>
+              </div>
+            </div>
+          )}
 
           {savedSuccess && (
             <div className="p-2.5 rounded-lg bg-brand-lime/10 border border-brand-lime/20 text-brand-lime text-xs font-medium flex items-center gap-1.5 animate-fadeIn">
               <CheckCircle2 className="w-3.5 h-3.5" />
-              <span>Saved to My Flashcards</span>
+              <span>Saved to My Flashcards!</span>
             </div>
           )}
         </Card>
@@ -255,17 +341,22 @@ export default function AIGeneratorView({ onSaveDeck }) {
               {format === 'flashcards' ? (
                 <>
                   <Layers className="w-3.5 h-3.5 text-brand-lime" />
-                  <span>Preview ({cards.length} cards)</span>
+                  <span>
+                    {generatedTitle ? `${generatedTitle} (${cards.length} cards)` : `Generated Flashcards (${cards.length})`}
+                  </span>
                 </>
               ) : (
                 <>
                   <Brain className="w-3.5 h-3.5 text-brand-violet" />
-                  <span>Preview ({quizQuestions.length} questions)</span>
+                  <span>
+                    {generatedTitle ? `${generatedTitle} (${quizQuestions.length} questions)` : `Generated Quiz (${quizQuestions.length})`}
+                  </span>
                 </>
               )}
             </h2>
+
             <div className="flex items-center gap-2">
-              {format === 'flashcards' && (
+              {format === 'flashcards' && cards.length > 0 && (
                 <Button
                   variant="outline"
                   size="sm"
@@ -275,10 +366,28 @@ export default function AIGeneratorView({ onSaveDeck }) {
                   Save Deck
                 </Button>
               )}
+              {format === 'quiz' && quizQuestions.length > 0 && onStartQuiz && (
+                <Button
+                  variant="primary"
+                  size="sm"
+                  leftIcon={Play}
+                  onClick={() => onStartQuiz(quizQuestions, generatedTitle)}
+                >
+                  Take Quiz
+                </Button>
+              )}
             </div>
           </div>
 
-          {format === 'flashcards' ? (
+          {isGenerating ? (
+            <Card padding="p-12" className="border-surface-border text-center space-y-3">
+              <Loader2 className="w-8 h-8 text-brand-violet animate-spin mx-auto" />
+              <h3 className="text-sm font-semibold text-white">Synthesizing with Google Gemini...</h3>
+              <p className="text-xs text-gray-400 max-w-sm mx-auto">
+                Extracting core definitions and formulating validated {format} from your study notes.
+              </p>
+            </Card>
+          ) : format === 'flashcards' ? (
             /* Flashcards Grid */
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {cards.map((card) => {
@@ -298,7 +407,7 @@ export default function AIGeneratorView({ onSaveDeck }) {
                     <div>
                       <div className="flex items-center justify-between mb-2">
                         <Badge variant={isFlipped ? 'lime' : 'default'} size="sm">
-                          {isFlipped ? 'Answer' : card.topic}
+                          {isFlipped ? 'Answer' : card.topic || 'Concept'}
                         </Badge>
                         <span className="text-[10px] text-gray-400 flex items-center gap-1">
                           <RotateCw className="w-3 h-3" />
@@ -312,7 +421,7 @@ export default function AIGeneratorView({ onSaveDeck }) {
                     </div>
 
                     <div className="pt-2 border-t border-surface-border flex items-center justify-between text-[10px] text-gray-400">
-                      <span>{card.difficulty}</span>
+                      <span>{card.difficulty || difficulty}</span>
                       <span className="text-gray-400">Click to flip</span>
                     </div>
                   </Card>
@@ -322,37 +431,46 @@ export default function AIGeneratorView({ onSaveDeck }) {
           ) : (
             /* Quiz Questions List */
             <div className="space-y-3">
-              {quizQuestions.map((q, idx) => (
-                <Card key={q.id} padding="p-4" className="border-surface-border">
-                  <div className="flex items-center justify-between mb-2">
-                    <Badge variant="default" size="sm">
-                      Question {idx + 1}
-                    </Badge>
-                    <span className="text-[11px] text-gray-400">Multiple Choice</span>
-                  </div>
-                  <h4 className="text-xs font-medium text-white mb-2.5">
-                    {q.question}
-                  </h4>
-                  <div className="space-y-1 mb-2.5">
-                    {q.options.map((opt, oIdx) => (
-                      <div
-                        key={oIdx}
-                        className={`p-2 rounded border text-xs flex items-center justify-between ${
-                          oIdx === q.correctIndex
-                            ? 'bg-brand-lime/10 border-brand-lime/30 text-brand-lime font-medium'
-                            : 'bg-surface-elevated border-surface-border text-gray-300'
-                        }`}
-                      >
-                        <span>{opt}</span>
-                        {oIdx === q.correctIndex && <CheckCircle2 className="w-3.5 h-3.5 text-brand-lime shrink-0 ml-1.5" />}
-                      </div>
-                    ))}
-                  </div>
-                  <p className="text-[10px] text-gray-400 bg-surface-elevated p-2 rounded border border-surface-border">
-                    <strong className="text-gray-300">Explanation:</strong> {q.explanation}
+              {quizQuestions.length > 0 ? (
+                quizQuestions.map((q, idx) => (
+                  <Card key={q.id} padding="p-4" className="border-surface-border">
+                    <div className="flex items-center justify-between mb-2">
+                      <Badge variant="default" size="sm">
+                        Question {idx + 1}
+                      </Badge>
+                      <span className="text-[11px] text-gray-400">Multiple Choice</span>
+                    </div>
+                    <h4 className="text-xs font-medium text-white mb-2.5">
+                      {q.question}
+                    </h4>
+                    <div className="space-y-1 mb-2.5">
+                      {q.options.map((opt, oIdx) => (
+                        <div
+                          key={oIdx}
+                          className={`p-2 rounded border text-xs flex items-center justify-between ${
+                            oIdx === q.correctIndex
+                              ? 'bg-brand-lime/10 border-brand-lime/30 text-brand-lime font-medium'
+                              : 'bg-surface-elevated border-surface-border text-gray-300'
+                          }`}
+                        >
+                          <span>{opt}</span>
+                          {oIdx === q.correctIndex && <CheckCircle2 className="w-3.5 h-3.5 text-brand-lime shrink-0 ml-1.5" />}
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-[10px] text-gray-400 bg-surface-elevated p-2 rounded border border-surface-border">
+                      <strong className="text-gray-300">Explanation:</strong> {q.explanation}
+                    </p>
+                  </Card>
+                ))
+              ) : (
+                <Card padding="p-8" className="text-center border-surface-border">
+                  <Brain className="w-8 h-8 text-gray-400 mx-auto mb-2 opacity-40" />
+                  <p className="text-xs text-gray-400">
+                    Enter notes on the left and click "Generate Quiz with AI" to create interactive questions.
                   </p>
                 </Card>
-              ))}
+              )}
             </div>
           )}
         </div>

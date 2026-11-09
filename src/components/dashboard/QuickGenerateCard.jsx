@@ -1,37 +1,67 @@
 import React, { useState, useRef } from 'react';
-import { Sparkles, Upload, Lightbulb, CheckCircle2, FileText } from 'lucide-react';
+import { Sparkles, Upload, Lightbulb, CheckCircle2, FileText, Loader2, AlertCircle } from 'lucide-react';
 import Card from '../common/Card';
 import Button from '../common/Button';
+import { generateContent } from '../../services/api';
 
 const samplePrompts = [
-  'Photosynthesis & Calvin Cycle',
-  'TCP vs UDP Protocols',
+  'Photosynthesis Light Reactions',
+  'TCP vs UDP Handshake Protocols',
   'Mitosis vs Meiosis Stages',
-  'Bayes Theorem',
+  'Bayes Theorem & Conditional Probability',
 ];
 
-export default function QuickGenerateCard({ onTriggerGeneration }) {
+export default function QuickGenerateCard({ onTriggerGeneration, onStudyDeck }) {
   const [topicInput, setTopicInput] = useState('');
   const [activeTab, setActiveTab] = useState('topic'); // topic, notes, file
   const [selectedFile, setSelectedFile] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
+  const [successDeck, setSuccessDeck] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
   const fileInputRef = useRef(null);
 
-  const handleGenerate = (e) => {
+  const handleGenerate = async (e) => {
     e.preventDefault();
     const effectiveTopic = activeTab === 'file' ? (selectedFile ? selectedFile.name : '') : topicInput;
     if (!effectiveTopic.trim()) return;
 
     setIsGenerating(true);
-    setTimeout(() => {
-      setIsGenerating(false);
-      setSuccessMessage(`Generated 15 flashcards for "${effectiveTopic}"`);
+    setErrorMessage('');
+    setSuccessDeck(null);
+
+    try {
+      const result = await generateContent({
+        notes: effectiveTopic,
+        mode: 'flashcards',
+        difficulty: 'adaptive',
+        quantity: 5,
+      });
+
+      const newDeck = {
+        id: `deck-${Date.now()}`,
+        title: result.title || effectiveTopic,
+        subject: 'AI Generated',
+        totalCards: result.cards.length,
+        masteredCards: 0,
+        masteryPercentage: 0,
+        lastStudied: 'Just now',
+        badgeColor: 'violet',
+        tags: ['Gemini 2.5', 'Adaptive'],
+        isBookmarked: false,
+        cards: result.cards.map((c) => ({ q: c.question, a: c.answer, difficulty: 'Adaptive' })),
+      };
+
       if (onTriggerGeneration) {
-        onTriggerGeneration(effectiveTopic);
+        onTriggerGeneration(newDeck);
       }
-      setTimeout(() => setSuccessMessage(''), 4000);
-    }, 900);
+      setSuccessDeck(newDeck);
+      setTopicInput('');
+    } catch (err) {
+      console.error('Quick generation error:', err);
+      setErrorMessage(err.message || 'Generation failed. Ensure server is running on port 3001.');
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const handleFileChange = (e) => {
@@ -45,10 +75,10 @@ export default function QuickGenerateCard({ onTriggerGeneration }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
         <div>
           <h2 className="text-sm font-semibold text-white">
-            Quick Generator
+            Instant Gemini Generator
           </h2>
           <p className="text-xs text-gray-400">
-            Convert a subject prompt, pasted notes, or document into study cards.
+            Convert a subject prompt, pasted notes, or document into real validated flashcards.
           </p>
         </div>
 
@@ -97,8 +127,9 @@ export default function QuickGenerateCard({ onTriggerGeneration }) {
               type="text"
               value={topicInput}
               onChange={(e) => setTopicInput(e.target.value)}
+              disabled={isGenerating}
               placeholder="e.g. Krebs Cycle in Cellular Respiration or Dijkstra's Algorithm..."
-              className="w-full bg-surface-elevated border border-surface-border rounded-lg px-3 py-2 text-xs text-white placeholder-gray-400 focus:outline-none focus:border-brand-violet/60 focus:ring-1 focus:ring-brand-violet/50 transition-colors pr-24"
+              className="w-full bg-surface-elevated border border-surface-border rounded-lg px-3 py-2 text-xs text-white placeholder-gray-400 focus:outline-none focus:border-brand-violet/60 focus:ring-1 focus:ring-brand-violet/50 transition-colors pr-28"
             />
             <div className="absolute right-1.5 top-1/2 -translate-y-1/2">
               <Button
@@ -106,7 +137,7 @@ export default function QuickGenerateCard({ onTriggerGeneration }) {
                 variant="primary"
                 size="sm"
                 disabled={!topicInput.trim() || isGenerating}
-                leftIcon={Sparkles}
+                leftIcon={isGenerating ? Loader2 : Sparkles}
               >
                 {isGenerating ? 'Generating...' : 'Generate'}
               </Button>
@@ -120,6 +151,7 @@ export default function QuickGenerateCard({ onTriggerGeneration }) {
               rows={3}
               value={topicInput}
               onChange={(e) => setTopicInput(e.target.value)}
+              disabled={isGenerating}
               placeholder="Paste raw lecture bullet points, textbook excerpts, or syllabus items..."
               className="w-full bg-surface-elevated border border-surface-border rounded-lg p-2.5 text-xs text-white placeholder-gray-400 focus:outline-none focus:border-brand-violet/60 focus:ring-1 focus:ring-brand-violet/50 transition-colors"
             />
@@ -129,9 +161,9 @@ export default function QuickGenerateCard({ onTriggerGeneration }) {
                 variant="primary"
                 size="sm"
                 disabled={!topicInput.trim() || isGenerating}
-                leftIcon={Sparkles}
+                leftIcon={isGenerating ? Loader2 : Sparkles}
               >
-                {isGenerating ? 'Extracting...' : 'Generate Flashcards'}
+                {isGenerating ? 'Synthesizing with Gemini...' : 'Generate Flashcards'}
               </Button>
             </div>
           </div>
@@ -184,7 +216,7 @@ export default function QuickGenerateCard({ onTriggerGeneration }) {
                   variant="primary"
                   size="sm"
                   disabled={isGenerating}
-                  leftIcon={Sparkles}
+                  leftIcon={isGenerating ? Loader2 : Sparkles}
                 >
                   {isGenerating ? 'Analyzing...' : 'Generate from File'}
                 </Button>
@@ -203,6 +235,7 @@ export default function QuickGenerateCard({ onTriggerGeneration }) {
             <button
               key={prompt}
               type="button"
+              disabled={isGenerating}
               onClick={() => setTopicInput(prompt)}
               className="text-[10px] px-2 py-0.5 rounded-md bg-surface-elevated hover:bg-surface-active text-gray-300 hover:text-white border border-surface-border transition-colors cursor-pointer"
             >
@@ -211,11 +244,30 @@ export default function QuickGenerateCard({ onTriggerGeneration }) {
           ))}
         </div>
 
-        {/* Feedback alert */}
-        {successMessage && (
-          <div className="flex items-center gap-1.5 p-2 rounded-md bg-brand-lime/10 border border-brand-lime/20 text-brand-lime text-xs font-medium animate-fadeIn">
-            <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
-            <span>{successMessage}</span>
+        {/* Success alert with direct study button */}
+        {successDeck && (
+          <div className="flex items-center justify-between p-2.5 rounded-md bg-brand-lime/10 border border-brand-lime/20 text-brand-lime text-xs font-medium animate-fadeIn">
+            <div className="flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 shrink-0" />
+              <span>Generated {successDeck.totalCards} cards for "{successDeck.title}"!</span>
+            </div>
+            {onStudyDeck && (
+              <Button
+                variant="lime"
+                size="sm"
+                onClick={() => onStudyDeck(successDeck)}
+              >
+                Study Now
+              </Button>
+            )}
+          </div>
+        )}
+
+        {/* Error message */}
+        {errorMessage && (
+          <div className="flex items-center gap-1.5 p-2 rounded-md bg-red-500/10 border border-red-500/20 text-red-300 text-xs animate-fadeIn">
+            <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
+            <span>{errorMessage}</span>
           </div>
         )}
       </form>

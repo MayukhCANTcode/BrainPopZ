@@ -21,6 +21,7 @@ export default function DashboardView({ onNavigate, onStudyDeck, onStartQuiz, on
             onAddNewDeck(topic);
           }
         }}
+        onStudyDeck={onStudyDeck}
       />
 
       <RecentDecks
