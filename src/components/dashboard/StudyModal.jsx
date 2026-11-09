@@ -118,7 +118,7 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
       }}
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn"
     >
-      <div className="bg-surface border border-surface-border rounded-xl w-full max-w-lg p-5 shadow-2xl relative flex flex-col justify-between min-h-[420px]">
+      <div className="bg-surface border border-surface-border rounded-2xl w-full max-w-xl p-5 sm:p-6 shadow-2xl relative flex flex-col justify-between min-h-[480px] max-h-[90vh]">
         {/* Top Header */}
         <div className="flex items-center justify-between pb-3 border-b border-surface-border">
           <div className="flex items-center gap-2">
@@ -143,37 +143,56 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
         {!isCompleted ? (
           <>
             {/* 3D Flippable Card Area */}
-            <div className="perspective-1000 my-5 flex-1 min-h-[200px]">
+            <div className="perspective-1000 my-4 flex-1 min-h-[280px] sm:min-h-[320px]">
               <div
                 onClick={() => setIsFlipped(!isFlipped)}
-                className={`w-full h-full relative preserve-3d transition-transform duration-300 cursor-pointer rounded-xl select-none ${
+                className={`w-full h-full relative preserve-3d transition-transform duration-300 cursor-pointer rounded-2xl select-none ${
                   isFlipped ? 'rotate-y-180' : ''
                 }`}
               >
                 {/* Front Face: Question */}
-                <div className="absolute inset-0 backface-hidden p-5 rounded-xl bg-surface-elevated border border-surface-border hover:border-gray-600 flex flex-col justify-center items-center text-center">
-                  <span className="text-[10px] font-medium uppercase tracking-wider text-gray-400 mb-2">
-                    Question
-                  </span>
-                  <p className="text-sm sm:text-base font-medium text-white max-w-sm leading-relaxed">
-                    {currentCard.question || currentCard.q}
-                  </p>
-                  <div className="mt-4 flex items-center gap-1 text-[11px] text-gray-400">
-                    <RotateCw className="w-3 h-3" />
+                <div className="absolute inset-0 backface-hidden p-5 sm:p-6 rounded-2xl bg-surface-elevated border border-surface-border hover:border-gray-600 flex flex-col justify-between items-center text-center overflow-hidden shadow-inner">
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-brand-violet-light px-2.5 py-0.5 rounded-full bg-brand-violet/10 border border-brand-violet/25">
+                      Question
+                    </span>
+                    {currentCard.difficulty && (
+                      <span className="text-[10px] text-gray-400 font-mono">
+                        • {currentCard.difficulty}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Scrollable / Flexible Question Area */}
+                  <div className="flex-1 w-full my-auto py-3 overflow-y-auto flex items-center justify-center">
+                    <p className="text-sm sm:text-base font-medium text-white max-w-md leading-relaxed break-words px-2">
+                      {currentCard.question || currentCard.q}
+                    </p>
+                  </div>
+
+                  <div className="mt-2 flex items-center gap-1.5 text-[11px] text-gray-400 shrink-0">
+                    <RotateCw className="w-3.5 h-3.5" />
                     <span>Space or click to flip</span>
                   </div>
                 </div>
 
                 {/* Back Face: Answer */}
-                <div className="absolute inset-0 backface-hidden rotate-y-180 p-5 rounded-xl bg-surface-elevated border border-brand-lime/30 flex flex-col justify-center items-center text-center">
-                  <span className="text-[10px] font-medium uppercase tracking-wider text-brand-lime mb-2">
-                    Answer
-                  </span>
-                  <p className="text-sm sm:text-base font-medium text-white max-w-sm leading-relaxed">
-                    {currentCard.answer || currentCard.a}
-                  </p>
-                  <div className="mt-4 flex items-center gap-1 text-[11px] text-brand-lime">
-                    <RotateCw className="w-3 h-3" />
+                <div className="absolute inset-0 backface-hidden rotate-y-180 p-5 sm:p-6 rounded-2xl bg-surface-elevated border border-brand-lime/30 flex flex-col justify-between items-center text-center overflow-hidden shadow-inner">
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-brand-lime px-2.5 py-0.5 rounded-full bg-brand-lime/10 border border-brand-lime/25">
+                      Answer
+                    </span>
+                  </div>
+
+                  {/* Scrollable / Flexible Answer Area */}
+                  <div className="flex-1 w-full my-auto py-3 overflow-y-auto flex items-center justify-center">
+                    <p className="text-sm sm:text-base font-medium text-gray-100 max-w-md leading-relaxed break-words px-2">
+                      {currentCard.answer || currentCard.a}
+                    </p>
+                  </div>
+
+                  <div className="mt-2 flex items-center gap-1.5 text-[11px] text-brand-lime shrink-0">
+                    <RotateCw className="w-3.5 h-3.5" />
                     <span>Space or click to view question</span>
                   </div>
                 </div>

@@ -422,7 +422,7 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
                         </span>
                       </div>
 
-                      <p className="text-xs font-medium text-white leading-relaxed">
+                      <p className="text-xs font-medium text-white leading-relaxed break-words">
                         {isFlipped ? card.answer : card.question}
                       </p>
                     </div>
