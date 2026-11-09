@@ -6,7 +6,7 @@ import Button from '../common/Button';
 import { multiQuestionQuizzes, upcomingReviews } from '../../data/mockData';
 
 export default function QuizzesView({ initialQuiz }) {
-  const [questions] = useState(
+  const [questions, setQuestions] = useState(
     initialQuiz?.questions || multiQuestionQuizzes.default
   );
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -14,6 +14,7 @@ export default function QuizzesView({ initialQuiz }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [score, setScore] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [missedQuestions, setMissedQuestions] = useState([]);
   const [activeQuizTitle, setActiveQuizTitle] = useState(
     initialQuiz?.title || "Raft Consensus & Distributed Systems"
   );
@@ -23,6 +24,7 @@ export default function QuizzesView({ initialQuiz }) {
   const [timeLeft, setTimeLeft] = useState(15);
 
   const currentQ = questions[currentIdx] || questions[0];
+  const correctIdx = currentQ?.correctAnswer !== undefined ? currentQ.correctAnswer : (currentQ?.correctIndex ?? 0);
 
   useEffect(() => {
     if (!isTimerMode || isSubmitted || isCompleted) return;
@@ -48,8 +50,10 @@ export default function QuizzesView({ initialQuiz }) {
   const handleSubmitAnswer = () => {
     if (selectedOption === null) return;
     setIsSubmitted(true);
-    if (selectedOption === currentQ.correctIndex) {
+    if (selectedOption === correctIdx) {
       setScore((prev) => prev + 1);
+    } else {
+      setMissedQuestions((prev) => [...prev, currentQ]);
     }
   };
 
@@ -65,6 +69,8 @@ export default function QuizzesView({ initialQuiz }) {
   };
 
   const handleRestart = (quizTitle = activeQuizTitle) => {
+    setQuestions(initialQuiz?.questions || multiQuestionQuizzes.default);
+    setMissedQuestions([]);
     setCurrentIdx(0);
     setSelectedOption(null);
     setIsSubmitted(false);
@@ -74,9 +80,28 @@ export default function QuizzesView({ initialQuiz }) {
     setTimeLeft(15);
   };
 
+  const handleRetestIncorrect = () => {
+    if (missedQuestions.length === 0) return;
+    setQuestions([...missedQuestions]);
+    setMissedQuestions([]);
+    setCurrentIdx(0);
+    setSelectedOption(null);
+    setIsSubmitted(false);
+    setScore(0);
+    setIsCompleted(false);
+    setTimeLeft(15);
+  };
+
   const handleStartSubjectQuiz = (quizItem) => {
     setActiveQuizTitle(quizItem.title);
-    handleRestart(quizItem.title);
+    setQuestions(multiQuestionQuizzes.default);
+    setMissedQuestions([]);
+    setCurrentIdx(0);
+    setSelectedOption(null);
+    setIsSubmitted(false);
+    setScore(0);
+    setIsCompleted(false);
+    setTimeLeft(15);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -164,7 +189,7 @@ export default function QuizzesView({ initialQuiz }) {
             <div className="space-y-2 mb-4">
               {currentQ.options.map((opt, idx) => {
                 const isSelected = selectedOption === idx;
-                const isCorrect = idx === currentQ.correctIndex;
+                const isCorrect = idx === correctIdx;
 
                 let buttonStyle = 'bg-surface-elevated border-surface-border text-gray-300 hover:border-gray-600 cursor-pointer';
 
@@ -250,14 +275,24 @@ export default function QuizzesView({ initialQuiz }) {
               </p>
             </div>
 
-            <div className="pt-2">
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-2">
+              {missedQuestions.length > 0 && (
+                <Button
+                  variant="primary"
+                  size="sm"
+                  leftIcon={RotateCcw}
+                  onClick={handleRetestIncorrect}
+                >
+                  Retest Incorrect ({missedQuestions.length})
+                </Button>
+              )}
               <Button
                 variant="outline"
                 size="sm"
                 leftIcon={RotateCcw}
                 onClick={() => handleRestart()}
               >
-                Retry Drill
+                Retry Full Drill
               </Button>
             </div>
           </div>

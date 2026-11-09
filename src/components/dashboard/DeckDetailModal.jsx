@@ -16,8 +16,8 @@ export default function DeckDetailModal({ deck, isOpen, onClose, onStartStudy, o
   const cards = deck.cards || [];
   const filteredCards = cards.filter(
     (c) =>
-      c.q.toLowerCase().includes(searchCard.toLowerCase()) ||
-      c.a.toLowerCase().includes(searchCard.toLowerCase())
+      (c.question || c.q || '').toLowerCase().includes(searchCard.toLowerCase()) ||
+      (c.answer || c.a || '').toLowerCase().includes(searchCard.toLowerCase())
   );
 
   const handleAddCardSubmit = (e) => {
@@ -27,6 +27,8 @@ export default function DeckDetailModal({ deck, isOpen, onClose, onStartStudy, o
     const updatedCards = [
       ...cards,
       {
+        question: newQuestion.trim(),
+        answer: newAnswer.trim(),
         q: newQuestion.trim(),
         a: newAnswer.trim(),
         difficulty: newDifficulty,
@@ -60,7 +62,7 @@ export default function DeckDetailModal({ deck, isOpen, onClose, onStartStudy, o
   const handleExportMarkdown = () => {
     let md = `# ${deck.title}\nSubject: ${deck.subject}\nTotal Cards: ${cards.length}\n\n---\n\n`;
     cards.forEach((c, idx) => {
-      md += `### Card ${idx + 1} (${c.difficulty || 'Medium'})\n**Q:** ${c.q}\n\n**A:** ${c.a}\n\n---\n\n`;
+      md += `### Card ${idx + 1} (${c.difficulty || 'Medium'})\n**Q:** ${c.question || c.q}\n\n**A:** ${c.answer || c.a}\n\n---\n\n`;
     });
 
     const blob = new Blob([md], { type: 'text/markdown;charset=utf-8;' });
@@ -253,13 +255,13 @@ export default function DeckDetailModal({ deck, isOpen, onClose, onStartStudy, o
                     <span className="text-[10px] uppercase font-semibold text-gray-400 block mb-0.5">
                       Question
                     </span>
-                    <p className="font-medium text-white leading-relaxed">{card.q}</p>
+                    <p className="font-medium text-white leading-relaxed">{card.question || card.q}</p>
                   </div>
                   <div className="pt-1.5 border-t border-surface-border/50">
                     <span className="text-[10px] uppercase font-semibold text-brand-lime block mb-0.5">
                       Answer
                     </span>
-                    <p className="text-gray-300 leading-relaxed">{card.a}</p>
+                    <p className="text-gray-300 leading-relaxed">{card.answer || card.a}</p>
                   </div>
                 </div>
               </div>

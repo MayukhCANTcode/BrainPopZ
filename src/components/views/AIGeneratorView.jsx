@@ -108,6 +108,7 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
           id: `quiz-q-${Date.now()}-${idx}`,
           question: q.question,
           options: q.options,
+          correctAnswer: q.correctAnswer,
           correctIndex: q.correctAnswer,
           explanation: q.explanation,
         }));
@@ -144,7 +145,13 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
         badgeColor: 'violet',
         tags: ['Gemini AI', difficulty],
         isBookmarked: false,
-        cards: cards.map((c) => ({ q: c.question, a: c.answer, difficulty: c.difficulty })),
+        cards: cards.map((c) => ({
+          question: c.question,
+          answer: c.answer,
+          q: c.question,
+          a: c.answer,
+          difficulty: c.difficulty,
+        })),
       });
     }
     setTimeout(() => setSavedSuccess(false), 3500);

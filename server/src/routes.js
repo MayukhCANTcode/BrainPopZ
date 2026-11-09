@@ -59,39 +59,41 @@ apiRouter.post('/generate', async (req, res) => {
     console.error('[AI-GEN] Error during generation:', err.message);
 
     // Classify known error patterns
-    const message = err.message || '';
+    const rawMessage = err.message || '';
+    const message = rawMessage.replace(/key=[^&\s]+/gi, 'key=[REDACTED]');
 
-    if (message.includes('API key') || message.includes('API_KEY')) {
+    if (message.includes('API key') || message.includes('API_KEY') || err.status === 401 || err.status === 403) {
       return res.status(401).json({
         error: 'Authentication Error',
         message: 'Invalid or missing Google Gemini API key. Please check the server configuration.',
       });
     }
 
-    if (message.includes('429') || message.includes('quota') || message.includes('ResourceExhausted')) {
+    if (message.includes('429') || message.includes('quota') || message.includes('ResourceExhausted') || err.status === 429) {
       return res.status(429).json({
         error: 'Rate Limit Exceeded',
         message: 'Google Gemini API rate limit exceeded. Please wait a moment before trying again.',
       });
     }
 
-    if (message.includes('timeout') || message.includes('timed out')) {
+    if (message.includes('timeout') || message.includes('timed out') || err.status === 504) {
       return res.status(504).json({
         error: 'Gateway Timeout',
-        message: 'The AI request timed out. Try reducing note length or deck size.',
+        message: 'The AI request timed out after 25 seconds. Try reducing note length or deck size.',
       });
     }
 
     if (err.status === 502 || message.includes('validation') || message.includes('JSON')) {
       return res.status(502).json({
         error: 'AI Output Validation Error',
-        message: err.message || 'Gemini output failed structural schema validation.',
+        message: message || 'Gemini output failed structural schema validation.',
       });
     }
 
     return res.status(err.status || 500).json({
       error: 'Generation Failed',
-      message: err.message || 'An unexpected error occurred while communicating with Google Gemini.',
+      message: message || 'An unexpected error occurred while communicating with Google Gemini.',
     });
   }
 });
+

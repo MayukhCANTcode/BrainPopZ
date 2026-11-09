@@ -60,3 +60,4 @@ export const QuizResponseSchema = z.object({
     .array(QuizQuestionItemSchema)
     .min(1, { message: 'Response must contain at least 1 question' }),
 });
+

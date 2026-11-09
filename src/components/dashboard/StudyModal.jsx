@@ -126,7 +126,7 @@ export default function StudyModal({ deck, onClose }) {
                     Question
                   </span>
                   <p className="text-sm sm:text-base font-medium text-white max-w-sm leading-relaxed">
-                    {currentCard.q}
+                    {currentCard.question || currentCard.q}
                   </p>
                   <div className="mt-4 flex items-center gap-1 text-[11px] text-gray-400">
                     <RotateCw className="w-3 h-3" />
@@ -140,7 +140,7 @@ export default function StudyModal({ deck, onClose }) {
                     Answer
                   </span>
                   <p className="text-sm sm:text-base font-medium text-white max-w-sm leading-relaxed">
-                    {currentCard.a}
+                    {currentCard.answer || currentCard.a}
                   </p>
                   <div className="mt-4 flex items-center gap-1 text-[11px] text-brand-lime">
                     <RotateCw className="w-3 h-3" />

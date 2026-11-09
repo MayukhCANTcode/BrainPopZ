@@ -48,7 +48,13 @@ export default function QuickGenerateCard({ onTriggerGeneration, onStudyDeck }) 
         badgeColor: 'violet',
         tags: ['Gemini 2.5', 'Adaptive'],
         isBookmarked: false,
-        cards: result.cards.map((c) => ({ q: c.question, a: c.answer, difficulty: 'Adaptive' })),
+        cards: result.cards.map((c) => ({
+          question: c.question,
+          answer: c.answer,
+          q: c.question,
+          a: c.answer,
+          difficulty: 'Adaptive',
+        })),
       };
 
       if (onTriggerGeneration) {

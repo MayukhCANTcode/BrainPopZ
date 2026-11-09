@@ -11,7 +11,7 @@ dotenv.config();
 
 // Primary and fallback models supported by modern Gemini API
 const PRIMARY_MODEL = 'gemini-2.5-flash';
-const FALLBACK_MODEL = 'gemini-3.8-flash';
+const FALLBACK_MODEL = 'gemini-3.5-flash';
 
 function getGenAI() {
   const apiKey = process.env.GEMINI_API_KEY;
@@ -155,7 +155,13 @@ export async function generateStudyAsset({ notes, mode, difficulty, quantity }) 
     console.warn(`Primary model (${PRIMARY_MODEL}) error:`, err.message);
 
     // If 503 or model error, attempt fallback model
-    if (err.message.includes('503') || err.message.includes('not found') || err.message.includes('temporarily')) {
+    if (
+      err.message.includes('503') ||
+      err.message.includes('not found') ||
+      err.message.includes('temporarily') ||
+      err.status === 503 ||
+      err.status === 404
+    ) {
       console.log(`Attempting fallback to ${FALLBACK_MODEL}...`);
       usedModel = FALLBACK_MODEL;
       rawContent = await executeGeneration(FALLBACK_MODEL);
