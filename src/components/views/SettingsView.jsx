@@ -5,13 +5,45 @@ import Button from '../common/Button';
 import Badge from '../common/Badge';
 import { currentUser } from '../../data/mockData';
 
-export default function SettingsView() {
-  const [dailyGoal, setDailyGoal] = useState(50);
-  const [spacedRepetition, setSpacedRepetition] = useState(true);
-  const [soundEffects, setSoundEffects] = useState(false);
+export default function SettingsView({ user }) {
+  const [dailyGoal, setDailyGoal] = useState(() => {
+    try {
+      const saved = localStorage.getItem('brainpopz_settings');
+      return saved ? JSON.parse(saved).dailyGoal ?? 50 : 50;
+    } catch {
+      return 50;
+    }
+  });
+
+  const [spacedRepetition, setSpacedRepetition] = useState(() => {
+    try {
+      const saved = localStorage.getItem('brainpopz_settings');
+      return saved ? JSON.parse(saved).spacedRepetition ?? true : true;
+    } catch {
+      return true;
+    }
+  });
+
+  const [soundEffects, setSoundEffects] = useState(() => {
+    try {
+      const saved = localStorage.getItem('brainpopz_settings');
+      return saved ? JSON.parse(saved).soundEffects ?? false : false;
+    } catch {
+      return false;
+    }
+  });
+
   const [savedSuccess, setSavedSuccess] = useState(false);
 
   const handleSave = () => {
+    try {
+      localStorage.setItem(
+        'brainpopz_settings',
+        JSON.stringify({ dailyGoal, spacedRepetition, soundEffects })
+      );
+    } catch (e) {
+      console.warn('Failed to save settings to localStorage', e);
+    }
     setSavedSuccess(true);
     setTimeout(() => setSavedSuccess(false), 3000);
   };
@@ -31,18 +63,22 @@ export default function SettingsView() {
         {/* Profile section */}
         <div className="flex items-center gap-3.5 pb-4 border-b border-surface-border">
           <img
-            src={currentUser.avatarUrl}
-            alt={currentUser.name}
-            className="w-12 h-12 rounded-full object-cover border border-surface-border"
+            src={user?.picture || currentUser.avatarUrl}
+            alt={user?.name || currentUser.name}
+            className="w-12 h-12 rounded-full object-cover border border-surface-border bg-surface-elevated"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = currentUser.avatarUrl;
+            }}
           />
           <div>
             <h2 className="text-sm font-semibold text-white">
-              {currentUser.name}
+              {user?.name || currentUser.name}
             </h2>
-            <p className="text-xs text-gray-400">{currentUser.email}</p>
+            <p className="text-xs text-gray-400">{user?.email || currentUser.email}</p>
             <div className="mt-1">
-              <Badge variant="default" size="sm">
-                {currentUser.role}
+              <Badge variant={user?.id ? 'lime' : 'default'} size="sm">
+                {user?.id ? 'Verified Google Scholar' : currentUser.role}
               </Badge>
             </div>
           </div>

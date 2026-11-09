@@ -7,6 +7,7 @@ import DecksView from './components/views/DecksView';
 import QuizzesView from './components/views/QuizzesView';
 import AnalyticsView from './components/views/AnalyticsView';
 import SettingsView from './components/views/SettingsView';
+import AchievementsView from './components/views/AchievementsView';
 import StudyModal from './components/dashboard/StudyModal';
 import ShortcutsModal from './components/common/ShortcutsModal';
 import { recentDecks } from './data/mockData';
@@ -50,15 +51,19 @@ function App() {
     setUser(null);
   };
 
-  // Initialize with localStorage if available (preserved across logins & reloads)
+  // Initialize with localStorage if available (zero fake data for new users)
   const [decksList, setDecksList] = useState(() => {
     try {
       const saved = localStorage.getItem('brainpopz_decks');
-      return saved ? JSON.parse(saved) : recentDecks;
+      return saved ? JSON.parse(saved) : [];
     } catch {
-      return recentDecks;
+      return [];
     }
   });
+
+  const handleLoadDemoDecks = () => {
+    setDecksList(recentDecks);
+  };
 
   // Sync decksList to localStorage
   useEffect(() => {
@@ -87,16 +92,20 @@ function App() {
     setActiveStudyDeck(deck);
   };
 
-  const handleStartQuiz = () => {
-    setActiveCustomQuiz(null);
-    setCurrentTab('quizzes');
-  };
-
-  const handleStartGeneratedQuiz = (quizQuestions, title) => {
-    setActiveCustomQuiz({
-      questions: quizQuestions,
-      title: title || 'Custom Gemini AI Quiz',
-    });
+  const handleStartGeneratedQuiz = (quizQuestionsOrPayload, title) => {
+    if (quizQuestionsOrPayload && !Array.isArray(quizQuestionsOrPayload) && quizQuestionsOrPayload.questions) {
+      setActiveCustomQuiz({
+        questions: quizQuestionsOrPayload.questions,
+        title: quizQuestionsOrPayload.title || 'Custom Gemini AI Quiz',
+      });
+    } else if (Array.isArray(quizQuestionsOrPayload)) {
+      setActiveCustomQuiz({
+        questions: quizQuestionsOrPayload,
+        title: title || 'Custom Gemini AI Quiz',
+      });
+    } else {
+      setActiveCustomQuiz(null);
+    }
     setCurrentTab('quizzes');
   };
 
@@ -149,10 +158,14 @@ function App() {
       case 'dashboard':
         return (
           <DashboardView
+            user={user}
+            decks={decksList}
             onNavigate={(tab) => setCurrentTab(tab)}
             onStudyDeck={handleStudyDeck}
-            onStartQuiz={handleStartQuiz}
+            onStartQuiz={handleStartGeneratedQuiz}
             onAddNewDeck={handleAddNewDeck}
+            onLoadDemoPack={handleLoadDemoDecks}
+            onToggleBookmark={handleToggleBookmark}
           />
         );
       case 'ai-generator':
@@ -179,17 +192,23 @@ function App() {
             initialQuiz={activeCustomQuiz}
           />
         );
+      case 'achievements':
+        return <AchievementsView onNavigate={(tab) => setCurrentTab(tab)} />;
       case 'analytics':
         return <AnalyticsView decks={decksList} />;
       case 'settings':
-        return <SettingsView />;
+        return <SettingsView user={user} />;
       default:
         return (
           <DashboardView
+            user={user}
+            decks={decksList}
             onNavigate={(tab) => setCurrentTab(tab)}
             onStudyDeck={handleStudyDeck}
-            onStartQuiz={handleStartQuiz}
+            onStartQuiz={handleStartGeneratedQuiz}
             onAddNewDeck={handleAddNewDeck}
+            onLoadDemoPack={handleLoadDemoDecks}
+            onToggleBookmark={handleToggleBookmark}
           />
         );
     }
@@ -215,6 +234,7 @@ function App() {
         onOpenShortcuts={() => setIsShortcutsOpen(true)}
         user={user}
         onLogout={handleLogout}
+        decks={decksList}
       >
         {renderActiveView()}
       </MainLayout>

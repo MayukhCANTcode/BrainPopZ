@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { X, RotateCw, ChevronRight, ChevronLeft, Award, RotateCcw } from 'lucide-react';
 import Button from '../common/Button';
 import Badge from '../common/Badge';
+import { recordCompletedActivity } from '../../services/gamification';
 
 export default function StudyModal({ deck, onClose, onUpdateDeck }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -40,9 +41,12 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
     });
   }, [cards.length, currentIndex]);
 
+  const activityRecordedRef = useRef(false);
+
   // Persist updated mastery and study timestamp to deck on completion
   useEffect(() => {
-    if (isCompleted && onUpdateDeck && deck) {
+    if (isCompleted && onUpdateDeck && deck && !activityRecordedRef.current) {
+      activityRecordedRef.current = true;
       const goodOrEasyCount = Object.values(cardRatings).filter(
         (r) => r === 'good' || r === 'easy'
       ).length;
@@ -54,6 +58,12 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
         masteredCards: effectiveMastered,
         masteryPercentage: Math.min(100, newPercentage),
       });
+
+      // Record study activity in gamification engine!
+      recordCompletedActivity({
+        type: 'flashcards',
+        cardsReviewed: cards.length,
+      });
     }
   }, [isCompleted, onUpdateDeck, deck, cardRatings, cards.length]);
 
@@ -63,6 +73,7 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
   }, []);
 
   const handleRestart = () => {
+    activityRecordedRef.current = false;
     setCurrentIndex(0);
     setIsFlipped(false);
     setIsCompleted(false);

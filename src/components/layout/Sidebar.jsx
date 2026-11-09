@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   LayoutDashboard,
   Sparkles,
@@ -9,18 +9,11 @@ import {
   Flame,
   X,
   LogOut,
+  Award,
+  Zap,
 } from 'lucide-react';
 import Badge from '../common/Badge';
-import { currentUser } from '../../data/mockData';
-
-const navItems = [
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { id: 'ai-generator', label: 'AI Generator', icon: Sparkles, badge: 'New', badgeVariant: 'lime' },
-  { id: 'decks', label: 'My Flashcards', icon: Layers, count: 12 },
-  { id: 'quizzes', label: 'Practice Quizzes', icon: BrainCircuit },
-  { id: 'analytics', label: 'Study Analytics', icon: BarChart3 },
-  { id: 'settings', label: 'Settings', icon: Settings },
-];
+import { getGamificationState, getLevelInfo } from '../../services/gamification';
 
 export default function Sidebar({
   currentTab = 'dashboard',
@@ -29,11 +22,48 @@ export default function Sidebar({
   onCloseMobile,
   user,
   onLogout,
+  decksCount = 0,
 }) {
+  const [gameState, setGameState] = useState(() => getGamificationState());
+
+  useEffect(() => {
+    const handleUpdate = (e) => {
+      if (e.detail) {
+        setGameState(e.detail);
+      } else {
+        setGameState(getGamificationState());
+      }
+    };
+
+    window.addEventListener('brainpopz_gamification_updated', handleUpdate);
+    window.addEventListener('storage', handleUpdate);
+    return () => {
+      window.removeEventListener('brainpopz_gamification_updated', handleUpdate);
+      window.removeEventListener('storage', handleUpdate);
+    };
+  }, []);
+
+  const levelInfo = getLevelInfo(gameState.xp);
+
+  const navItems = [
+    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'ai-generator', label: 'AI Generator', icon: Sparkles, badge: 'AI', badgeVariant: 'lime' },
+    { id: 'decks', label: 'My Flashcards', icon: Layers, count: decksCount },
+    { id: 'quizzes', label: 'Practice Quizzes', icon: BrainCircuit },
+    { id: 'achievements', label: 'Achievements', icon: Award, badge: `${gameState.unlockedAchievements?.length || 0}`, badgeVariant: 'violet' },
+    { id: 'analytics', label: 'Study Analytics', icon: BarChart3 },
+    { id: 'settings', label: 'Settings', icon: Settings },
+  ];
+
   const handleNav = (id) => {
     onSelectTab(id);
     if (onCloseMobile) onCloseMobile();
   };
+
+  const dailyGoalPercent = Math.min(
+    100,
+    Math.round((gameState.cardsReviewedToday / (gameState.dailyGoalTarget || 20)) * 100)
+  );
 
   return (
     <>
@@ -54,20 +84,20 @@ export default function Sidebar({
         {/* Top Section */}
         <div className="flex flex-col flex-1 overflow-y-auto px-3 py-4">
           {/* Logo & Close for mobile */}
-          <div className="flex items-center justify-between mb-6 px-2">
+          <div className="flex items-center justify-between mb-4 px-2">
             <button
               onClick={() => handleNav('dashboard')}
               className="flex items-center gap-2.5 text-left group cursor-pointer focus:outline-none"
               title="Go to BrainPopZ Dashboard"
             >
-              <div className="w-7 h-7 rounded-lg bg-brand-violet/15 text-brand-violet flex items-center justify-center border border-brand-violet/25">
-                <BrainCircuit className="w-4 h-4 stroke-[2.2]" />
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-brand-violet to-brand-lime text-midnight flex items-center justify-center font-bold shadow-md shadow-brand-violet/20">
+                <BrainCircuit className="w-4 h-4 stroke-[2.4]" />
               </div>
               <div className="flex items-baseline gap-1">
-                <span className="font-heading font-bold text-sm tracking-tight text-white">
+                <span className="font-heading font-black text-sm tracking-tight text-white">
                   BrainPop<span className="text-brand-lime">Z</span>
                 </span>
-                <span className="text-[9px] text-gray-500 font-mono">v1.0</span>
+                <span className="text-[9px] text-brand-orange font-mono font-bold">PRO</span>
               </div>
             </button>
 
@@ -81,9 +111,36 @@ export default function Sidebar({
             </button>
           </div>
 
+          {/* Gamification Stats Header Pills */}
+          <div className="grid grid-cols-2 gap-1.5 px-2 mb-4">
+            <div
+              onClick={() => handleNav('achievements')}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-brand-orange/10 border border-brand-orange/20 text-brand-orange cursor-pointer hover:bg-brand-orange/15 transition-colors"
+              title="Current Active Streak"
+            >
+              <Flame className="w-3.5 h-3.5 fill-brand-orange shrink-0" />
+              <div className="truncate">
+                <span className="font-mono font-bold text-xs">{gameState.streak}</span>
+                <span className="text-[10px] ml-1 text-brand-orange/80">streak</span>
+              </div>
+            </div>
+
+            <div
+              onClick={() => handleNav('achievements')}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-brand-lime/10 border border-brand-lime/20 text-brand-lime cursor-pointer hover:bg-brand-lime/15 transition-colors"
+              title="Total XP Earned"
+            >
+              <Zap className="w-3.5 h-3.5 fill-brand-lime shrink-0" />
+              <div className="truncate">
+                <span className="font-mono font-bold text-xs">{gameState.xp}</span>
+                <span className="text-[10px] ml-1 text-brand-lime/80">XP</span>
+              </div>
+            </div>
+          </div>
+
           {/* Navigation Links */}
           <div className="space-y-0.5">
-            <p className="px-2.5 text-[10px] font-medium text-gray-400 uppercase tracking-wider mb-1.5">
+            <p className="px-2.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
               Platform
             </p>
             {navItems.map((item) => {
@@ -96,14 +153,14 @@ export default function Sidebar({
                   onClick={() => handleNav(item.id)}
                   className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
                     isActive
-                      ? 'bg-surface-elevated text-white border border-surface-border'
+                      ? 'bg-surface-elevated text-white border border-surface-border shadow-sm'
                       : 'text-gray-400 hover:text-gray-200 hover:bg-surface-elevated/50'
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
                     <Icon
                       className={`w-4 h-4 ${
-                        isActive ? 'text-brand-violet' : 'text-gray-400'
+                        isActive ? 'text-brand-violet-light' : 'text-gray-400'
                       }`}
                     />
                     <span>{item.label}</span>
@@ -115,7 +172,7 @@ export default function Sidebar({
                     </Badge>
                   )}
 
-                  {item.count && (
+                  {typeof item.count === 'number' && item.count > 0 && (
                     <span className="text-[10px] px-1.5 py-0.2 rounded bg-surface-elevated text-gray-400 border border-surface-border font-mono">
                       {item.count}
                     </span>
@@ -125,32 +182,34 @@ export default function Sidebar({
             })}
           </div>
 
-          {/* Minimalist Study Status Line */}
-          <div className="mt-8 px-2.5 py-3 rounded-lg bg-surface border border-surface-border space-y-2">
+          {/* Duolingo-style Live Daily Progress Card */}
+          <div className="mt-6 px-3 py-3 rounded-xl bg-surface border border-surface-border space-y-2">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-gray-400 flex items-center gap-1.5 text-[11px]">
+              <span className="text-gray-300 flex items-center gap-1.5 text-xs font-medium">
                 <Flame className="w-3.5 h-3.5 text-brand-orange fill-brand-orange" />
                 <span>Daily Cards</span>
               </span>
-              <span className="text-white text-[11px] font-medium font-mono">
-                {currentUser.dailyGoalProgress}/{currentUser.dailyGoalTarget}
+              <span className="text-white text-xs font-bold font-mono">
+                {gameState.cardsReviewedToday}/{gameState.dailyGoalTarget || 20}
               </span>
             </div>
-            <div className="w-full bg-[#0A0A0F] h-1.5 rounded-full overflow-hidden">
+
+            <div className="w-full bg-[#0A0A0F] h-1.5 rounded-full overflow-hidden border border-surface-border/40">
               <div
-                className="bg-brand-lime h-full rounded-full transition-all duration-300"
-                style={{
-                  width: `${(currentUser.dailyGoalProgress / currentUser.dailyGoalTarget) * 100}%`,
-                }}
+                className={`h-full rounded-full transition-all duration-300 ${
+                  dailyGoalPercent >= 100 ? 'bg-brand-lime' : 'bg-brand-orange'
+                }`}
+                style={{ width: `${dailyGoalPercent}%` }}
               />
             </div>
+
             <div className="flex justify-between items-center text-[10px] text-gray-400 pt-0.5">
-              <span>{currentUser.creditsRemaining} AI credits left</span>
+              <span>Tier {levelInfo.level} • {levelInfo.title}</span>
               <button
-                onClick={() => handleNav('ai-generator')}
+                onClick={() => handleNav('achievements')}
                 className="text-brand-violet-light hover:underline cursor-pointer"
               >
-                Top up →
+                Badges →
               </button>
             </div>
           </div>
@@ -164,21 +223,23 @@ export default function Sidebar({
               className="flex items-center gap-2.5 text-left group cursor-pointer focus:outline-none min-w-0"
               title="User Settings"
             >
-              <img
-                src={user?.picture || currentUser.avatarUrl}
-                alt={user?.name || currentUser.name}
-                className="w-7 h-7 rounded-full object-cover border border-surface-border shrink-0 bg-surface-elevated"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = currentUser.avatarUrl;
-                }}
-              />
+              {user?.picture ? (
+                <img
+                  src={user.picture}
+                  alt={user?.name || 'User Profile'}
+                  className="w-7 h-7 rounded-full object-cover border border-surface-border shrink-0 bg-surface-elevated"
+                />
+              ) : (
+                <div className="w-7 h-7 rounded-full bg-brand-violet/20 text-brand-violet-light flex items-center justify-center font-bold text-xs border border-brand-violet/30 shrink-0">
+                  {user?.name ? user.name[0].toUpperCase() : 'U'}
+                </div>
+              )}
               <div className="truncate">
                 <p className="text-xs font-medium text-white truncate group-hover:text-brand-violet-light transition-colors">
-                  {user?.name || currentUser.name}
+                  {user?.name || 'Scholar'}
                 </p>
                 <p className="text-[10px] text-gray-400 truncate">
-                  {user?.email || currentUser.email}
+                  {user?.email || 'scholar@university.edu'}
                 </p>
               </div>
             </button>

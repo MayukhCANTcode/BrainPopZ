@@ -8,9 +8,11 @@ import {
   X,
   BookOpen,
   Keyboard,
+  Zap,
 } from 'lucide-react';
 import Button from '../common/Button';
-import { currentUser, notificationsList, recentDecks } from '../../data/mockData';
+import { notificationsList } from '../../data/mockData';
+import { getGamificationState } from '../../services/gamification';
 
 export default function Header({
   onOpenMobile,
@@ -18,15 +20,34 @@ export default function Header({
   onNavigate,
   onStudyDeck,
   onOpenShortcuts,
+  decks = [],
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const [notifications, setNotifications] = useState(notificationsList);
+  const [gameState, setGameState] = useState(() => getGamificationState());
   const searchInputRef = useRef(null);
   const notifRef = useRef(null);
 
   const unreadCount = notifications.filter((n) => n.unread).length;
+
+  useEffect(() => {
+    const handleUpdate = (e) => {
+      if (e.detail) {
+        setGameState(e.detail);
+      } else {
+        setGameState(getGamificationState());
+      }
+    };
+
+    window.addEventListener('brainpopz_gamification_updated', handleUpdate);
+    window.addEventListener('storage', handleUpdate);
+    return () => {
+      window.removeEventListener('brainpopz_gamification_updated', handleUpdate);
+      window.removeEventListener('storage', handleUpdate);
+    };
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -57,11 +78,11 @@ export default function Header({
   }, []);
 
   const searchResults = searchQuery.trim()
-    ? recentDecks.filter(
+    ? decks.filter(
         (deck) =>
-          deck.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          deck.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          deck.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+          deck.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          deck.subject?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (deck.tags && deck.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase())))
       )
     : [];
 
@@ -130,7 +151,7 @@ export default function Header({
                             {deck.title}
                           </p>
                           <span className="text-[10px] text-gray-400">
-                            {deck.subject} • {deck.totalCards} cards
+                            {deck.subject} • {deck.cards ? deck.cards.length : deck.totalCards || 0} cards
                           </span>
                         </div>
                       </div>
@@ -161,12 +182,24 @@ export default function Header({
       <div className="flex items-center gap-2">
         {/* Streak quick chip */}
         <button
-          onClick={() => onNavigate && onNavigate('analytics')}
-          className="hidden md:flex items-center gap-1.5 px-2 py-1 rounded-md bg-brand-orange/10 border border-brand-orange/20 text-xs text-brand-orange hover:bg-brand-orange/15 transition-colors cursor-pointer"
-          title="View Study Streak"
+          onClick={() => onNavigate && onNavigate('achievements')}
+          className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-brand-orange/10 border border-brand-orange/20 text-xs text-brand-orange hover:bg-brand-orange/15 transition-colors cursor-pointer"
+          title="View Active Study Streak"
         >
           <Flame className="w-3.5 h-3.5 fill-brand-orange" />
-          <span className="font-medium">{currentUser.studyStreak}d streak</span>
+          <span className="font-mono font-bold">{gameState.streak}d</span>
+          <span className="text-[10px] text-brand-orange/80">streak</span>
+        </button>
+
+        {/* XP quick chip */}
+        <button
+          onClick={() => onNavigate && onNavigate('achievements')}
+          className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-brand-lime/10 border border-brand-lime/20 text-xs text-brand-lime hover:bg-brand-lime/15 transition-colors cursor-pointer"
+          title="View Total XP Earned"
+        >
+          <Zap className="w-3.5 h-3.5 fill-brand-lime" />
+          <span className="font-mono font-bold">{gameState.xp}</span>
+          <span className="text-[10px] text-brand-lime/80">XP</span>
         </button>
 
         {/* Keyboard shortcuts trigger */}

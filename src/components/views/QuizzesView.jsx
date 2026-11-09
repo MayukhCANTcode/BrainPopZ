@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { CheckCircle2, XCircle, Play, RotateCcw, Award, ChevronRight, Timer } from 'lucide-react';
 import Card from '../common/Card';
 import Badge from '../common/Badge';
 import Button from '../common/Button';
 import { multiQuestionQuizzes, upcomingReviews } from '../../data/mockData';
+import { recordCompletedActivity, getGamificationState } from '../../services/gamification';
 
 export default function QuizzesView({ initialQuiz }) {
   const [questions, setQuestions] = useState(
@@ -57,6 +58,22 @@ export default function QuizzesView({ initialQuiz }) {
     }
   };
 
+  const [gameState, setGameState] = useState(() => getGamificationState());
+  const hasRecordedRef = useRef(false);
+
+  useEffect(() => {
+    if (isCompleted && !hasRecordedRef.current) {
+      hasRecordedRef.current = true;
+      recordCompletedActivity({
+        type: 'quiz',
+        correctAnswers: score,
+        questionsCount: questions.length,
+        isPerfectQuiz: score === questions.length,
+      });
+      setGameState(getGamificationState());
+    }
+  }, [isCompleted, score, questions.length]);
+
   const handleNextQuestion = () => {
     if (currentIdx + 1 < questions.length) {
       setCurrentIdx((prev) => prev + 1);
@@ -69,6 +86,7 @@ export default function QuizzesView({ initialQuiz }) {
   };
 
   const handleRestart = (quizTitle = activeQuizTitle) => {
+    hasRecordedRef.current = false;
     setQuestions(initialQuiz?.questions || multiQuestionQuizzes.default);
     setMissedQuestions([]);
     setCurrentIdx(0);
@@ -82,6 +100,7 @@ export default function QuizzesView({ initialQuiz }) {
 
   const handleRetestIncorrect = () => {
     if (missedQuestions.length === 0) return;
+    hasRecordedRef.current = false;
     setQuestions([...missedQuestions]);
     setMissedQuestions([]);
     setCurrentIdx(0);
@@ -93,6 +112,7 @@ export default function QuizzesView({ initialQuiz }) {
   };
 
   const handleStartSubjectQuiz = (quizItem) => {
+    hasRecordedRef.current = false;
     setActiveQuizTitle(quizItem.title);
     setQuestions(multiQuestionQuizzes.default);
     setMissedQuestions([]);
@@ -134,8 +154,10 @@ export default function QuizzesView({ initialQuiz }) {
             <span>{isTimerMode ? '15s Timer ON' : 'Untimed'}</span>
           </button>
 
-          <Badge variant="default" size="md">
-            Accuracy: 94.2%
+          <Badge variant="lime" size="md">
+            {gameState.totalQuizzesTaken > 0
+              ? `${Math.round((gameState.totalCorrectAnswers / (gameState.totalQuizzesTaken * 5)) * 100)}% Accuracy`
+              : 'Active Recall'}
           </Badge>
         </div>
       </div>

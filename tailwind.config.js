@@ -9,18 +9,19 @@ export default {
     extend: {
       colors: {
         midnight: {
-          DEFAULT: '#0F1017',
+          DEFAULT: '#11121A',
           darker: '#0A0A0F',
-          lighter: '#151622',
+          lighter: '#181926',
         },
         surface: {
-          DEFAULT: '#151622',
-          card: '#151622',
-          elevated: '#1C1D2C',
-          hover: '#1F2030',
-          active: '#26273B',
-          border: '#242638',
-          'border-subtle': '#1B1C2A',
+          DEFAULT: '#1B1C29',
+          card: '#1B1C29',
+          secondary: '#222638',
+          elevated: '#232538',
+          hover: '#282B40',
+          active: '#2E324B',
+          border: '#292C42',
+          'border-subtle': '#202234',
         },
         brand: {
           violet: {
@@ -40,6 +41,16 @@ export default {
             DEFAULT: '#FFB86B',
             hover: '#FFA242',
             subtle: 'rgba(255, 184, 107, 0.08)',
+          },
+          coral: {
+            DEFAULT: '#FF7F96',
+            hover: '#FF6480',
+            subtle: 'rgba(255, 127, 150, 0.08)',
+          },
+          cyan: {
+            DEFAULT: '#54C7EC',
+            hover: '#3ABDE8',
+            subtle: 'rgba(84, 199, 236, 0.08)',
           },
         },
       },

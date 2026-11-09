@@ -11,6 +11,7 @@ export default function MainLayout({
   onOpenShortcuts,
   user,
   onLogout,
+  decks = [],
 }) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
@@ -24,6 +25,7 @@ export default function MainLayout({
         onCloseMobile={() => setIsMobileOpen(false)}
         user={user}
         onLogout={onLogout}
+        decksCount={decks.length}
       />
 
       {/* Main Content Area */}
@@ -35,6 +37,7 @@ export default function MainLayout({
           onNavigate={onSelectTab}
           onStudyDeck={onStudyDeck}
           onOpenShortcuts={onOpenShortcuts}
+          decks={decks}
         />
 
         {/* Dynamic Page Content */}

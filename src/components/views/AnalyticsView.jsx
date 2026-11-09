@@ -1,22 +1,38 @@
-import React, { useState } from 'react';
-import { TrendingUp, Award, Clock, Flame } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { TrendingUp, Award, Zap, Flame, BookOpen } from 'lucide-react';
 import Card from '../common/Card';
 import Badge from '../common/Badge';
+import { getGamificationState, getLevelInfo } from '../../services/gamification';
 
 export default function AnalyticsView({ decks = [] }) {
   const [period, setPeriod] = useState('month'); // week, month, all
+  const [gameState, setGameState] = useState(() => getGamificationState());
+
+  useEffect(() => {
+    const handleUpdate = (e) => {
+      if (e.detail) {
+        setGameState(e.detail);
+      } else {
+        setGameState(getGamificationState());
+      }
+    };
+
+    window.addEventListener('brainpopz_gamification_updated', handleUpdate);
+    window.addEventListener('storage', handleUpdate);
+    return () => {
+      window.removeEventListener('brainpopz_gamification_updated', handleUpdate);
+      window.removeEventListener('storage', handleUpdate);
+    };
+  }, []);
+
+  const levelInfo = getLevelInfo(gameState.xp);
 
   const subjectMastery = React.useMemo(() => {
     if (!decks || decks.length === 0) {
-      return [
-        { name: 'Computer Science & Systems', percentage: 95, color: 'bg-brand-lime' },
-        { name: 'Biology & Cognitive Neuroscience', percentage: 84, color: 'bg-brand-violet' },
-        { name: 'Artificial Intelligence & ML', percentage: 80, color: 'bg-brand-violet-light' },
-        { name: 'Organic Chemistry', percentage: 69, color: 'bg-brand-orange' },
-      ];
+      return [];
     }
 
-    const colorPalette = ['bg-brand-lime', 'bg-brand-violet', 'bg-brand-violet-light', 'bg-brand-orange'];
+    const colorPalette = ['bg-brand-lime', 'bg-brand-violet', 'bg-brand-violet-light', 'bg-brand-orange', 'bg-cyan-400'];
     const subjectsMap = {};
 
     decks.forEach((deck) => {
@@ -28,21 +44,20 @@ export default function AnalyticsView({ decks = [] }) {
       subjectsMap[subject].mastered += deck.masteredCards || 0;
     });
 
-    const list = Object.entries(subjectsMap).map(([name, stats], idx) => ({
+    return Object.entries(subjectsMap).map(([name, stats], idx) => ({
       name,
+      total: stats.total,
+      mastered: stats.mastered,
       percentage: Math.min(100, Math.round((stats.mastered / (stats.total || 1)) * 100)),
       color: colorPalette[idx % colorPalette.length],
     }));
-
-    return list.length > 0
-      ? list
-      : [
-          { name: 'Computer Science & Systems', percentage: 95, color: 'bg-brand-lime' },
-          { name: 'Biology & Cognitive Neuroscience', percentage: 84, color: 'bg-brand-violet' },
-          { name: 'Artificial Intelligence & ML', percentage: 80, color: 'bg-brand-violet-light' },
-          { name: 'Organic Chemistry', percentage: 69, color: 'bg-brand-orange' },
-        ];
   }, [decks]);
+
+  const totalCardsInLibrary = decks.reduce((sum, d) => sum + (d.cards ? d.cards.length : d.totalCards || 0), 0);
+  const totalCardsMasteredInDecks = decks.reduce((sum, d) => sum + (d.masteredCards || 0), 0);
+  const overallRetention = totalCardsInLibrary > 0
+    ? Math.round((totalCardsMasteredInDecks / totalCardsInLibrary) * 100)
+    : 0;
 
   return (
     <div className="space-y-4">
@@ -53,7 +68,7 @@ export default function AnalyticsView({ decks = [] }) {
             Study Analytics
           </h1>
           <p className="text-xs text-gray-400">
-            Retention rate, recall performance, and subject mastery.
+            Real retention rate, recall milestones, and subject mastery based on your active sessions.
           </p>
         </div>
 
@@ -95,40 +110,40 @@ export default function AnalyticsView({ decks = [] }) {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <Card padding="p-4" className="border-surface-border">
           <div className="flex items-center justify-between text-gray-400 mb-1">
-            <span className="text-xs">Retention Rate</span>
+            <span className="text-xs">Deck Mastery</span>
             <TrendingUp className="w-3.5 h-3.5 text-brand-lime" />
           </div>
           <div className="text-xl sm:text-2xl font-bold font-heading text-white">
-            94.2%
+            {overallRetention}%
           </div>
           <p className="text-[11px] text-brand-lime mt-0.5">
-            +4.1% via spaced recall
+            {totalCardsMasteredInDecks} of {totalCardsInLibrary} cards
           </p>
         </Card>
 
         <Card padding="p-4" className="border-surface-border">
           <div className="flex items-center justify-between text-gray-400 mb-1">
-            <span className="text-xs">Study Time</span>
-            <Clock className="w-3.5 h-3.5 text-brand-violet" />
-          </div>
-          <div className="text-xl sm:text-2xl font-bold font-heading text-white">
-            {period === 'week' ? '18.5h' : '42.8h'}
-          </div>
-          <p className="text-[11px] text-gray-400 mt-0.5">
-            ~1.4h daily average
-          </p>
-        </Card>
-
-        <Card padding="p-4" className="border-surface-border">
-          <div className="flex items-center justify-between text-gray-400 mb-1">
-            <span className="text-xs">Active Streak</span>
+            <span className="text-xs">Study Streak</span>
             <Flame className="w-3.5 h-3.5 text-brand-orange" />
           </div>
           <div className="text-xl sm:text-2xl font-bold font-heading text-white">
-            7 Days
+            {gameState.streak} {gameState.streak === 1 ? 'Day' : 'Days'}
           </div>
           <p className="text-[11px] text-brand-orange mt-0.5">
-            Personal best
+            {gameState.freezes} streak freezes saved
+          </p>
+        </Card>
+
+        <Card padding="p-4" className="border-surface-border">
+          <div className="flex items-center justify-between text-gray-400 mb-1">
+            <span className="text-xs">Total XP</span>
+            <Zap className="w-3.5 h-3.5 text-brand-violet-light" />
+          </div>
+          <div className="text-xl sm:text-2xl font-bold font-heading text-white">
+            {gameState.xp}
+          </div>
+          <p className="text-[11px] text-brand-violet-light mt-0.5">
+            {levelInfo.xpRemaining} XP to Tier {levelInfo.level + 1}
           </p>
         </Card>
 
@@ -138,10 +153,10 @@ export default function AnalyticsView({ decks = [] }) {
             <Award className="w-3.5 h-3.5 text-brand-lime" />
           </div>
           <div className="text-xl sm:text-2xl font-bold font-heading text-white">
-            Lvl 14
+            Lvl {levelInfo.level}
           </div>
-          <p className="text-[11px] text-gray-400 mt-0.5">
-            280 XP to Lvl 15
+          <p className="text-[11px] text-gray-400 mt-0.5 truncate">
+            {levelInfo.title}
           </p>
         </Card>
       </div>
@@ -149,29 +164,47 @@ export default function AnalyticsView({ decks = [] }) {
       {/* Subject Breakdown Card */}
       <Card padding="p-5" className="border-surface-border">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-semibold text-white">
-            Subject Mastery
-          </h3>
-          <Badge variant="default" size="sm">
-            Top 5%
-          </Badge>
+          <div>
+            <h3 className="text-sm font-semibold text-white">
+              Subject Mastery
+            </h3>
+            <p className="text-[11px] text-gray-400">Recall progress mapped by academic discipline</p>
+          </div>
+          {subjectMastery.length > 0 && (
+            <Badge variant="default" size="sm">
+              {subjectMastery.length} {subjectMastery.length === 1 ? 'Subject' : 'Subjects'}
+            </Badge>
+          )}
         </div>
-        <div className="space-y-3.5">
-          {subjectMastery.map((item) => (
-            <div key={item.name} className="space-y-1">
-              <div className="flex justify-between text-xs">
-                <span className="text-gray-300 font-medium">{item.name}</span>
-                <span className="font-mono text-gray-400">{item.percentage}%</span>
+
+        {subjectMastery.length > 0 ? (
+          <div className="space-y-3.5">
+            {subjectMastery.map((item) => (
+              <div key={item.name} className="space-y-1">
+                <div className="flex justify-between text-xs">
+                  <span className="text-gray-300 font-medium">{item.name}</span>
+                  <span className="font-mono text-gray-400">
+                    {item.mastered}/{item.total} cards ({item.percentage}%)
+                  </span>
+                </div>
+                <div className="w-full bg-[#0A0A0F] h-1.5 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all duration-300 ${item.color}`}
+                    style={{ width: `${item.percentage}%` }}
+                  />
+                </div>
               </div>
-              <div className="w-full bg-[#0A0A0F] h-1.5 rounded-full overflow-hidden">
-                <div
-                  className={`h-full rounded-full transition-all duration-300 ${item.color}`}
-                  style={{ width: `${item.percentage}%` }}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="py-8 text-center text-gray-400 flex flex-col items-center justify-center">
+            <BookOpen className="w-8 h-8 text-gray-600 mb-2" />
+            <p className="text-xs">No study sets created yet.</p>
+            <p className="text-[11px] text-gray-500 mt-0.5">
+              Generate decks with Gemini AI to view discipline-specific analytics.
+            </p>
+          </div>
+        )}
       </Card>
     </div>
   );
