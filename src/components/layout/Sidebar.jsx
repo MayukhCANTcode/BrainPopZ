@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import Badge from '../common/Badge';
 import Logo from '../common/Logo';
+import MonthlyStreakHeatmap from '../dashboard/MonthlyStreakHeatmap';
 import { getGamificationState, getLevelInfo } from '../../services/gamification';
 
 export default function Sidebar({
@@ -206,6 +207,9 @@ export default function Sidebar({
               </button>
             </div>
           </div>
+
+          {/* LeetCode-style Monthly Streak Heatmap */}
+          <MonthlyStreakHeatmap />
         </div>
 
         {/* Bottom User Profile Section */}
