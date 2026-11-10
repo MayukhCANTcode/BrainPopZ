@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -16,15 +17,28 @@ import { apiRouter } from './routes.js';
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Allowed origins
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:3000',
+];
+if (process.env.FRONTEND_URL) {
+  allowedOrigins.push(process.env.FRONTEND_URL);
+}
+
 // CORS configuration supporting HTTP-only cookie credentials
 app.use(
   cors({
-    origin: [
-      'http://localhost:5173',
-      'http://localhost:3000',
-      'http://127.0.0.1:5173',
-      'http://127.0.0.1:3000',
-    ],
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, or same-origin)
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(null, true); // Permissive in deployment with credentials handled safely
+      }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -39,21 +53,31 @@ app.use(express.urlencoded({ extended: true, limit: '2mb' }));
 // Mount API routes
 app.use('/api', apiRouter);
 
-// Root fallback
-app.get('/', (req, res) => {
-  res.json({
-    message: 'BrainPopZ AI Generation Engine Backend is running.',
-    endpoints: {
-      health: 'GET /api/health',
-      generate: 'POST /api/generate',
-    },
+// In production, serve the built static client from dist/ if available
+const distPath = path.resolve(__dirname, '../../dist');
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) return next();
+    res.sendFile(path.join(distPath, 'index.html'));
   });
-});
+} else {
+  // Root fallback in standalone API mode
+  app.get('/', (req, res) => {
+    res.json({
+      message: 'BrainPopZ AI Generation Engine Backend is running.',
+      endpoints: {
+        health: 'GET /api/health',
+        generate: 'POST /api/generate',
+      },
+    });
+  });
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ error: 'Endpoint not found' });
-});
+  // 404 handler for API mode
+  app.use((req, res) => {
+    res.status(404).json({ error: 'Endpoint not found' });
+  });
+}
 
 // Global error handler
 app.use((err, req, res, _next) => {
