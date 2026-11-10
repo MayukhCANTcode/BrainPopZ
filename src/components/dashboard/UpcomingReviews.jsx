@@ -93,7 +93,7 @@ export default function UpcomingReviews({ onStartQuiz }) {
                   <span className="text-[9px] text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity font-mono">
                     {day.count}
                   </span>
-                  <div className="w-full bg-[#0A0A0F] rounded-t h-full max-h-20 flex items-end overflow-hidden">
+                  <div className="w-full bg-surface-secondary rounded-t h-full max-h-20 flex items-end overflow-hidden">
                     <div
                       className={`w-full rounded-t transition-all duration-300 ${
                         isToday

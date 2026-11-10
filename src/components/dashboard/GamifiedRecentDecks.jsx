@@ -152,7 +152,7 @@ export default function GamifiedRecentDecks({
                       </span>
                     </div>
 
-                    <div className="w-full bg-[#0A0A0F] h-1.5 rounded-full overflow-hidden">
+                    <div className="w-full bg-surface-secondary h-1.5 rounded-full overflow-hidden">
                       <div
                         className={`h-full rounded-full transition-all duration-300 ${
                           mastery >= 80 ? 'bg-brand-lime' : 'bg-brand-violet'

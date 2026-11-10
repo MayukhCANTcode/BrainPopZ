@@ -281,7 +281,7 @@ export default function MonthlyStreakHeatmap({ className = '' }) {
         <span className="tracking-tight">Monthly Streak</span>
         <div className="flex items-center gap-1">
           <span>Less</span>
-          <div className="w-2 h-2 rounded-[2px] bg-[#181A26] border border-surface-border/40" />
+          <div className="w-2 h-2 rounded-[2px] bg-surface-secondary border border-surface-border/60" />
           <div className="w-2 h-2 rounded-[2px] bg-brand-lime/25 border border-brand-lime/30" />
           <div className="w-2 h-2 rounded-[2px] bg-brand-lime/60 border border-brand-lime/70" />
           <div className="w-2 h-2 rounded-[2px] bg-brand-lime border border-brand-lime" />

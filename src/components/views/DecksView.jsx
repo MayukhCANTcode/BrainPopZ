@@ -156,7 +156,7 @@ export default function DecksView({ onNavigate, onStudyDeck, decks = [], onToggl
                     {deck.masteryPercentage}%
                   </span>
                 </div>
-                <div className="w-full bg-[#0A0A0F] h-1 rounded-full overflow-hidden mb-2.5">
+                <div className="w-full bg-surface-secondary h-1 rounded-full overflow-hidden mb-2.5">
                   <div
                     className="bg-brand-lime h-full rounded-full"
                     style={{ width: `${deck.masteryPercentage}%` }}
