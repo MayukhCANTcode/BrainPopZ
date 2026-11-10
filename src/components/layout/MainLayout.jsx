@@ -48,6 +48,7 @@ export default function MainLayout({
       <div className="flex-1 flex flex-col min-w-0 lg:pl-64">
         {/* Top Header */}
         <Header
+          user={user}
           onOpenMobile={() => setIsMobileOpen(true)}
           onQuickGenerate={onQuickGenerate}
           onNavigate={onSelectTab}

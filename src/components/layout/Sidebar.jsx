@@ -145,16 +145,16 @@ export default function Sidebar({
                 <button
                   key={item.id}
                   onClick={() => handleNav(item.id)}
-                  className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-150 cursor-pointer ${
                     isActive
-                      ? 'bg-surface-elevated text-white border border-surface-border shadow-sm'
-                      : 'text-gray-400 hover:text-gray-200 hover:bg-surface-elevated/50'
+                      ? 'bg-brand-violet/12 text-white border border-brand-violet/30 shadow-xs'
+                      : 'text-gray-400 hover:text-white hover:bg-surface-elevated/60 border border-transparent'
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
                     <Icon
-                      className={`w-4 h-4 ${
-                        isActive ? 'text-brand-violet-light' : 'text-gray-400'
+                      className={`w-4 h-4 transition-colors ${
+                        isActive ? 'text-brand-violet' : 'text-gray-400'
                       }`}
                     />
                     <span>{item.label}</span>

@@ -1,13 +1,13 @@
 import React from 'react';
-import WelcomeBanner from '../dashboard/WelcomeBanner';
 import HeroGenerator from '../dashboard/HeroGenerator';
-import GamifiedStreakCard from '../dashboard/GamifiedStreakCard';
-import DailyQuestCard from '../dashboard/DailyQuestCard';
 import WeeklyActivityTracker from '../dashboard/WeeklyActivityTracker';
 import GamifiedRecentDecks from '../dashboard/GamifiedRecentDecks';
+import GamifiedStreakCard from '../dashboard/GamifiedStreakCard';
+import DailyQuestCard from '../dashboard/DailyQuestCard';
+import RecommendedPractice from '../dashboard/RecommendedPractice';
 
 export default function DashboardView({
-  user,
+  user: _user,
   decks = [],
   onNavigate,
   onStudyDeck,
@@ -17,15 +17,8 @@ export default function DashboardView({
   onToggleBookmark,
 }) {
   return (
-    <div className="space-y-6">
-      {/* 1. Motivational Greeting Banner */}
-      <WelcomeBanner
-        user={user}
-        onGenerateClick={() => onNavigate('ai-generator')}
-        onStartPracticeClick={() => onNavigate('quizzes')}
-      />
-
-      {/* 2. Primary Prominence: Hero AI Study Generator */}
+    <div className="space-y-8">
+      {/* 1. Primary Prominence: Hero AI Study Studio ("Turn your notes into knowledge") */}
       <HeroGenerator
         onDeckGenerated={(deck) => {
           if (onAddNewDeck) onAddNewDeck(deck);
@@ -38,25 +31,10 @@ export default function DashboardView({
         }}
       />
 
-      {/* 3. Gamification Core Row: Duolingo-style Streaks & Quests */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <GamifiedStreakCard onOpenQuests={() => onNavigate('achievements')} />
-        <DailyQuestCard
-          onNavigate={onNavigate}
-          onStartStudy={() => {
-            if (decks.length > 0 && onStudyDeck) {
-              onStudyDeck(decks[0]);
-            } else {
-              onNavigate('ai-generator');
-            }
-          }}
-        />
-      </div>
-
-      {/* 4. Weekly Activity & Heatmap (Real 7-day study records) */}
+      {/* 2. Weekly Activity — 7-day real activity visualization */}
       <WeeklyActivityTracker onStartQuiz={() => onNavigate('quizzes')} />
 
-      {/* 5. Recent Study Sets (Real user decks with zero fake data and demo loader) */}
+      {/* 3. Continue Learning — Recently studied decks or welcoming empty shelf */}
       <GamifiedRecentDecks
         decks={decks}
         onStudyDeck={onStudyDeck}
@@ -83,6 +61,39 @@ export default function DashboardView({
         onToggleBookmark={onToggleBookmark}
         onLoadDemoPack={onLoadDemoPack}
         onNavigateToGenerator={() => onNavigate('ai-generator')}
+      />
+
+      {/* 4. Today's Goal & Daily Quests */}
+      <div>
+        <div className="mb-4">
+          <h2 className="text-base font-heading font-bold text-white tracking-tight">
+            Today's Target & Quests
+          </h2>
+          <p className="text-xs text-gray-400">
+            Keep your active streak alive and level up your memory rank
+          </p>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <GamifiedStreakCard onOpenQuests={() => onNavigate('achievements')} />
+          <DailyQuestCard
+            onNavigate={onNavigate}
+            onStartStudy={() => {
+              if (decks.length > 0 && onStudyDeck) {
+                onStudyDeck(decks[0]);
+              } else {
+                onNavigate('ai-generator');
+              }
+            }}
+          />
+        </div>
+      </div>
+
+      {/* 5. Recommended Practice — Curated high-yield topics & quizzes */}
+      <RecommendedPractice
+        onStartQuiz={onStartQuiz}
+        onSelectTopic={(_topicPrompt) => {
+          onNavigate('ai-generator');
+        }}
       />
     </div>
   );

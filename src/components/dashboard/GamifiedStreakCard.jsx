@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Flame, Shield, Zap, Sparkles } from 'lucide-react';
 import Card from '../common/Card';
+import Mascot from '../common/Mascot';
 import { getGamificationState, getLevelInfo } from '../../services/gamification';
 
 export default function GamifiedStreakCard({ onOpenQuests }) {
@@ -147,15 +148,22 @@ export default function GamifiedStreakCard({ onOpenQuests }) {
           </div>
 
           <div className="flex items-center justify-between text-[11px] text-gray-400 pt-0.5">
-            <span>
-              {dailyProgressPercent >= 100
-                ? '🎉 Daily goal completed!'
-                : `${(gameState.dailyGoalTarget || 20) - gameState.cardsReviewedToday} more cards to hit target`}
-            </span>
+            <div className="flex items-center gap-1.5">
+              {dailyProgressPercent >= 100 ? (
+                <>
+                  <Mascot size="xs" animation="bounce" />
+                  <span className="text-brand-lime font-semibold">🎉 Daily goal crushed! Streak protected.</span>
+                </>
+              ) : (
+                <span>
+                  🔥 {(gameState.dailyGoalTarget || 20) - gameState.cardsReviewedToday} more cards to hit today's target
+                </span>
+              )}
+            </div>
             {onOpenQuests && (
               <button
                 onClick={onOpenQuests}
-                className="text-brand-violet-light hover:text-white transition-colors cursor-pointer text-[11px] font-medium"
+                className="text-brand-violet-light hover:text-white transition-colors cursor-pointer text-[11px] font-semibold shrink-0"
               >
                 View Quests →
               </button>

@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { CheckCircle2, XCircle, Play, RotateCcw, Award, ChevronRight, Timer } from 'lucide-react';
+import { CheckCircle2, XCircle, Play, RotateCcw, ChevronRight, Timer } from 'lucide-react';
 import Card from '../common/Card';
 import Badge from '../common/Badge';
 import Button from '../common/Button';
 import Confetti from '../common/Confetti';
+import Mascot from '../common/Mascot';
 import { multiQuestionQuizzes, upcomingReviews } from '../../data/mockData';
 import { recordCompletedActivity, getGamificationState } from '../../services/gamification';
 import {
@@ -291,19 +292,24 @@ export default function QuizzesView({ initialQuiz }) {
             </div>
           </>
         ) : (
-          /* Quiz Completed Screen */
-          <div className="py-6 flex flex-col items-center justify-center text-center space-y-3 animate-fadeIn relative">
-            <Confetti trigger={isCompleted} count={60} />
-            <div className="w-12 h-12 rounded-xl bg-surface-elevated text-brand-lime flex items-center justify-center border border-surface-border">
-              <Award className="w-6 h-6" />
+          /* Quiz Completed Screen with Mascot celebration */
+          <div className="py-8 flex flex-col items-center justify-center text-center space-y-4 animate-fadeIn relative">
+            <Confetti trigger={isCompleted} count={70} />
+            
+            <div className="mb-1">
+              <Mascot
+                size="lg"
+                animation="bounce"
+                bubble={score === questions.length ? 'Flawless 100%! 🧠' : 'Great practice session! ⚡'}
+              />
             </div>
 
             <div>
-              <h3 className="text-base font-semibold text-white">
+              <h3 className="text-lg font-heading font-bold text-white">
                 Drill Complete
               </h3>
-              <p className="text-xs text-gray-400 mt-1">
-                You scored <strong className="text-white font-medium">{score} / {questions.length}</strong> ({Math.round((score / questions.length) * 100)}%) on {activeQuizTitle}
+              <p className="text-xs text-gray-400 mt-1 max-w-sm">
+                You scored <strong className="text-brand-lime font-mono font-bold">{score} / {questions.length}</strong> ({Math.round((score / questions.length) * 100)}%) on {activeQuizTitle}
               </p>
             </div>
 

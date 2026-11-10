@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { X, RotateCw, ChevronRight, ChevronLeft, RotateCcw, Award } from 'lucide-react';
+import { X, RotateCw, ChevronRight, ChevronLeft, RotateCcw } from 'lucide-react';
 import Button from '../common/Button';
 import Badge from '../common/Badge';
 import Confetti from '../common/Confetti';
+import Mascot from '../common/Mascot';
 import { recordCompletedActivity } from '../../services/gamification';
 import { playCardFlipSound, playCelebrationSound } from '../../services/soundEffects';
 
@@ -262,11 +263,12 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
             </div>
           </>
         ) : (
-          /* Completion State */
+          /* Completion State with Mascot */
           <div className="py-6 flex flex-col items-center justify-center text-center flex-1 space-y-3 animate-fadeIn relative">
-            <Confetti trigger={isCompleted} count={60} />
-            <div className="w-12 h-12 rounded-xl bg-surface-elevated text-brand-lime flex items-center justify-center border border-surface-border">
-              <Award className="w-6 h-6" />
+            <Confetti trigger={isCompleted} count={70} />
+            
+            <div className="mb-1">
+              <Mascot size="lg" animation="bounce" bubble="Deck Mastered! 🧠" />
             </div>
 
             <div>

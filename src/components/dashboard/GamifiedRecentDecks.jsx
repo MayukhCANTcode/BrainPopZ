@@ -1,8 +1,9 @@
 import React from 'react';
-import { Bookmark, Play, ArrowRight, BookOpen, Sparkles, Plus, BrainCircuit } from 'lucide-react';
+import { Bookmark, Play, ArrowRight, Sparkles, Plus, BrainCircuit } from 'lucide-react';
 import Card from '../common/Card';
 import Badge from '../common/Badge';
 import Button from '../common/Button';
+import Mascot from '../common/Mascot';
 
 export default function GamifiedRecentDecks({
   decks = [],
@@ -20,21 +21,23 @@ export default function GamifiedRecentDecks({
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-sm font-semibold text-white tracking-tight flex items-center gap-2">
-            <span>Recent Flashcard Decks</span>
-            <span className="text-[10px] font-mono text-gray-400 bg-surface-elevated px-2 py-0.5 rounded border border-surface-border">
-              {decks.length} {decks.length === 1 ? 'deck' : 'decks'}
-            </span>
+          <h2 className="text-base font-heading font-bold text-white tracking-tight flex items-center gap-2">
+            <span>Continue Learning</span>
+            {hasDecks && (
+              <span className="text-[10px] font-mono text-gray-400 bg-surface-elevated px-2 py-0.5 rounded-full border border-surface-border">
+                {decks.length} {decks.length === 1 ? 'deck' : 'decks'}
+              </span>
+            )}
           </h2>
           <p className="text-xs text-gray-400">
-            Decks in active review and spaced repetition queue
+            Recently studied decks in your active spaced recall queue
           </p>
         </div>
 
         {hasDecks && (
           <button
             onClick={onViewAll}
-            className="text-xs font-medium text-brand-violet-light hover:text-white flex items-center gap-1 transition-colors cursor-pointer"
+            className="text-xs font-semibold text-brand-violet-light hover:text-white flex items-center gap-1 transition-colors cursor-pointer"
           >
             <span>View all in library</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -42,18 +45,18 @@ export default function GamifiedRecentDecks({
         )}
       </div>
 
-      {/* When Empty: Duolingo-style warm empty state with Demo Pack Loader */}
+      {/* When Empty: Warm Mascot empty state with Starter Pack Loader */}
       {!hasDecks ? (
-        <Card padding="p-8" className="border-surface-border text-center flex flex-col items-center justify-center">
-          <div className="w-14 h-14 rounded-2xl bg-surface-elevated text-brand-violet flex items-center justify-center border border-surface-border mb-3 shadow-inner">
-            <BookOpen className="w-7 h-7 stroke-[1.8]" />
+        <Card padding="p-8 sm:p-10" className="border-surface-border text-center flex flex-col items-center justify-center">
+          <div className="mb-4">
+            <Mascot size="lg" animation="float" />
           </div>
 
-          <h3 className="text-base font-semibold text-white mb-1">
-            Your Study Bookshelf is Ready
+          <h3 className="text-base sm:text-lg font-heading font-bold text-white mb-1.5">
+            Your Study Shelf is Ready!
           </h3>
           <p className="text-xs text-gray-400 max-w-md mb-5 leading-relaxed">
-            You don't have any flashcard sets saved yet. Generate an adaptive deck on any topic using Google Gemini AI, or load our starter pack to test right away.
+            You don't have any saved flashcard decks yet. Enter any concept above to generate adaptive cards with Google Gemini AI, or load a curated starter pack.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-3">

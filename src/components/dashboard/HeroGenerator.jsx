@@ -19,6 +19,7 @@ import {
 import Card from '../common/Card';
 import Button from '../common/Button';
 import Badge from '../common/Badge';
+import Mascot from '../common/Mascot';
 import { generateContent, fetchYouTubeTranscript } from '../../services/api';
 import { recordCompletedActivity } from '../../services/gamification';
 
@@ -206,31 +207,22 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
     >
       <div className="space-y-5">
         {/* Header Banner */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl overflow-hidden border border-brand-violet/30 shadow-md shadow-brand-violet/15 bg-midnight shrink-0 hidden sm:block">
-              <img
-                src="/brainpopz-logo.png"
-                alt="BrainPopZ Mascot"
-                className="w-full h-full object-cover scale-105"
-              />
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-brand-violet/10 border border-brand-violet/25 text-brand-violet-light text-[11px] font-semibold mb-2">
+              <Sparkles className="w-3.5 h-3.5 text-brand-lime" />
+              <span>AI Study Studio</span>
             </div>
-            <div>
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-brand-violet/15 border border-brand-violet/30 text-brand-violet-light text-[11px] font-medium mb-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-brand-lime" />
-                <span>Real Google Gemini AI Engine</span>
-              </div>
-              <h2 className="text-xl sm:text-2xl font-heading font-extrabold text-white tracking-tight">
-                What are we learning today?
-              </h2>
-              <p className="text-xs text-gray-400">
-                Turn topics, notes, syllabi, or YouTube lectures into interactive flashcards and diagnostic drills.
-              </p>
-            </div>
+            <h1 className="text-2xl sm:text-3xl font-heading font-extrabold text-white tracking-tight">
+              Turn your notes into knowledge.
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-400 mt-1 leading-relaxed">
+              Create flashcards and quizzes from anything you're learning.
+            </p>
           </div>
 
           {/* Mode Selector Segmented Pill */}
-          <div className="flex items-center p-1 rounded-xl bg-surface-secondary border border-surface-border self-start sm:self-auto">
+          <div className="flex items-center p-1 rounded-xl bg-surface-secondary border border-surface-border self-start sm:self-auto shrink-0">
             <button
               type="button"
               onClick={() => {
@@ -644,6 +636,24 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
                   Take Practice Quiz
                 </Button>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* Generating Feedback Card with Mascot */}
+        {isGenerating && (
+          <div className="p-4 rounded-xl bg-surface-secondary/80 border border-brand-violet/40 flex items-center gap-3.5 animate-fadeIn">
+            <Mascot size="sm" animation="float" />
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                <Loader2 className="w-3.5 h-3.5 text-brand-lime animate-spin shrink-0" />
+                <span className="text-xs font-semibold text-white">
+                  Crafting your active recall deck with Gemini AI...
+                </span>
+              </div>
+              <p className="text-[11px] text-gray-400 truncate">
+                Formatting rigorous questions and validating scientific rationales.
+              </p>
             </div>
           </div>
         )}

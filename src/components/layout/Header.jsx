@@ -15,6 +15,7 @@ import { notificationsList } from '../../data/mockData';
 import { getGamificationState } from '../../services/gamification';
 
 export default function Header({
+  user,
   onOpenMobile,
   onQuickGenerate,
   onNavigate,
@@ -286,6 +287,26 @@ export default function Header({
         >
           <span>Generate</span>
         </Button>
+
+        {/* User Profile Avatar */}
+        <button
+          onClick={() => onNavigate && onNavigate('settings')}
+          className="flex items-center p-0.5 rounded-full hover:ring-2 hover:ring-brand-violet/40 transition-all cursor-pointer focus:outline-none shrink-0"
+          title={user?.name ? `${user.name} (Settings)` : 'Account Settings'}
+          aria-label="User Profile and Settings"
+        >
+          {user?.picture ? (
+            <img
+              src={user.picture}
+              alt={user?.name || 'User Profile'}
+              className="w-7 h-7 rounded-full object-cover border border-surface-border bg-surface-elevated"
+            />
+          ) : (
+            <div className="w-7 h-7 rounded-full bg-brand-violet/20 text-brand-violet-light flex items-center justify-center font-bold text-xs border border-brand-violet/30">
+              {user?.name ? user.name[0].toUpperCase() : 'U'}
+            </div>
+          )}
+        </button>
       </div>
 
       {/* Expandable Mobile Search bar */}
