@@ -1,7 +1,7 @@
 import React from 'react';
 
 /**
- * Minimalist shadcn-style Badge component.
+ * Whimsical, friendly Badge component for BrainPopZ.
  */
 export default function Badge({
   children,
@@ -11,11 +11,11 @@ export default function Badge({
   className = '',
 }) {
   const variantStyles = {
-    default: 'bg-surface-elevated text-gray-300 border-surface-border',
-    violet: 'bg-brand-violet/10 text-brand-violet-light border-brand-violet/25',
-    lime: 'bg-brand-lime/10 text-brand-lime border-brand-lime/25',
-    orange: 'bg-brand-orange/10 text-brand-orange border-brand-orange/25',
-    outline: 'bg-transparent text-gray-400 border-surface-border',
+    default: 'bg-surface-elevated text-gray-200 border-surface-border shadow-xs',
+    violet: 'bg-brand-violet/15 text-brand-violet-light border-brand-violet/30 font-semibold shadow-xs',
+    lime: 'bg-brand-lime/15 text-brand-lime border-brand-lime/30 font-semibold shadow-xs',
+    orange: 'bg-brand-orange/15 text-brand-orange border-brand-orange/30 font-semibold shadow-xs',
+    outline: 'bg-transparent text-gray-300 border-surface-border',
   };
 
   const dotColors = {
@@ -27,9 +27,9 @@ export default function Badge({
   };
 
   const sizeStyles = {
-    sm: 'text-[10px] px-1.5 py-0.5 gap-1',
-    md: 'text-xs px-2 py-0.5 gap-1.5 font-medium',
-    lg: 'text-xs px-2.5 py-1 gap-1.5 font-medium',
+    sm: 'text-[10px] px-2 py-0.5 gap-1 font-semibold rounded-full',
+    md: 'text-xs px-2.5 py-0.5 gap-1.5 font-semibold rounded-full',
+    lg: 'text-xs px-3 py-1 gap-1.5 font-bold rounded-full',
   };
 
   const currentVariant = variantStyles[variant] || variantStyles.default;
@@ -38,11 +38,11 @@ export default function Badge({
 
   return (
     <span
-      className={`inline-flex items-center rounded-md border tracking-tight transition-colors ${currentSize} ${currentVariant} ${className}`}
+      className={`inline-flex items-center border tracking-tight transition-all duration-150 ${currentSize} ${currentVariant} ${className}`}
     >
       {dot && (
         <span
-          className={`w-1.5 h-1.5 rounded-full ${currentDot}`}
+          className={`w-1.5 h-1.5 rounded-full animate-pulse ${currentDot}`}
         />
       )}
       {children}

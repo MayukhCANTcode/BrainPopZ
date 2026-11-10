@@ -13,13 +13,13 @@ export default function Card({
   ...props
 }) {
   const hoverStyles = hoverEffect
-    ? 'hover:border-surface-active hover:-translate-y-0.5 hover:shadow-card-hover transition-all duration-200 cursor-pointer'
+    ? 'hover:border-brand-violet/35 hover:-translate-y-1 hover:shadow-card-hover transition-all duration-200 cursor-pointer'
     : 'transition-all duration-150';
 
   return (
     <Component
       onClick={onClick}
-      className={`bg-surface border border-surface-border rounded-xl shadow-card ${padding} ${hoverStyles} ${className}`}
+      className={`bg-surface border border-surface-border rounded-2xl shadow-card ${padding} ${hoverStyles} ${className}`}
       {...props}
     >
       {children}

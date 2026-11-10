@@ -222,18 +222,18 @@ export default function QuizzesView({ initialQuiz }) {
                 const isSelected = selectedOption === idx;
                 const isCorrect = idx === correctIdx;
 
-                let buttonStyle = 'bg-surface-elevated border-surface-border text-gray-300 hover:border-gray-600 cursor-pointer';
+                let buttonStyle = 'bg-surface-elevated border-surface-border text-gray-200 hover:border-gray-500 hover:bg-[#282C40] active:translate-y-[2px] shadow-[0_2.5px_0_0_#141724] cursor-pointer';
 
                 if (isSubmitted) {
                   if (isCorrect) {
-                    buttonStyle = 'bg-brand-lime/10 border-brand-lime/40 text-brand-lime font-medium';
+                    buttonStyle = 'bg-brand-lime/15 border-brand-lime/60 text-brand-lime font-bold shadow-[0_2.5px_0_0_#89BC27] -translate-y-0.5';
                   } else if (isSelected && !isCorrect) {
-                    buttonStyle = 'bg-red-500/10 border-red-500/30 text-red-400';
+                    buttonStyle = 'bg-red-500/15 border-red-500/40 text-red-400 shadow-[0_2.5px_0_0_#8B1E1E]';
                   } else {
-                    buttonStyle = 'bg-surface-elevated/40 border-surface-border text-gray-400 opacity-50';
+                    buttonStyle = 'bg-surface-elevated/40 border-surface-border/50 text-gray-400 opacity-50 shadow-none';
                   }
                 } else if (isSelected) {
-                  buttonStyle = 'bg-surface-active border-brand-violet/50 text-white font-medium';
+                  buttonStyle = 'bg-brand-violet/15 border-brand-violet text-white font-bold shadow-[0_2.5px_0_0_#7551DC] -translate-y-0.5';
                 }
 
                 return (
@@ -241,7 +241,7 @@ export default function QuizzesView({ initialQuiz }) {
                     key={idx}
                     type="button"
                     onClick={() => handleSelectOption(idx)}
-                    className={`w-full text-left p-3 rounded-lg border text-xs transition-colors flex items-center justify-between ${buttonStyle}`}
+                    className={`w-full text-left p-3.5 rounded-xl border text-xs transition-all duration-100 flex items-center justify-between ${buttonStyle}`}
                   >
                     <span>{opt}</span>
                     {isSubmitted && isCorrect && <CheckCircle2 className="w-3.5 h-3.5 text-brand-lime shrink-0 ml-2" />}

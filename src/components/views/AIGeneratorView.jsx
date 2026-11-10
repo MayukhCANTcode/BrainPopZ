@@ -224,10 +224,10 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
                 type="button"
                 onClick={() => setFormat('flashcards')}
                 disabled={isGenerating}
-                className={`py-1.5 px-2.5 rounded-md border text-center font-medium transition-colors cursor-pointer ${
+                className={`py-2 px-2.5 rounded-xl border text-center font-bold transition-all duration-100 cursor-pointer ${
                   format === 'flashcards'
-                    ? 'bg-surface-elevated border-brand-violet/40 text-white'
-                    : 'bg-transparent border-surface-border text-gray-400 hover:text-white'
+                    ? 'bg-brand-violet text-midnight border-brand-violet shadow-[0_2.5px_0_0_#7551DC] -translate-y-0.5'
+                    : 'bg-surface-elevated/60 border-surface-border text-gray-400 hover:text-white hover:border-gray-500'
                 }`}
               >
                 Flashcards
@@ -236,10 +236,10 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
                 type="button"
                 onClick={() => setFormat('quiz')}
                 disabled={isGenerating}
-                className={`py-1.5 px-2.5 rounded-md border text-center font-medium transition-colors cursor-pointer ${
+                className={`py-2 px-2.5 rounded-xl border text-center font-bold transition-all duration-100 cursor-pointer ${
                   format === 'quiz'
-                    ? 'bg-surface-elevated border-brand-violet/40 text-white'
-                    : 'bg-transparent border-surface-border text-gray-400 hover:text-white'
+                    ? 'bg-brand-lime text-midnight border-brand-lime shadow-[0_2.5px_0_0_#89BC27] -translate-y-0.5'
+                    : 'bg-surface-elevated/60 border-surface-border text-gray-400 hover:text-white hover:border-gray-500'
                 }`}
               >
                 Practice Quiz
@@ -259,10 +259,10 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
                   type="button"
                   onClick={() => setDifficulty(lvl)}
                   disabled={isGenerating}
-                  className={`py-1 px-1.5 rounded border text-center text-[11px] capitalize transition-colors cursor-pointer ${
+                  className={`py-1.5 px-2 rounded-xl text-center text-[11px] font-semibold capitalize transition-all duration-100 cursor-pointer ${
                     difficulty === lvl
-                      ? 'bg-brand-lime/10 border-brand-lime/30 text-brand-lime font-medium'
-                      : 'bg-transparent border-surface-border text-gray-400 hover:text-white'
+                      ? 'bg-brand-violet/20 border border-brand-violet text-brand-violet-light font-bold shadow-[0_2px_0_0_#7551DC] -translate-y-0.5'
+                      : 'bg-surface-elevated/40 border border-surface-border text-gray-400 hover:text-white hover:border-gray-500'
                   }`}
                 >
                   {lvl}

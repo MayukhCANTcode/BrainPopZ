@@ -237,9 +237,9 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
                 setMode('flashcards');
                 setGeneratedResult(null);
               }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-100 cursor-pointer ${
                 mode === 'flashcards'
-                  ? 'bg-brand-violet text-midnight shadow-md font-bold'
+                  ? 'bg-brand-violet text-midnight shadow-[0_2.5px_0_0_#7551DC] font-bold -translate-y-0.5'
                   : 'text-gray-400 hover:text-white'
               }`}
             >
@@ -252,9 +252,9 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
                 setMode('quiz');
                 setGeneratedResult(null);
               }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-100 cursor-pointer ${
                 mode === 'quiz'
-                  ? 'bg-brand-lime text-midnight shadow-md font-bold'
+                  ? 'bg-brand-lime text-midnight shadow-[0_2.5px_0_0_#89BC27] font-bold -translate-y-0.5'
                   : 'text-gray-400 hover:text-white'
               }`}
             >
@@ -535,10 +535,10 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
                   key={diff.id}
                   type="button"
                   onClick={() => setDifficulty(diff.id)}
-                  className={`py-1.5 px-2 rounded-lg text-xs font-medium border text-center transition-all cursor-pointer ${
+                  className={`py-1.5 px-2 rounded-xl text-xs transition-all duration-100 cursor-pointer ${
                     difficulty === diff.id
-                      ? 'bg-surface-elevated text-white border-brand-violet shadow-sm font-semibold'
-                      : 'bg-surface-secondary border-surface-border text-gray-400 hover:text-white'
+                      ? 'bg-brand-violet text-midnight font-bold border border-brand-violet shadow-[0_2.5px_0_0_#7551DC] -translate-y-0.5'
+                      : 'bg-surface-secondary border border-surface-border text-gray-400 hover:text-white hover:border-gray-500'
                   }`}
                 >
                   {diff.label}
@@ -558,10 +558,10 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
                   key={num}
                   type="button"
                   onClick={() => setQuantity(num)}
-                  className={`flex-1 py-1.5 rounded-lg text-xs font-mono font-medium border text-center transition-all cursor-pointer ${
+                  className={`flex-1 py-1.5 rounded-xl text-xs font-mono transition-all duration-100 cursor-pointer ${
                     quantity === num
-                      ? 'bg-brand-lime/15 text-brand-lime border-brand-lime/40 font-bold'
-                      : 'bg-surface-secondary border-surface-border text-gray-400 hover:text-white'
+                      ? 'bg-brand-lime text-midnight font-bold border border-brand-lime shadow-[0_2.5px_0_0_#89BC27] -translate-y-0.5'
+                      : 'bg-surface-secondary border border-surface-border text-gray-400 hover:text-white hover:border-gray-500'
                   }`}
                 >
                   {num}
