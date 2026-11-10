@@ -20,15 +20,12 @@ export default function DashboardView({
     <div className="space-y-8">
       {/* 1. Primary Prominence: Hero AI Study Studio ("Turn your notes into knowledge") */}
       <HeroGenerator
-        onDeckGenerated={(deck) => {
-          if (onAddNewDeck) onAddNewDeck(deck);
-        }}
-        onStudyGeneratedDeck={(deck) => {
-          if (onStudyDeck) onStudyDeck(deck);
-        }}
-        onStartGeneratedQuiz={(questions, title) => {
-          if (onStartQuiz) onStartQuiz({ questions, title });
-        }}
+        onAddNewDeck={onAddNewDeck}
+        onDeckGenerated={onAddNewDeck}
+        onStudyDeck={onStudyDeck}
+        onStudyGeneratedDeck={onStudyDeck}
+        onStartQuiz={onStartQuiz}
+        onStartGeneratedQuiz={onStartQuiz}
       />
 
       {/* 2. Weekly Activity — 7-day real activity visualization */}

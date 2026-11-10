@@ -38,7 +38,14 @@ const SUGGESTED_YOUTUBE_VIDEOS = [
   { label: '💻 Computerphile: Raft Consensus', url: 'https://www.youtube.com/watch?v=vYp4LYbnnW8' },
 ];
 
-export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }) {
+export default function HeroGenerator({
+  onAddNewDeck,
+  onStartQuiz,
+  onStudyDeck,
+  onDeckGenerated,
+  onStudyGeneratedDeck,
+  onStartGeneratedQuiz,
+}) {
   const [activeTab, setActiveTab] = useState('topic'); // 'topic' | 'notes' | 'upload' | 'youtube'
   const [topicInput, setTopicInput] = useState('');
   const [notesInput, setNotesInput] = useState('');
@@ -59,6 +66,7 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
   const [isGenerating, setIsGenerating] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [generatedResult, setGeneratedResult] = useState(null);
+  const [createdDeck, setCreatedDeck] = useState(null);
 
   const fileInputRef = useRef(null);
   const abortControllerRef = useRef(null);
@@ -220,8 +228,11 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
           })),
         };
 
-        if (onAddNewDeck) {
-          onAddNewDeck(newDeck);
+        setCreatedDeck(newDeck);
+
+        const addDeckCallback = onAddNewDeck || onDeckGenerated;
+        if (addDeckCallback) {
+          addDeckCallback(newDeck);
         }
 
         // Award generation XP
@@ -669,13 +680,29 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
                   size="sm"
                   leftIcon={BookOpen}
                   onClick={() => {
-                    if (onStudyDeck) {
-                      onStudyDeck({
-                        id: `deck-${Date.now()}`,
-                        title: generatedResult.title,
-                        subject: activeTab === 'youtube' ? 'YouTube Lecture' : 'AI Generated',
-                        cards: generatedResult.cards,
-                      });
+                    const deckToStudy = createdDeck || {
+                      id: `deck-${Date.now()}`,
+                      title: generatedResult.title || 'AI Generated Deck',
+                      subject: activeTab === 'youtube' ? 'YouTube Lecture' : 'AI Generated',
+                      totalCards: generatedResult.cards?.length || 0,
+                      masteredCards: 0,
+                      masteryPercentage: 0,
+                      lastStudied: 'Just now',
+                      badgeColor: activeTab === 'youtube' ? 'coral' : 'violet',
+                      tags: ['Gemini AI', difficulty],
+                      isBookmarked: false,
+                      cards: (generatedResult.cards || []).map((c) => ({
+                        question: c.question,
+                        answer: c.answer,
+                        q: c.question,
+                        a: c.answer,
+                        difficulty: 'Adaptive',
+                      })),
+                    };
+
+                    const studyCallback = onStudyDeck || onStudyGeneratedDeck;
+                    if (studyCallback) {
+                      studyCallback(deckToStudy);
                     }
                   }}
                 >
@@ -687,8 +714,9 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
                   size="sm"
                   leftIcon={Play}
                   onClick={() => {
-                    if (onStartQuiz) {
-                      onStartQuiz(generatedResult.questions, generatedResult.title);
+                    const quizCallback = onStartQuiz || onStartGeneratedQuiz;
+                    if (quizCallback) {
+                      quizCallback(generatedResult.questions, generatedResult.title);
                     }
                   }}
                 >
