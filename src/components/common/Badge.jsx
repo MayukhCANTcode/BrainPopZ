@@ -12,6 +12,9 @@ export default function Badge({
 }) {
   const variantStyles = {
     default: 'bg-surface-secondary text-zinc-700 border-surface-border shadow-xs',
+    blue: 'bg-blue-50 text-blue-700 border-blue-200 font-bold uppercase tracking-wider',
+    lavender: 'bg-[#EADEFA] text-[#6B21A8] border-[#D8B4FE] font-bold shadow-xs',
+    neo: 'bg-white text-zinc-950 border border-black shadow-[1.5px_1.5px_0px_#000] font-bold',
     violet: 'bg-purple-50 text-purple-800 border-purple-200 font-semibold shadow-xs',
     lime: 'bg-emerald-50 text-emerald-800 border-emerald-200 font-semibold shadow-xs',
     orange: 'bg-amber-50 text-amber-800 border-amber-200 font-semibold shadow-xs',

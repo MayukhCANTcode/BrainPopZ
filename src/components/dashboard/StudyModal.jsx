@@ -128,11 +128,11 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
       }}
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn"
     >
-      <div className="bg-white border border-surface-border rounded-2xl w-full max-w-xl p-5 sm:p-6 shadow-2xl relative flex flex-col justify-between min-h-[480px] max-h-[90vh]">
+      <div className="bg-white border-2 border-midnight-ink rounded-2xl w-full max-w-xl p-5 sm:p-6 shadow-neo-lg relative flex flex-col justify-between min-h-[480px] max-h-[90vh]">
         {/* Top Header */}
         <div className="flex items-center justify-between pb-3 border-b border-surface-border">
           <div className="flex items-center gap-2">
-            <Badge variant="default" size="sm">
+            <Badge variant="neo" size="sm">
               {deck.subject || 'AI Generated'}
             </Badge>
             <span className="text-xs text-zinc-500 font-mono">
@@ -153,7 +153,7 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
         {!isCompleted ? (
           <>
             {/* Progress bar */}
-            <div className="w-full bg-surface-secondary h-1 rounded-full overflow-hidden my-2 border border-surface-border">
+            <div className="w-full bg-surface-secondary h-1.5 rounded-full overflow-hidden my-2 border border-surface-border">
               <div
                 className="bg-brand-violet-dark h-full transition-all duration-300"
                 style={{ width: `${((currentIndex + 1) / cards.length) * 100}%` }}
@@ -163,19 +163,19 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
             {/* Interactive Flashcard Face */}
             <div
               onClick={toggleFlip}
-              className={`w-full min-h-[300px] sm:min-h-[320px] p-6 rounded-2xl cursor-pointer select-none transition-all duration-200 flex flex-col justify-between items-center text-center shadow-sm border my-2 ${
+              className={`w-full min-h-[300px] sm:min-h-[320px] p-6 rounded-2xl cursor-pointer select-none transition-all duration-200 flex flex-col justify-between items-center text-center my-2 border-2 border-midnight-ink ${
                 isFlipped
-                  ? 'bg-emerald-50/60 border-emerald-300 ring-1 ring-emerald-200'
-                  : 'bg-surface-secondary/70 border-surface-border hover:border-zinc-400'
+                  ? 'bg-[#EADEFA]/40 shadow-neo'
+                  : 'bg-white shadow-neo hover:translate-x-[1px] hover:translate-y-[1px]'
               }`}
             >
               {/* Card Header Badge */}
               <div className="flex items-center gap-2 shrink-0">
                 <span
-                  className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${
+                  className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border-2 border-midnight-ink shadow-[1px_1px_0px_#111218] ${
                     isFlipped
-                      ? 'bg-emerald-100 border-emerald-300 text-emerald-800'
-                      : 'bg-purple-100 border-purple-200 text-purple-900'
+                      ? 'bg-emerald-100 text-emerald-950'
+                      : 'bg-purple-100 text-purple-950'
                   }`}
                 >
                   {isFlipped ? 'Answer' : 'Question'}
@@ -203,7 +203,7 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
               {/* Card Footer Hint */}
               <div
                 className={`flex items-center gap-1.5 text-xs shrink-0 ${
-                  isFlipped ? 'text-emerald-700 font-medium' : 'text-zinc-500'
+                  isFlipped ? 'text-purple-900 font-medium' : 'text-zinc-500'
                 }`}
               >
                 <RotateCw className="w-3.5 h-3.5" />
@@ -232,21 +232,21 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
                 <div className="flex items-center gap-1.5 sm:gap-2">
                   <button
                     onClick={() => handleNext('hard')}
-                    className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-amber-50 text-amber-800 border border-amber-200 text-xs font-semibold hover:bg-amber-100 transition-colors cursor-pointer"
+                    className="px-3 sm:px-3.5 py-1.5 rounded-xl bg-[#FEF3C7] text-[#92400E] border-2 border-midnight-ink shadow-neo-sm text-xs font-bold hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_#111218] transition-all cursor-pointer"
                     title="Press 1"
                   >
                     1 • Hard
                   </button>
                   <button
                     onClick={() => handleNext('good')}
-                    className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-purple-50 text-purple-800 border border-purple-200 text-xs font-semibold hover:bg-purple-100 transition-colors cursor-pointer"
+                    className="px-3 sm:px-3.5 py-1.5 rounded-xl bg-[#EADEFA] text-[#6B21A8] border-2 border-midnight-ink shadow-neo-sm text-xs font-bold hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_#111218] transition-all cursor-pointer"
                     title="Press 2"
                   >
                     2 • Good
                   </button>
                   <button
                     onClick={() => handleNext('easy')}
-                    className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold hover:bg-emerald-100 transition-colors cursor-pointer"
+                    className="px-3 sm:px-3.5 py-1.5 rounded-xl bg-[#DCFCE7] text-[#166534] border-2 border-midnight-ink shadow-neo-sm text-xs font-bold hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_#111218] transition-all cursor-pointer"
                     title="Press 3"
                   >
                     3 • Easy
@@ -265,7 +265,7 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
               )}
 
               <Button
-                variant="primary"
+                variant="blue"
                 size="sm"
                 rightIcon={ChevronRight}
                 onClick={() => handleNext('good')}

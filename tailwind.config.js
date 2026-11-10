@@ -69,6 +69,9 @@ export default {
         'subtle': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
         'card': '0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04)',
         'dock': '0 12px 30px -4px rgba(17, 18, 24, 0.25), 0 4px 12px rgba(17, 18, 24, 0.1)',
+        'neo': '4px 4px 0px #19191E',
+        'neo-sm': '2px 2px 0px #19191E',
+        'neo-lg': '6px 6px 0px #19191E',
       },
       borderRadius: {
         'sm': '0.25rem',

@@ -16,6 +16,7 @@ import { getGamificationState } from '../../services/gamification';
 
 export default function Header({
   user,
+  currentTab = 'dashboard',
   onOpenMobile,
   onQuickGenerate,
   onNavigate,
@@ -195,6 +196,29 @@ export default function Header({
         </button>
       </div>
 
+      {/* Center Nav Links (Scaler Flow Style) */}
+      <nav className="hidden xl:flex items-center gap-1">
+        {[
+          { id: 'dashboard', label: 'OVERVIEW' },
+          { id: 'quizzes', label: 'PRACTICE DRILLS' },
+          { id: 'decks', label: 'MY DECKS' },
+          { id: 'analytics', label: 'ANALYTICS' },
+          { id: 'achievements', label: 'REWARDS' },
+        ].map((item) => (
+          <button
+            key={item.id}
+            onClick={() => onNavigate && onNavigate(item.id)}
+            className={`px-3 py-1 rounded-full text-[11px] font-bold tracking-wider transition-all cursor-pointer ${
+              currentTab === item.id
+                ? 'bg-midnight-ink text-white shadow-xs'
+                : 'text-zinc-600 hover:text-zinc-950 hover:bg-surface-secondary'
+            }`}
+          >
+            {item.label}
+          </button>
+        ))}
+      </nav>
+
       {/* Right side: Streak indicator, Notifications, Hotkeys, Quick Action */}
       <div className="flex items-center gap-2">
         {/* Streak quick chip */}
@@ -278,14 +302,15 @@ export default function Header({
           )}
         </div>
 
-        {/* Primary CTA */}
+        {/* Primary CTA: Scaler Flow Royal Blue Button */}
         <Button
-          variant="primary"
+          variant="blue"
           size="sm"
-          leftIcon={Sparkles}
+          rightIcon={Sparkles}
           onClick={onQuickGenerate}
+          className="rounded-lg shadow-sm font-semibold"
         >
-          <span>Generate</span>
+          <span>Generate with AI →</span>
         </Button>
 
         {/* User Profile Avatar */}

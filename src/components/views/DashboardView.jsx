@@ -1,5 +1,6 @@
 import React from 'react';
 import HeroGenerator from '../dashboard/HeroGenerator';
+import FlowMilestonesGrid from '../dashboard/FlowMilestonesGrid';
 import WeeklyActivityTracker from '../dashboard/WeeklyActivityTracker';
 import GamifiedRecentDecks from '../dashboard/GamifiedRecentDecks';
 import GamifiedStreakCard from '../dashboard/GamifiedStreakCard';
@@ -28,10 +29,16 @@ export default function DashboardView({
         onStartGeneratedQuiz={onStartQuiz}
       />
 
-      {/* 2. Weekly Activity — 7-day real activity visualization */}
+      {/* 2. Scaler Flow-Style Mastery & Milestone Grid */}
+      <FlowMilestonesGrid
+        decks={decks}
+        onStartDrill={() => onNavigate('quizzes')}
+      />
+
+      {/* 3. Weekly Activity — 7-day real activity visualization */}
       <WeeklyActivityTracker onStartQuiz={() => onNavigate('quizzes')} />
 
-      {/* 3. Continue Learning — Recently studied decks or welcoming empty shelf */}
+      {/* 4. Continue Learning — Recently studied decks or welcoming empty shelf */}
       <GamifiedRecentDecks
         decks={decks}
         onStudyDeck={onStudyDeck}

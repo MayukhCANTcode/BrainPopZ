@@ -259,8 +259,9 @@ export default function HeroGenerator({
 
   return (
     <Card
-      padding="p-5 sm:p-6"
-      className="relative overflow-hidden border-surface-border bg-surface shadow-md"
+      variant="neo"
+      padding="p-5 sm:p-7"
+      className="relative overflow-hidden bg-white"
     >
       <div className="space-y-5">
         {/* Header Banner */}

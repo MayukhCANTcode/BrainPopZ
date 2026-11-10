@@ -25,6 +25,15 @@ export default function Button({
     // Primary: Scaler Flow Soft Lavender CTA button with deep ink text
     primary:
       'bg-brand-violet-lilac text-midnight-ink hover:bg-brand-violet-lilacHover border border-[#C5AFFC] shadow-xs font-semibold',
+    // Flow Blue: Scaler Flow Royal Blue Action button
+    blue:
+      'bg-[#1D4ED8] hover:bg-[#1E40AF] text-white border border-blue-800 shadow-sm font-semibold',
+    // Neo-brutalist white with solid black drop shadow
+    neo:
+      'bg-white text-midnight-ink hover:bg-zinc-50 border-2 border-midnight-ink shadow-neo-sm font-bold',
+    // Neo-brutalist lavender with solid black drop shadow
+    neoLavender:
+      'bg-[#EADEFA] text-midnight-ink hover:bg-[#D9C4F7] border-2 border-midnight-ink shadow-neo-sm font-bold',
     // Dark: Deep midnight ink button (high contrast)
     dark:
       'bg-midnight-ink text-white hover:bg-[#20222C] border border-midnight-ink shadow-xs font-medium',

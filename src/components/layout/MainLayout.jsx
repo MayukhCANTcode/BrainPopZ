@@ -68,6 +68,7 @@ export default function MainLayout({
         {/* Top Header */}
         <Header
           user={user}
+          currentTab={currentTab}
           onOpenMobile={() => setIsMobileOpen(true)}
           onQuickGenerate={onQuickGenerate}
           onNavigate={onSelectTab}

@@ -105,7 +105,7 @@ export default function DecksView({ onNavigate, onStudyDeck, decks = [], onToggl
               hoverEffect
               padding="p-4"
               onClick={() => setInspectingDeck(deck)}
-              className="flex flex-col justify-between border-surface-border group cursor-pointer"
+              className="flex flex-col justify-between border-surface-border bg-surface shadow-xs group cursor-pointer"
             >
               <div>
                 <div className="flex items-center justify-between mb-2">
@@ -117,20 +117,20 @@ export default function DecksView({ onNavigate, onStudyDeck, decks = [], onToggl
                       e.stopPropagation();
                       if (onToggleBookmark) onToggleBookmark(deck.id);
                     }}
-                    className="p-1 rounded hover:bg-surface-elevated transition-colors cursor-pointer"
+                    className="p-1 rounded hover:bg-surface-secondary transition-colors cursor-pointer"
                     title={deck.isBookmarked ? 'Remove bookmark' : 'Bookmark deck'}
                   >
                     <Bookmark
                       className={`w-3.5 h-3.5 ${
                         deck.isBookmarked
                           ? 'fill-brand-orange text-brand-orange'
-                          : 'text-gray-400 hover:text-white'
+                          : 'text-zinc-400 hover:text-zinc-950'
                       }`}
                     />
                   </button>
                 </div>
 
-                <h3 className="font-medium text-sm text-white group-hover:text-brand-violet-light transition-colors mb-1.5 line-clamp-1">
+                <h3 className="font-medium text-sm text-zinc-950 group-hover:text-brand-violet-dark transition-colors mb-1.5 line-clamp-1">
                   {deck.title}
                 </h3>
 
@@ -139,7 +139,7 @@ export default function DecksView({ onNavigate, onStudyDeck, decks = [], onToggl
                     deck.tags.map((t) => (
                       <span
                         key={t}
-                        className="text-[10px] px-1.5 py-0.2 rounded bg-surface-elevated text-gray-400 border border-surface-border font-mono"
+                        className="text-[10px] px-1.5 py-0.2 rounded bg-surface-secondary text-zinc-600 border border-surface-border font-mono"
                       >
                         {t}
                       </span>
@@ -148,17 +148,17 @@ export default function DecksView({ onNavigate, onStudyDeck, decks = [], onToggl
               </div>
 
               <div className="pt-2.5 border-t border-surface-border">
-                <div className="flex justify-between text-xs text-gray-400 mb-1">
+                <div className="flex justify-between text-xs text-zinc-500 mb-1">
                   <span className="text-[11px]">
                     {deck.cards?.length || deck.totalCards} cards
                   </span>
-                  <span className="text-[11px] font-mono text-gray-300">
+                  <span className="text-[11px] font-mono text-zinc-700 font-medium">
                     {deck.masteryPercentage}%
                   </span>
                 </div>
                 <div className="w-full bg-surface-secondary h-1 rounded-full overflow-hidden mb-2.5">
                   <div
-                    className="bg-brand-lime h-full rounded-full"
+                    className="bg-emerald-500 h-full rounded-full"
                     style={{ width: `${deck.masteryPercentage}%` }}
                   />
                 </div>

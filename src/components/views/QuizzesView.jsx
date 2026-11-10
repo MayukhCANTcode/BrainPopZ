@@ -173,7 +173,7 @@ export default function QuizzesView({ initialQuiz }) {
       </div>
 
       {/* Interactive Quiz Card */}
-      <Card padding="p-5 sm:p-6" className="border-surface-border relative overflow-hidden bg-surface shadow-sm">
+      <Card variant="neo" padding="p-5 sm:p-7" className="relative overflow-hidden bg-white">
         {/* Countdown Timer Line (Speed Drill) */}
         {isTimerMode && !isSubmitted && !isCompleted && (
           <div className="absolute top-0 left-0 right-0 h-1 bg-surface-secondary">
@@ -305,11 +305,11 @@ export default function QuizzesView({ initialQuiz }) {
             </div>
 
             <div>
-              <h3 className="text-lg font-heading font-bold text-white">
+              <h3 className="text-lg font-heading font-bold text-zinc-950">
                 Drill Complete
               </h3>
-              <p className="text-xs text-gray-400 mt-1 max-w-sm">
-                You scored <strong className="text-brand-lime font-mono font-bold">{score} / {questions.length}</strong> ({Math.round((score / questions.length) * 100)}%) on {activeQuizTitle}
+              <p className="text-xs text-zinc-600 mt-1 max-w-sm">
+                You scored <strong className="text-emerald-700 font-mono font-bold">{score} / {questions.length}</strong> ({Math.round((score / questions.length) * 100)}%) on {activeQuizTitle}
               </p>
             </div>
 
