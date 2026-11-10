@@ -52,6 +52,17 @@ body {
   background: #32354E;
 }
 
+/* Claude Console-style Minimal Dot Grid Background */
+.bg-dot-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.bg-dot-grid-subtle {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
 /* 3D Flashcard Flip utilities */
 .perspective-1000 {
   perspective: 1000px;

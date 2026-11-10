@@ -224,10 +224,10 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
                 type="button"
                 onClick={() => setFormat('flashcards')}
                 disabled={isGenerating}
-                className={`py-2 px-2.5 rounded-xl border text-center font-bold transition-all duration-100 cursor-pointer ${
+                className={`py-2 px-2.5 rounded-lg border text-center font-medium transition-colors cursor-pointer ${
                   format === 'flashcards'
-                    ? 'bg-brand-violet text-midnight border-brand-violet shadow-[0_2.5px_0_0_#7551DC] -translate-y-0.5'
-                    : 'bg-surface-elevated/60 border-surface-border text-gray-400 hover:text-white hover:border-gray-500'
+                    ? 'bg-white text-zinc-950 border-white shadow-xs font-semibold'
+                    : 'bg-surface-elevated/60 border-surface-border text-zinc-400 hover:text-white hover:border-zinc-700'
                 }`}
               >
                 Flashcards
@@ -236,10 +236,10 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
                 type="button"
                 onClick={() => setFormat('quiz')}
                 disabled={isGenerating}
-                className={`py-2 px-2.5 rounded-xl border text-center font-bold transition-all duration-100 cursor-pointer ${
+                className={`py-2 px-2.5 rounded-lg border text-center font-medium transition-colors cursor-pointer ${
                   format === 'quiz'
-                    ? 'bg-brand-lime text-midnight border-brand-lime shadow-[0_2.5px_0_0_#89BC27] -translate-y-0.5'
-                    : 'bg-surface-elevated/60 border-surface-border text-gray-400 hover:text-white hover:border-gray-500'
+                    ? 'bg-white text-zinc-950 border-white shadow-xs font-semibold'
+                    : 'bg-surface-elevated/60 border-surface-border text-zinc-400 hover:text-white hover:border-zinc-700'
                 }`}
               >
                 Practice Quiz
@@ -249,7 +249,7 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
 
           {/* Difficulty setting */}
           <div>
-            <label className="block text-[11px] font-medium text-gray-400 uppercase tracking-wider mb-1.5">
+            <label className="block text-[11px] font-medium text-zinc-400 uppercase tracking-wider mb-1.5">
               Cognitive Level
             </label>
             <div className="grid grid-cols-3 gap-1 text-xs">
@@ -259,10 +259,10 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
                   type="button"
                   onClick={() => setDifficulty(lvl)}
                   disabled={isGenerating}
-                  className={`py-1.5 px-2 rounded-xl text-center text-[11px] font-semibold capitalize transition-all duration-100 cursor-pointer ${
+                  className={`py-1.5 px-2 rounded-lg text-center text-[11px] font-medium capitalize transition-colors cursor-pointer ${
                     difficulty === lvl
-                      ? 'bg-brand-violet/20 border border-brand-violet text-brand-violet-light font-bold shadow-[0_2px_0_0_#7551DC] -translate-y-0.5'
-                      : 'bg-surface-elevated/40 border border-surface-border text-gray-400 hover:text-white hover:border-gray-500'
+                      ? 'bg-brand-violet/20 border border-brand-violet text-brand-violet-light font-semibold'
+                      : 'bg-surface-elevated/40 border border-surface-border text-zinc-400 hover:text-white hover:border-zinc-700'
                   }`}
                 >
                   {lvl}

@@ -200,23 +200,23 @@ export default function Header({
         {/* Streak quick chip */}
         <button
           onClick={() => onNavigate && onNavigate('achievements')}
-          className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-brand-orange/10 border border-brand-orange/20 text-xs text-brand-orange hover:bg-brand-orange/15 transition-colors cursor-pointer"
+          className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface-secondary border border-surface-border text-xs text-zinc-300 hover:border-zinc-700 hover:text-white transition-colors cursor-pointer"
           title="View Active Study Streak"
         >
-          <Flame className="w-3.5 h-3.5 fill-brand-orange" />
-          <span className="font-mono font-bold">{gameState.streak}d</span>
-          <span className="text-[10px] text-brand-orange/80">streak</span>
+          <Flame className="w-3.5 h-3.5 text-brand-orange shrink-0 stroke-[1.75]" />
+          <span className="font-mono font-medium text-white">{gameState.streak}d</span>
+          <span className="text-[10px] text-zinc-400">streak</span>
         </button>
 
         {/* XP quick chip */}
         <button
           onClick={() => onNavigate && onNavigate('achievements')}
-          className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-brand-lime/10 border border-brand-lime/20 text-xs text-brand-lime hover:bg-brand-lime/15 transition-colors cursor-pointer"
+          className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface-secondary border border-surface-border text-xs text-zinc-300 hover:border-zinc-700 hover:text-white transition-colors cursor-pointer"
           title="View Total XP Earned"
         >
-          <Zap className="w-3.5 h-3.5 fill-brand-lime" />
-          <span className="font-mono font-bold">{gameState.xp}</span>
-          <span className="text-[10px] text-brand-lime/80">XP</span>
+          <Zap className="w-3.5 h-3.5 text-brand-lime shrink-0 stroke-[1.75]" />
+          <span className="font-mono font-medium text-white">{gameState.xp}</span>
+          <span className="text-[10px] text-zinc-400">XP</span>
         </button>
 
         {/* Keyboard shortcuts trigger */}

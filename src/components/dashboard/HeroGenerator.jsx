@@ -222,20 +222,20 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
           </div>
 
           {/* Mode Selector Segmented Pill */}
-          <div className="flex items-center p-1 rounded-xl bg-surface-secondary border border-surface-border self-start sm:self-auto shrink-0">
+          <div className="flex items-center p-0.5 rounded-lg bg-surface-secondary border border-surface-border self-start sm:self-auto shrink-0">
             <button
               type="button"
               onClick={() => {
                 setMode('flashcards');
                 setGeneratedResult(null);
               }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-100 cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer ${
                 mode === 'flashcards'
-                  ? 'bg-brand-violet text-midnight shadow-[0_2.5px_0_0_#7551DC] font-bold -translate-y-0.5'
-                  : 'text-gray-400 hover:text-white'
+                  ? 'bg-white text-zinc-950 font-semibold shadow-xs'
+                  : 'text-zinc-400 hover:text-white'
               }`}
             >
-              <Layers className="w-3.5 h-3.5" />
+              <Layers className="w-3.5 h-3.5 stroke-[1.75]" />
               <span>Flashcards</span>
             </button>
             <button
@@ -244,13 +244,13 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
                 setMode('quiz');
                 setGeneratedResult(null);
               }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-100 cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer ${
                 mode === 'quiz'
-                  ? 'bg-brand-lime text-midnight shadow-[0_2.5px_0_0_#89BC27] font-bold -translate-y-0.5'
-                  : 'text-gray-400 hover:text-white'
+                  ? 'bg-white text-zinc-950 font-semibold shadow-xs'
+                  : 'text-zinc-400 hover:text-white'
               }`}
             >
-              <Brain className="w-3.5 h-3.5" />
+              <Brain className="w-3.5 h-3.5 stroke-[1.75]" />
               <span>Practice Quiz</span>
             </button>
           </div>
@@ -514,7 +514,7 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 pt-1">
           {/* Difficulty Selection */}
           <div className="sm:col-span-6 space-y-1">
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 block">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 block">
               Cognitive Level
             </span>
             <div className="grid grid-cols-3 gap-1.5">
@@ -527,10 +527,10 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
                   key={diff.id}
                   type="button"
                   onClick={() => setDifficulty(diff.id)}
-                  className={`py-1.5 px-2 rounded-xl text-xs transition-all duration-100 cursor-pointer ${
+                  className={`py-1.5 px-2 rounded-lg text-xs transition-colors cursor-pointer ${
                     difficulty === diff.id
-                      ? 'bg-brand-violet text-midnight font-bold border border-brand-violet shadow-[0_2.5px_0_0_#7551DC] -translate-y-0.5'
-                      : 'bg-surface-secondary border border-surface-border text-gray-400 hover:text-white hover:border-gray-500'
+                      ? 'bg-zinc-100 text-zinc-950 font-medium shadow-xs'
+                      : 'bg-surface-secondary border border-surface-border text-zinc-400 hover:text-white hover:border-zinc-700'
                   }`}
                 >
                   {diff.label}
@@ -541,7 +541,7 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
 
           {/* Quantity Selector */}
           <div className="sm:col-span-6 space-y-1">
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 block">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 block">
               Quantity ({mode === 'flashcards' ? 'Cards' : 'Questions'})
             </span>
             <div className="flex items-center gap-1.5">
@@ -550,10 +550,10 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
                   key={num}
                   type="button"
                   onClick={() => setQuantity(num)}
-                  className={`flex-1 py-1.5 rounded-xl text-xs font-mono transition-all duration-100 cursor-pointer ${
+                  className={`flex-1 py-1.5 rounded-lg text-xs font-mono transition-colors cursor-pointer ${
                     quantity === num
-                      ? 'bg-brand-lime text-midnight font-bold border border-brand-lime shadow-[0_2.5px_0_0_#89BC27] -translate-y-0.5'
-                      : 'bg-surface-secondary border border-surface-border text-gray-400 hover:text-white hover:border-gray-500'
+                      ? 'bg-white text-zinc-950 font-semibold shadow-xs'
+                      : 'bg-surface-secondary border border-surface-border text-zinc-400 hover:text-white hover:border-zinc-700'
                   }`}
                 >
                   {num}
@@ -664,11 +664,11 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
           fullWidth
           disabled={isGenerating || isFetchingTranscript}
           onClick={handleGenerate}
-          className="h-11 font-semibold text-sm shadow-lg shadow-brand-violet/15"
+          className="h-10 text-sm font-medium"
         >
           {isGenerating ? (
             <span className="flex items-center justify-center gap-2">
-              <Loader2 className="w-4 h-4 animate-spin text-white" />
+              <Loader2 className="w-4 h-4 animate-spin text-zinc-950" />
               <span>Generating with Google Gemini AI...</span>
             </span>
           ) : (

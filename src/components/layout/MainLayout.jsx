@@ -32,7 +32,7 @@ export default function MainLayout({
   };
 
   return (
-    <div className="min-h-screen bg-midnight text-gray-100 flex">
+    <div className="min-h-screen bg-midnight bg-dot-grid-subtle text-gray-100 flex">
       {/* Sidebar Navigation */}
       <Sidebar
         currentTab={currentTab}

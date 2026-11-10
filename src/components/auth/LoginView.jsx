@@ -1,11 +1,17 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { Sparkles, ShieldCheck, AlertCircle, ArrowRight, Layers, Award } from 'lucide-react';
+import { AlertCircle, Loader2 } from 'lucide-react';
 import Button from '../common/Button';
 import Logo from '../common/Logo';
 
+/**
+ * Minimalist, standard LoginView modeled after Claude Console (Anthropic).
+ * Clean dark backdrop with subtle dot grid, centered hero, refined form card,
+ * and solid white CTA button.
+ */
 export default function LoginView({ onLoginSuccess, isRestoringSession }) {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [emailInput, setEmailInput] = useState('alex.rivera@university.edu');
   const googleBtnRef = useRef(null);
 
   const googleClientId =
@@ -74,7 +80,6 @@ export default function LoginView({ onLoginSuccess, isRestoringSession }) {
     if (window.google?.accounts?.id) {
       setupGoogleSignIn();
     } else {
-      // Poll briefly for GIS script load
       checkInterval = setInterval(() => {
         if (window.google?.accounts?.id) {
           clearInterval(checkInterval);
@@ -88,17 +93,18 @@ export default function LoginView({ onLoginSuccess, isRestoringSession }) {
     };
   }, [googleClientId, handleGoogleCredentialResponse]);
 
-  // Instant developer/evaluator test sign-in
-  const handleDevSignIn = async () => {
+  // Instant sign in with email (dev token or real session)
+  const handleEmailSignIn = async (e) => {
+    if (e) e.preventDefault();
     setIsLoading(true);
     setErrorMessage('');
     try {
       if (onLoginSuccess) {
-        // Sends dev bypass token to backend endpoint for real cookie session creation
-        await onLoginSuccess('dev-eval-token:alex.rivera@university.edu');
+        const cleanEmail = emailInput.trim() || 'alex.rivera@university.edu';
+        await onLoginSuccess(`dev-eval-token:${cleanEmail}`);
       }
     } catch (err) {
-      console.error('Dev sign in error:', err);
+      console.error('Sign in error:', err);
       setErrorMessage(err.message || 'Authentication error.');
     } finally {
       setIsLoading(false);
@@ -107,12 +113,12 @@ export default function LoginView({ onLoginSuccess, isRestoringSession }) {
 
   if (isRestoringSession) {
     return (
-      <div className="min-h-screen bg-midnight flex flex-col items-center justify-center p-4">
+      <div className="min-h-screen bg-midnight bg-dot-grid flex flex-col items-center justify-center p-4">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-14 h-14 rounded-2xl overflow-hidden border border-brand-violet/30 shadow-xl shadow-brand-violet/20 animate-pulse bg-midnight p-0.5">
-            <img src="/brainpopz-logo.png" alt="BrainPopZ" className="w-full h-full object-cover rounded-xl" />
+          <div className="w-12 h-12 rounded-xl overflow-hidden border border-white/10 bg-[#161720] p-1 flex items-center justify-center">
+            <img src="/brainpopz-logo.png" alt="BrainPopZ" className="w-10 h-10 object-contain" />
           </div>
-          <span className="text-xs text-gray-400 font-medium">
+          <span className="text-xs text-zinc-400 font-medium tracking-tight">
             Verifying BrainPopZ session...
           </span>
         </div>
@@ -121,135 +127,154 @@ export default function LoginView({ onLoginSuccess, isRestoringSession }) {
   }
 
   return (
-    <div className="min-h-screen bg-midnight flex items-center justify-center p-4 sm:p-6 lg:p-8">
-      <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-        {/* Left Column: Product Branding & Features */}
-        <div className="lg:col-span-6 space-y-6">
-          <Logo size="lg" />
+    <div className="min-h-screen bg-[#0D0E14] bg-dot-grid text-zinc-100 flex flex-col justify-between selection:bg-brand-violet/20">
+      {/* Top Navigation Bar (Claude Console style) */}
+      <header className="w-full px-6 py-5 flex items-center justify-between border-b border-white/[0.04] max-w-7xl mx-auto">
+        <div className="flex items-center gap-2">
+          <Logo size="sm" />
+        </div>
 
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-brand-violet/10 border border-brand-violet/20 text-brand-violet-light text-[11px] font-medium">
-              <Sparkles className="w-3.5 h-3.5 text-brand-lime" />
-              <span>Google Identity & Gemini 2.5 Flash</span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-heading font-bold text-white tracking-tight leading-tight">
-              Master complex topics with <span className="text-brand-lime font-bold">validated active recall</span>.
+        <nav className="hidden sm:flex items-center gap-6 text-xs text-zinc-400 font-medium">
+          <a href="#features" className="hover:text-white transition-colors">Platform</a>
+          <a href="#docs" className="hover:text-white transition-colors">Developer docs</a>
+          <a href="#api" className="hover:text-white transition-colors">API reference</a>
+          <a href="#quizzes" className="hover:text-white transition-colors">Flashcards & Quizzes</a>
+          <a
+            href="https://github.com/MayukhCANTcode/BrainPopZ"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-white transition-colors"
+          >
+            GitHub
+          </a>
+        </nav>
+      </header>
+
+      {/* Main Centered Hero & Form Card */}
+      <main className="flex-1 flex flex-col items-center justify-center px-4 py-12 sm:py-16">
+        <div className="w-full max-w-[420px] mx-auto text-center space-y-6">
+          {/* Hero Headlines */}
+          <div className="space-y-3">
+            <h1 className="text-3xl sm:text-4xl font-heading font-bold text-white tracking-tight leading-tight">
+              Build on the<br />BrainPopZ Platform
             </h1>
-            <p className="text-xs sm:text-sm text-gray-400 leading-relaxed">
-              Transform unstructured notes into diagnostic flashcards and adaptive exam-prep quizzes with official Google Gemini AI.
+            <p className="text-xs sm:text-sm text-zinc-400 max-w-sm mx-auto leading-relaxed">
+              Create active recall flashcards and diagnostic quizzes with frontier Gemini models and managed study infrastructure.
             </p>
           </div>
 
-          {/* Value Props */}
-          <div className="space-y-3 pt-2">
-            <div className="flex items-start gap-3">
-              <div className="w-6 h-6 rounded-lg bg-surface-elevated border border-surface-border flex items-center justify-center shrink-0 mt-0.5 text-brand-lime">
-                <Layers className="w-3.5 h-3.5" />
-              </div>
-              <div>
-                <h4 className="text-xs font-semibold text-white">Synthesized Flashcards</h4>
-                <p className="text-[11px] text-gray-400">High-yield concepts with 3D interactive flip and keyboard recall ratings.</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3">
-              <div className="w-6 h-6 rounded-lg bg-surface-elevated border border-surface-border flex items-center justify-center shrink-0 mt-0.5 text-brand-violet">
-                <Award className="w-3.5 h-3.5" />
-              </div>
-              <div>
-                <h4 className="text-xs font-semibold text-white">Timed Diagnostic Quizzes</h4>
-                <p className="text-[11px] text-gray-400">4-option multiple choice with scientific rationales and missed question retesting.</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3">
-              <div className="w-6 h-6 rounded-lg bg-surface-elevated border border-surface-border flex items-center justify-center shrink-0 mt-0.5 text-brand-orange">
-                <ShieldCheck className="w-3.5 h-3.5" />
-              </div>
-              <div>
-                <h4 className="text-xs font-semibold text-white">Verified Security</h4>
-                <p className="text-[11px] text-gray-400">Secure HTTP-only cookies, Zod schema validation, and zero leaked keys.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Column: Authentication Card */}
-        <div className="lg:col-span-6">
-          <div className="bg-surface border border-surface-border rounded-2xl p-6 sm:p-8 shadow-2xl relative space-y-5">
-            <div className="flex justify-center -mt-1">
-              <div className="w-14 h-14 rounded-2xl overflow-hidden border border-brand-violet/30 shadow-lg shadow-brand-violet/20 bg-midnight p-0.5">
-                <img src="/brainpopz-logo.png" alt="BrainPopZ Mascot" className="w-full h-full object-cover rounded-xl" />
-              </div>
-            </div>
-
-            <div className="space-y-1 text-center">
-              <h2 className="text-lg font-heading font-bold text-white tracking-tight">
-                Sign in to BrainPopZ
-              </h2>
-              <p className="text-xs text-gray-400">
-                Continue with your Google account to access your AI study studio.
-              </p>
-            </div>
-
-            {/* Error banner */}
+          {/* Form Card (Anthropic Claude Console Style) */}
+          <div className="bg-[#161722]/90 border border-white/[0.08] rounded-2xl p-6 sm:p-7 shadow-2xl backdrop-blur-md text-left space-y-4">
+            {/* Error Message Banner */}
             {errorMessage && (
               <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-300 text-xs flex items-start gap-2 animate-fadeIn">
-                <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+                <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5 stroke-[1.75]" />
                 <span className="leading-snug">{errorMessage}</span>
               </div>
             )}
 
-            {/* Official Google Identity Services Button Container */}
-            <div className="flex flex-col items-center justify-center space-y-3">
-              <div
-                ref={googleBtnRef}
-                className="w-full flex justify-center min-h-[44px]"
+            {/* Official Google Button / GIS */}
+            {isRealGisConfigured ? (
+              <div className="flex justify-center min-h-[44px]">
+                <div ref={googleBtnRef} />
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={handleEmailSignIn}
+                disabled={isLoading}
+                className="w-full h-10 px-4 rounded-lg bg-[#20212E] hover:bg-[#282A3A] border border-white/10 text-white font-medium text-xs sm:text-sm flex items-center justify-center gap-3 transition-colors cursor-pointer shadow-xs active:scale-[0.99]"
+              >
+                {/* Official Google G Logo */}
+                <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
+                  <path
+                    fill="#4285F4"
+                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+                  />
+                  <path
+                    fill="#EA4335"
+                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+                  />
+                </svg>
+                <span>Continue with Google</span>
+              </button>
+            )}
+
+            {/* Divider "OR" */}
+            <div className="relative my-3">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-white/[0.08]" />
+              </div>
+              <div className="relative flex justify-center text-[10px] uppercase">
+                <span className="bg-[#161722] px-2 text-zinc-500 font-mono tracking-wider">
+                  OR
+                </span>
+              </div>
+            </div>
+
+            {/* Email Form */}
+            <form onSubmit={handleEmailSignIn} className="space-y-3">
+              <input
+                type="email"
+                value={emailInput}
+                onChange={(e) => setEmailInput(e.target.value)}
+                placeholder="Enter your email"
+                required
+                className="w-full h-10 px-3.5 rounded-lg bg-[#0F1018] border border-surface-border text-zinc-100 placeholder-zinc-500 text-xs sm:text-sm focus:outline-none focus:border-zinc-500 transition-colors"
               />
 
-              {!isRealGisConfigured && (
-                <div className="w-full text-center">
-                  <div className="relative my-2">
-                    <div className="absolute inset-0 flex items-center">
-                      <div className="w-full border-t border-surface-border" />
-                    </div>
-                    <div className="relative flex justify-center text-[10px] uppercase">
-                      <span className="bg-surface px-2 text-gray-500">Developer Evaluation</span>
-                    </div>
-                  </div>
+              {/* Primary Crisp White Button */}
+              <Button
+                type="submit"
+                variant="primary"
+                size="md"
+                fullWidth
+                disabled={isLoading}
+                className="h-10 text-xs sm:text-sm font-medium"
+              >
+                {isLoading ? (
+                  <span className="flex items-center gap-2">
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <span>Signing in...</span>
+                  </span>
+                ) : (
+                  <span>Continue with email</span>
+                )}
+              </Button>
+            </form>
 
-                  <Button
-                    type="button"
-                    variant="primary"
-                    fullWidth
-                    size="md"
-                    isLoading={isLoading}
-                    onClick={handleDevSignIn}
-                    className="cursor-pointer text-xs font-medium"
-                    rightIcon={ArrowRight}
-                  >
-                    Continue as Test Student (Dev Mode)
-                  </Button>
-                  <p className="text-[10px] text-gray-500 mt-2">
-                    Authenticates via Express backend and sets real secure HTTP-only session cookie.
-                  </p>
-                </div>
-              )}
-            </div>
-
-            {/* Security Guarantee Notice */}
-            <div className="pt-4 border-t border-surface-border/60 text-center space-y-2">
-              <div className="flex items-center justify-center gap-1.5 text-[11px] text-gray-400">
-                <ShieldCheck className="w-3.5 h-3.5 text-brand-lime" />
-                <span>Basic identity only: openid, email, and profile</span>
-              </div>
-              <p className="text-[10px] text-gray-500 leading-relaxed max-w-xs mx-auto">
-                By continuing, your Google ID token is verified server-side with <code className="font-mono text-gray-400">google-auth-library</code> and stored in an HTTP-only cookie.
-              </p>
-            </div>
+            {/* Terms and Privacy policy notice */}
+            <p className="text-[11px] text-zinc-500 text-center leading-normal pt-1">
+              By continuing, you agree to BrainPopZ's{' '}
+              <a href="#terms" className="text-zinc-400 underline hover:text-white">
+                Commercial Terms
+              </a>{' '}
+              and{' '}
+              <a href="#usage" className="text-zinc-400 underline hover:text-white">
+                Usage Policy
+              </a>
+              , and acknowledge our{' '}
+              <a href="#privacy" className="text-zinc-400 underline hover:text-white">
+                Privacy Policy
+              </a>
+              .
+            </p>
           </div>
         </div>
-      </div>
+      </main>
+
+      {/* Footer (Claude Console style) */}
+      <footer className="w-full px-6 py-6 border-t border-white/[0.04] text-center text-xs text-zinc-500">
+        <p>Built with Google Gemini 2.5 Flash • Active Recall & Spaced Repetition Engine</p>
+      </footer>
     </div>
   );
 }

@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import {
-  LayoutDashboard,
-  Sparkles,
-  Layers,
-  BrainCircuit,
-  BarChart3,
+  LayoutGrid,
+  Cpu,
+  FileText,
+  GraduationCap,
+  Trophy,
+  ListOrdered,
   Settings,
   Flame,
   X,
   LogOut,
-  Award,
   Zap,
 } from 'lucide-react';
 import Badge from '../common/Badge';
@@ -17,6 +17,11 @@ import Logo from '../common/Logo';
 import MonthlyStreakHeatmap from '../dashboard/MonthlyStreakHeatmap';
 import { getGamificationState, getLevelInfo } from '../../services/gamification';
 
+/**
+ * Minimalist, standard Sidebar navigation for BrainPopZ.
+ * Styled after Claude Console, Linear, and modern developer interfaces.
+ * Uses clean outline stroke icons matching standard design systems.
+ */
 export default function Sidebar({
   currentTab = 'dashboard',
   onSelectTab,
@@ -47,13 +52,14 @@ export default function Sidebar({
 
   const levelInfo = getLevelInfo(gameState.xp);
 
+  // Exact icons matching modern minimal design (Image 2 reference)
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'ai-generator', label: 'AI Generator', icon: Sparkles, badge: 'AI', badgeVariant: 'lime' },
-    { id: 'decks', label: 'My Flashcards', icon: Layers, count: decksCount },
-    { id: 'quizzes', label: 'Practice Quizzes', icon: BrainCircuit },
-    { id: 'achievements', label: 'Achievements', icon: Award, badge: `${gameState.unlockedAchievements?.length || 0}`, badgeVariant: 'violet' },
-    { id: 'analytics', label: 'Study Analytics', icon: BarChart3 },
+    { id: 'dashboard', label: 'Dashboard', icon: LayoutGrid },
+    { id: 'ai-generator', label: 'AI Generator', icon: Cpu, badge: 'AI', badgeVariant: 'lime' },
+    { id: 'decks', label: 'My Flashcards', icon: FileText, count: decksCount },
+    { id: 'quizzes', label: 'Practice Quizzes', icon: GraduationCap },
+    { id: 'achievements', label: 'Achievements', icon: Trophy, badge: `${gameState.unlockedAchievements?.length || 0}`, badgeVariant: 'violet' },
+    { id: 'analytics', label: 'Study Analytics', icon: ListOrdered },
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
@@ -98,43 +104,43 @@ export default function Sidebar({
             {/* Mobile close button */}
             <button
               onClick={onCloseMobile}
-              className="lg:hidden p-1 rounded-md text-gray-400 hover:text-white hover:bg-surface-elevated cursor-pointer"
+              className="lg:hidden p-1 rounded-md text-zinc-400 hover:text-white hover:bg-surface-elevated cursor-pointer"
               aria-label="Close Sidebar"
             >
-              <X className="w-4 h-4" />
+              <X className="w-4 h-4 stroke-[1.75]" />
             </button>
           </div>
 
-          {/* Gamification Stats Header Pills */}
-          <div className="grid grid-cols-2 gap-1.5 px-2 mb-4">
+          {/* Gamification Stats Header Pills - Minimal & restrained */}
+          <div className="grid grid-cols-2 gap-1.5 px-1 mb-4">
             <div
               onClick={() => handleNav('achievements')}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-brand-orange/10 border border-brand-orange/20 text-brand-orange cursor-pointer hover:bg-brand-orange/15 transition-colors"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-surface-secondary border border-surface-border text-zinc-300 cursor-pointer hover:border-zinc-700 hover:text-white transition-colors"
               title="Current Active Streak"
             >
-              <Flame className="w-3.5 h-3.5 fill-brand-orange shrink-0" />
-              <div className="truncate">
-                <span className="font-mono font-bold text-xs">{gameState.streak}</span>
-                <span className="text-[10px] ml-1 text-brand-orange/80">streak</span>
+              <Flame className="w-3.5 h-3.5 text-brand-orange shrink-0 stroke-[1.75]" />
+              <div className="truncate flex items-baseline gap-1">
+                <span className="font-mono font-medium text-xs text-white">{gameState.streak}</span>
+                <span className="text-[10px] text-zinc-400">streak</span>
               </div>
             </div>
 
             <div
               onClick={() => handleNav('achievements')}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-brand-lime/10 border border-brand-lime/20 text-brand-lime cursor-pointer hover:bg-brand-lime/15 transition-colors"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-surface-secondary border border-surface-border text-zinc-300 cursor-pointer hover:border-zinc-700 hover:text-white transition-colors"
               title="Total XP Earned"
             >
-              <Zap className="w-3.5 h-3.5 fill-brand-lime shrink-0" />
-              <div className="truncate">
-                <span className="font-mono font-bold text-xs">{gameState.xp}</span>
-                <span className="text-[10px] ml-1 text-brand-lime/80">XP</span>
+              <Zap className="w-3.5 h-3.5 text-brand-lime shrink-0 stroke-[1.75]" />
+              <div className="truncate flex items-baseline gap-1">
+                <span className="font-mono font-medium text-xs text-white">{gameState.xp}</span>
+                <span className="text-[10px] text-zinc-400">XP</span>
               </div>
             </div>
           </div>
 
-          {/* Navigation Links */}
+          {/* Navigation Links - Standard, minimal, outline icons */}
           <div className="space-y-0.5">
-            <p className="px-2.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
+            <p className="px-2.5 text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-1.5">
               Platform
             </p>
             {navItems.map((item) => {
@@ -145,16 +151,16 @@ export default function Sidebar({
                 <button
                   key={item.id}
                   onClick={() => handleNav(item.id)}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-150 cursor-pointer ${
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors duration-150 cursor-pointer group ${
                     isActive
-                      ? 'bg-brand-violet/12 text-white border border-brand-violet/30 shadow-xs'
-                      : 'text-gray-400 hover:text-white hover:bg-surface-elevated/60 border border-transparent'
+                      ? 'bg-white/[0.08] text-white border border-white/[0.08]'
+                      : 'text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04] border border-transparent'
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
                     <Icon
-                      className={`w-4 h-4 transition-colors ${
-                        isActive ? 'text-brand-violet' : 'text-gray-400'
+                      className={`w-[18px] h-[18px] shrink-0 stroke-[1.75] transition-colors ${
+                        isActive ? 'text-white' : 'text-zinc-400 group-hover:text-zinc-200'
                       }`}
                     />
                     <span>{item.label}</span>
@@ -167,7 +173,7 @@ export default function Sidebar({
                   )}
 
                   {typeof item.count === 'number' && item.count > 0 && (
-                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-surface-elevated text-gray-400 border border-surface-border font-mono">
+                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-surface-elevated text-zinc-400 border border-surface-border font-mono">
                       {item.count}
                     </span>
                   )}
@@ -176,14 +182,14 @@ export default function Sidebar({
             })}
           </div>
 
-          {/* Duolingo-style Live Daily Progress Card */}
-          <div className="mt-6 px-3 py-3 rounded-xl bg-surface border border-surface-border space-y-2">
+          {/* Clean Live Daily Progress Card */}
+          <div className="mt-5 px-3 py-2.5 rounded-xl bg-surface border border-surface-border space-y-2">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-gray-300 flex items-center gap-1.5 text-xs font-medium">
-                <Flame className="w-3.5 h-3.5 text-brand-orange fill-brand-orange" />
+              <span className="text-zinc-300 flex items-center gap-1.5 text-xs font-medium">
+                <Flame className="w-3.5 h-3.5 text-brand-orange shrink-0 stroke-[1.75]" />
                 <span>Daily Cards</span>
               </span>
-              <span className="text-white text-xs font-bold font-mono">
+              <span className="text-white text-xs font-mono font-medium">
                 {gameState.cardsReviewedToday}/{gameState.dailyGoalTarget || 20}
               </span>
             </div>
@@ -197,7 +203,7 @@ export default function Sidebar({
               />
             </div>
 
-            <div className="flex justify-between items-center text-[10px] text-gray-400 pt-0.5">
+            <div className="flex justify-between items-center text-[10px] text-zinc-400 pt-0.5">
               <span>Tier {levelInfo.level} • {levelInfo.title}</span>
               <button
                 onClick={() => handleNav('achievements')}
@@ -227,15 +233,15 @@ export default function Sidebar({
                   className="w-7 h-7 rounded-full object-cover border border-surface-border shrink-0 bg-surface-elevated"
                 />
               ) : (
-                <div className="w-7 h-7 rounded-full bg-brand-violet/20 text-brand-violet-light flex items-center justify-center font-bold text-xs border border-brand-violet/30 shrink-0">
+                <div className="w-7 h-7 rounded-full bg-brand-violet/20 text-brand-violet-light flex items-center justify-center font-medium text-xs border border-brand-violet/30 shrink-0">
                   {user?.name ? user.name[0].toUpperCase() : 'U'}
                 </div>
               )}
               <div className="truncate">
-                <p className="text-xs font-medium text-white truncate group-hover:text-brand-violet-light transition-colors">
+                <p className="text-xs font-medium text-white truncate group-hover:text-zinc-200 transition-colors">
                   {user?.name || 'Scholar'}
                 </p>
-                <p className="text-[10px] text-gray-400 truncate">
+                <p className="text-[10px] text-zinc-400 truncate">
                   {user?.email || 'scholar@university.edu'}
                 </p>
               </div>
@@ -245,10 +251,10 @@ export default function Sidebar({
               <button
                 onClick={onLogout}
                 title="Sign out of Google"
-                className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-surface-elevated rounded-md transition-colors cursor-pointer shrink-0"
+                className="p-1.5 text-zinc-400 hover:text-red-400 hover:bg-surface-elevated rounded-md transition-colors cursor-pointer shrink-0"
                 aria-label="Sign Out"
               >
-                <LogOut className="w-3.5 h-3.5" />
+                <LogOut className="w-3.5 h-3.5 stroke-[1.75]" />
               </button>
             )}
           </div>

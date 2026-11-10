@@ -226,21 +226,21 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleNext('hard')}
-                    className="px-3 py-1.5 rounded-xl bg-brand-orange/20 text-brand-orange border border-brand-orange/40 text-xs font-bold shadow-[0_2.5px_0_0_#C05621] active:translate-y-[2px] active:shadow-none hover:brightness-110 transition-all duration-100 cursor-pointer"
+                    className="px-3 py-1.5 rounded-lg bg-brand-orange/15 text-brand-orange border border-brand-orange/30 text-xs font-medium hover:bg-brand-orange/25 transition-colors cursor-pointer"
                     title="Press 1"
                   >
                     1 • Hard
                   </button>
                   <button
                     onClick={() => handleNext('good')}
-                    className="px-3 py-1.5 rounded-xl bg-brand-violet/20 text-brand-violet-light border border-brand-violet/40 text-xs font-bold shadow-[0_2.5px_0_0_#7551DC] active:translate-y-[2px] active:shadow-none hover:brightness-110 transition-all duration-100 cursor-pointer"
+                    className="px-3 py-1.5 rounded-lg bg-brand-violet/15 text-brand-violet-light border border-brand-violet/30 text-xs font-medium hover:bg-brand-violet/25 transition-colors cursor-pointer"
                     title="Press 2"
                   >
                     2 • Good
                   </button>
                   <button
                     onClick={() => handleNext('easy')}
-                    className="px-3 py-1.5 rounded-xl bg-brand-lime/20 text-brand-lime border border-brand-lime/40 text-xs font-bold shadow-[0_2.5px_0_0_#89BC27] active:translate-y-[2px] active:shadow-none hover:brightness-110 transition-all duration-100 cursor-pointer"
+                    className="px-3 py-1.5 rounded-lg bg-brand-lime/15 text-brand-lime border border-brand-lime/30 text-xs font-medium hover:bg-brand-lime/25 transition-colors cursor-pointer"
                     title="Press 3"
                   >
                     3 • Easy

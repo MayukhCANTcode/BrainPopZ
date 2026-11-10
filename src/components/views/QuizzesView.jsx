@@ -223,18 +223,18 @@ export default function QuizzesView({ initialQuiz }) {
                 const isSelected = selectedOption === idx;
                 const isCorrect = idx === correctIdx;
 
-                let buttonStyle = 'bg-surface-elevated border-surface-border text-gray-200 hover:border-gray-500 hover:bg-[#282C40] active:translate-y-[2px] shadow-[0_2.5px_0_0_#141724] cursor-pointer';
+                let buttonStyle = 'bg-surface-elevated/90 border-surface-border text-zinc-200 hover:border-zinc-600 hover:bg-[#282C40] active:scale-[0.99] cursor-pointer';
 
                 if (isSubmitted) {
                   if (isCorrect) {
-                    buttonStyle = 'bg-brand-lime/15 border-brand-lime/60 text-brand-lime font-bold shadow-[0_2.5px_0_0_#89BC27] -translate-y-0.5';
+                    buttonStyle = 'bg-brand-lime/15 border-brand-lime/60 text-brand-lime font-semibold';
                   } else if (isSelected && !isCorrect) {
-                    buttonStyle = 'bg-red-500/15 border-red-500/40 text-red-400 shadow-[0_2.5px_0_0_#8B1E1E]';
+                    buttonStyle = 'bg-red-500/15 border-red-500/40 text-red-400';
                   } else {
-                    buttonStyle = 'bg-surface-elevated/40 border-surface-border/50 text-gray-400 opacity-50 shadow-none';
+                    buttonStyle = 'bg-surface-elevated/40 border-surface-border/50 text-zinc-500 opacity-50';
                   }
                 } else if (isSelected) {
-                  buttonStyle = 'bg-brand-violet/15 border-brand-violet text-white font-bold shadow-[0_2.5px_0_0_#7551DC] -translate-y-0.5';
+                  buttonStyle = 'bg-brand-violet/15 border-brand-violet text-white font-semibold';
                 }
 
                 return (
