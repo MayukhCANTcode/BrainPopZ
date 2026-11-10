@@ -55,8 +55,10 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        heading: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+        sans: ['"NDot 57"', '"NDot 55"', 'Doto', 'Inter', 'system-ui', 'sans-serif'],
+        heading: ['"NDot 57"', '"NDot 55"', 'Doto', '"Plus Jakarta Sans"', 'sans-serif'],
+        mono: ['"NDot 57"', '"NDot 55"', 'Doto', 'monospace'],
+        dot: ['"NDot 57"', '"NDot 55"', 'Doto', 'monospace'],
       },
       boxShadow: {
         'subtle': '0 1px 2px 0 rgba(0, 0, 0, 0.4)',
