@@ -20,19 +20,19 @@
     "test": "node server/auth-test.js && node server/test-pdf.js && node server/test-youtube.js && node server/comprehensive-test.js"
   },
   "dependencies": {
+    "@vitejs/plugin-react": "^6.1.2",
+    "autoprefixer": "^10.6.2",
+    "concurrently": "^10.0.7",
     "lucide-react": "^1.70.0",
+    "postcss": "^8.5.32",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "tailwindcss": "^3.4.19",
+    "vite": "^8.3.6"
   },
   "devDependencies": {
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "@vitejs/plugin-react": "^6.1.2",
-    "autoprefixer": "^10.6.2",
-    "concurrently": "^10.0.7",
-    "oxlint": "^1.90.0",
-    "postcss": "^8.5.32",
-    "tailwindcss": "^3.4.19",
-    "vite": "^8.3.6"
+    "oxlint": "^1.90.0"
   }
 }
