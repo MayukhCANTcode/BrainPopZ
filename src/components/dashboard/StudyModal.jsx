@@ -152,60 +152,66 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
         {/* Normal Study State */}
         {!isCompleted ? (
           <>
-            {/* 3D Flippable Card Area */}
-            <div className="perspective-1000 my-4 flex-1 min-h-[280px] sm:min-h-[320px]">
+            {/* Progress bar */}
+            <div className="w-full bg-surface-secondary h-1 rounded-full overflow-hidden my-2">
               <div
-                onClick={toggleFlip}
-                className={`w-full h-full relative preserve-3d transition-transform duration-300 cursor-pointer rounded-2xl select-none ${
-                  isFlipped ? 'rotate-y-180' : ''
+                className="bg-brand-violet h-full transition-all duration-300"
+                style={{ width: `${((currentIndex + 1) / cards.length) * 100}%` }}
+              />
+            </div>
+
+            {/* Interactive Flashcard Face */}
+            <div
+              onClick={toggleFlip}
+              className={`w-full min-h-[300px] sm:min-h-[320px] p-6 rounded-2xl cursor-pointer select-none transition-all duration-200 flex flex-col justify-between items-center text-center shadow-lg border my-2 ${
+                isFlipped
+                  ? 'bg-surface-elevated border-brand-lime/40 ring-1 ring-brand-lime/20'
+                  : 'bg-surface-elevated border-surface-border hover:border-zinc-500'
+              }`}
+            >
+              {/* Card Header Badge */}
+              <div className="flex items-center gap-2 shrink-0">
+                <span
+                  className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${
+                    isFlipped
+                      ? 'bg-brand-lime/10 border-brand-lime/30 text-brand-lime'
+                      : 'bg-brand-violet/10 border-brand-violet/30 text-brand-violet-light'
+                  }`}
+                >
+                  {isFlipped ? 'Answer' : 'Question'}
+                </span>
+                {currentCard.difficulty && (
+                  <span className="text-[10px] text-zinc-400 font-mono">
+                    • {currentCard.difficulty}
+                  </span>
+                )}
+              </div>
+
+              {/* Card Content Area */}
+              <div className="flex-1 w-full my-auto py-4 overflow-y-auto flex items-center justify-center">
+                {isFlipped ? (
+                  <p className="text-sm sm:text-base font-normal text-zinc-100 max-w-lg leading-relaxed break-words px-2 animate-fadeIn">
+                    {currentCard.answer || currentCard.a}
+                  </p>
+                ) : (
+                  <p className="text-base sm:text-lg font-heading font-semibold text-white max-w-lg leading-relaxed break-words px-2 animate-fadeIn">
+                    {currentCard.question || currentCard.q}
+                  </p>
+                )}
+              </div>
+
+              {/* Card Footer Hint */}
+              <div
+                className={`flex items-center gap-1.5 text-xs shrink-0 ${
+                  isFlipped ? 'text-brand-lime' : 'text-zinc-400'
                 }`}
               >
-                {/* Front Face: Question */}
-                <div className="absolute inset-0 backface-hidden p-5 sm:p-6 rounded-2xl bg-surface-elevated border border-surface-border hover:border-gray-600 flex flex-col justify-between items-center text-center overflow-hidden shadow-inner">
-                  <div className="flex items-center gap-2 shrink-0">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-brand-violet-light px-2.5 py-0.5 rounded-full bg-brand-violet/10 border border-brand-violet/25">
-                      Question
-                    </span>
-                    {currentCard.difficulty && (
-                      <span className="text-[10px] text-gray-400 font-mono">
-                        • {currentCard.difficulty}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Scrollable / Flexible Question Area */}
-                  <div className="flex-1 w-full my-auto py-3 overflow-y-auto flex items-center justify-center">
-                    <p className="text-sm sm:text-base font-medium text-white max-w-md leading-relaxed break-words px-2">
-                      {currentCard.question || currentCard.q}
-                    </p>
-                  </div>
-
-                  <div className="mt-2 flex items-center gap-1.5 text-[11px] text-gray-400 shrink-0">
-                    <RotateCw className="w-3.5 h-3.5" />
-                    <span>Space or click to flip</span>
-                  </div>
-                </div>
-
-                {/* Back Face: Answer */}
-                <div className="absolute inset-0 backface-hidden rotate-y-180 p-5 sm:p-6 rounded-2xl bg-surface-elevated border border-brand-lime/30 flex flex-col justify-between items-center text-center overflow-hidden shadow-inner">
-                  <div className="flex items-center gap-2 shrink-0">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-brand-lime px-2.5 py-0.5 rounded-full bg-brand-lime/10 border border-brand-lime/25">
-                      Answer
-                    </span>
-                  </div>
-
-                  {/* Scrollable / Flexible Answer Area */}
-                  <div className="flex-1 w-full my-auto py-3 overflow-y-auto flex items-center justify-center">
-                    <p className="text-sm sm:text-base font-medium text-gray-100 max-w-md leading-relaxed break-words px-2">
-                      {currentCard.answer || currentCard.a}
-                    </p>
-                  </div>
-
-                  <div className="mt-2 flex items-center gap-1.5 text-[11px] text-brand-lime shrink-0">
-                    <RotateCw className="w-3.5 h-3.5" />
-                    <span>Space or click to view question</span>
-                  </div>
-                </div>
+                <RotateCw className="w-3.5 h-3.5" />
+                <span>
+                  {isFlipped
+                    ? 'Click or press Space to view question'
+                    : 'Click or press Space to reveal answer'}
+                </span>
               </div>
             </div>
 
@@ -221,35 +227,41 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
                 Prev
               </Button>
 
-              {/* Recall rating buttons shown when flipped */}
+              {/* Recall rating buttons shown when flipped, or Flip prompt when not */}
               {isFlipped ? (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 sm:gap-2">
                   <button
                     onClick={() => handleNext('hard')}
-                    className="px-3 py-1.5 rounded-lg bg-brand-orange/15 text-brand-orange border border-brand-orange/30 text-xs font-medium hover:bg-brand-orange/25 transition-colors cursor-pointer"
+                    className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-brand-orange/15 text-brand-orange border border-brand-orange/30 text-xs font-medium hover:bg-brand-orange/25 transition-colors cursor-pointer"
                     title="Press 1"
                   >
                     1 • Hard
                   </button>
                   <button
                     onClick={() => handleNext('good')}
-                    className="px-3 py-1.5 rounded-lg bg-brand-violet/15 text-brand-violet-light border border-brand-violet/30 text-xs font-medium hover:bg-brand-violet/25 transition-colors cursor-pointer"
+                    className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-brand-violet/15 text-brand-violet-light border border-brand-violet/30 text-xs font-medium hover:bg-brand-violet/25 transition-colors cursor-pointer"
                     title="Press 2"
                   >
                     2 • Good
                   </button>
                   <button
                     onClick={() => handleNext('easy')}
-                    className="px-3 py-1.5 rounded-lg bg-brand-lime/15 text-brand-lime border border-brand-lime/30 text-xs font-medium hover:bg-brand-lime/25 transition-colors cursor-pointer"
+                    className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-brand-lime/15 text-brand-lime border border-brand-lime/30 text-xs font-medium hover:bg-brand-lime/25 transition-colors cursor-pointer"
                     title="Press 3"
                   >
                     3 • Easy
                   </button>
                 </div>
               ) : (
-                <span className="text-[11px] text-gray-400 hidden sm:inline">
-                  Flip card to rate recall
-                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  leftIcon={RotateCw}
+                  onClick={toggleFlip}
+                  className="text-xs text-zinc-300 hover:text-white"
+                >
+                  Flip Card
+                </Button>
               )}
 
               <Button
