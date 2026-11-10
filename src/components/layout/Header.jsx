@@ -30,6 +30,18 @@ export default function Header({
   const searchInputRef = useRef(null);
   const notifRef = useRef(null);
 
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const unreadCount = notifications.filter((n) => n.unread).length;
 
   useEffect(() => {
@@ -91,7 +103,11 @@ export default function Header({
   };
 
   return (
-    <header className="sticky top-0 z-30 h-14 bg-midnight/90 backdrop-blur-md border-b border-surface-border px-4 lg:px-6 flex items-center justify-between">
+    <header
+      className={`sticky top-0 z-30 h-14 px-4 lg:px-6 flex items-center justify-between transition-all duration-300 ${
+        isScrolled ? 'header-glass-scrolled' : 'header-glass-top'
+      }`}
+    >
       {/* Left side: Mobile menu toggle + Search */}
       <div className="flex items-center gap-3 flex-1 max-w-md">
         <button
