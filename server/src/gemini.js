@@ -129,8 +129,8 @@ export async function generateStudyAsset({ notes, mode, difficulty, quantity }) 
   let rawContent = null;
   let usedModel = PRIMARY_MODEL;
 
-  // Helper to execute generation with timeout
-  const executeGeneration = async (modelName) => {
+  // Helper to execute generation with timeout and automatic retry on transient errors
+  const executeGeneration = async (modelName, retryCount = 1) => {
     const model = genAI.getGenerativeModel({
       model: modelName,
       generationConfig: {
@@ -144,9 +144,24 @@ export async function generateStudyAsset({ notes, mode, difficulty, quantity }) 
       setTimeout(() => reject(new Error('Network timeout: Gemini API took longer than 25 seconds to respond.')), 25000)
     );
 
-    const apiPromise = model.generateContent(prompt);
-    const response = await Promise.race([apiPromise, timeoutPromise]);
-    return response.response.text();
+    try {
+      const apiPromise = model.generateContent(prompt);
+      const response = await Promise.race([apiPromise, timeoutPromise]);
+      return response.response.text();
+    } catch (err) {
+      const isTransient =
+        err.message?.includes('503') ||
+        err.message?.includes('high demand') ||
+        err.message?.includes('ResourceExhausted') ||
+        err.status === 503;
+
+      if (retryCount > 0 && isTransient) {
+        console.warn(`Transient ${modelName} error (${err.message}), retrying in 1.5s...`);
+        await new Promise((r) => setTimeout(r, 1500));
+        return executeGeneration(modelName, retryCount - 1);
+      }
+      throw err;
+    }
   };
 
   try {
