@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { GenerateRequestSchema } from './validators.js';
 import { generateStudyAsset } from './gemini.js';
+import { getYouTubeTranscript } from './youtube.js';
 import {
   verifyGoogleIdToken,
   createSessionToken,
@@ -94,6 +95,34 @@ apiRouter.post('/auth/logout', (req, res) => {
     success: true,
     message: 'Logged out successfully.',
   });
+});
+
+// -------------------------------------------------------------
+// YouTube Transcript Extraction Endpoint
+// -------------------------------------------------------------
+apiRouter.post('/youtube-transcript', requireAuth, async (req, res) => {
+  const { url } = req.body || {};
+
+  if (!url || typeof url !== 'string' || !url.trim()) {
+    return res.status(400).json({
+      error: 'Bad Request',
+      message: 'Please provide a valid YouTube video URL or ID.',
+    });
+  }
+
+  try {
+    const data = await getYouTubeTranscript(url.trim());
+    return res.status(200).json({
+      success: true,
+      data,
+    });
+  } catch (err) {
+    console.error('[YOUTUBE] Transcript extraction failed:', err.message);
+    return res.status(err.status || 500).json({
+      error: 'Transcript Extraction Failed',
+      message: err.message || 'Unable to fetch transcript from YouTube.',
+    });
+  }
 });
 
 // -------------------------------------------------------------

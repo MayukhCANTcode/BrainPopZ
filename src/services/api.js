@@ -152,3 +152,46 @@ export async function logoutUser() {
     return false;
   }
 }
+
+/**
+ * Fetches transcript and metadata for a given YouTube URL.
+ *
+ * @param {string} url - YouTube video URL or video ID
+ * @param {AbortSignal} [signal]
+ * @returns {Promise<Object>} { videoId, title, author, thumbnail, transcript, wordCount, estimatedMinutes }
+ */
+export async function fetchYouTubeTranscript(url, signal) {
+  let response;
+
+  try {
+    response = await fetch(`${API_BASE_URL}/youtube-transcript`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({ url }),
+      signal,
+    });
+  } catch (networkError) {
+    if (networkError.name === 'AbortError') throw networkError;
+    throw new APIError(
+      'Cannot connect to BrainPopZ backend server. Ensure the backend is running.',
+      0
+    );
+  }
+
+  let data;
+  try {
+    data = await response.json();
+  } catch {
+    throw new APIError('Server returned an unparseable response.', response.status);
+  }
+
+  if (!response.ok || !data.success) {
+    const errorMsg = data.message || data.error || `Failed to retrieve YouTube transcript (${response.status})`;
+    throw new APIError(errorMsg, response.status, data.details || null);
+  }
+
+  return data.data;
+}

@@ -11,11 +11,12 @@ import {
   AlertCircle,
   RotateCcw,
   Play,
+  SquarePlay,
 } from 'lucide-react';
 import Card from '../common/Card';
 import Button from '../common/Button';
 import Badge from '../common/Badge';
-import { generateContent } from '../../services/api';
+import { generateContent, fetchYouTubeTranscript } from '../../services/api';
 
 const initialCards = [
   {
@@ -54,9 +55,34 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
   const [flippedCardId, setFlippedCardId] = useState(null);
   const [savedSuccess, setSavedSuccess] = useState(false);
 
+  // YouTube import states
+  const [showYouTubeInput, setShowYouTubeInput] = useState(false);
+  const [youtubeUrl, setYoutubeUrl] = useState('');
+  const [isFetchingYoutube, setIsFetchingYoutube] = useState(false);
+
   // Request race-condition prevention refs
   const abortControllerRef = useRef(null);
   const latestRequestIdRef = useRef(0);
+
+  const handleFetchYouTubeTranscript = async () => {
+    if (!youtubeUrl.trim()) {
+      setErrorMessage('Please paste a valid YouTube URL first.');
+      return;
+    }
+
+    setIsFetchingYoutube(true);
+    setErrorMessage('');
+    try {
+      const data = await fetchYouTubeTranscript(youtubeUrl.trim());
+      setInputText(data.transcript);
+      setGeneratedTitle(data.title);
+      setShowYouTubeInput(false);
+    } catch (err) {
+      setErrorMessage(err.message || 'Failed to fetch transcript from YouTube.');
+    } finally {
+      setIsFetchingYoutube(false);
+    }
+  };
 
   const handleGenerate = async (e) => {
     if (e) e.preventDefault();
@@ -265,9 +291,57 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
 
           {/* Input Area */}
           <div>
-            <label className="block text-[11px] font-medium text-gray-400 uppercase tracking-wider mb-1.5">
-              Topic or Source Material
-            </label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="text-[11px] font-medium text-gray-400 uppercase tracking-wider">
+                Topic or Source Material
+              </label>
+              <button
+                type="button"
+                onClick={() => setShowYouTubeInput(!showYouTubeInput)}
+                className="text-[10px] text-red-400 hover:text-red-300 flex items-center gap-1 cursor-pointer font-medium"
+              >
+                <SquarePlay className="w-3 h-3" />
+                <span>{showYouTubeInput ? 'Use Manual Notes' : 'Import from YouTube'}</span>
+              </button>
+            </div>
+
+            {/* YouTube Import Drawer */}
+            {showYouTubeInput ? (
+              <div className="space-y-2 p-2.5 rounded-lg bg-surface border border-red-500/30 mb-2 animate-fadeIn">
+                <span className="text-[10px] text-gray-400 block">
+                  Paste any YouTube link to fetch captions & lecture notes:
+                </span>
+                <div className="flex gap-1.5">
+                  <input
+                    type="text"
+                    value={youtubeUrl}
+                    onChange={(e) => setYoutubeUrl(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleFetchYouTubeTranscript();
+                    }}
+                    placeholder="https://youtu.be/... or youtube.com/watch?v=..."
+                    className="flex-1 bg-surface-elevated border border-surface-border rounded px-2.5 py-1 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-red-500/50"
+                  />
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    className="bg-red-500 hover:bg-red-600 text-white shrink-0 text-xs py-1"
+                    disabled={isFetchingYoutube || !youtubeUrl.trim()}
+                    onClick={handleFetchYouTubeTranscript}
+                  >
+                    {isFetchingYoutube ? (
+                      <span className="flex items-center gap-1">
+                        <Loader2 className="w-3 h-3 animate-spin" />
+                        <span>Fetching...</span>
+                      </span>
+                    ) : (
+                      'Fetch'
+                    )}
+                  </Button>
+                </div>
+              </div>
+            ) : null}
+
             <textarea
               rows={4}
               value={inputText}
