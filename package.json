@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "postinstall": "npm --prefix server install",
     "start": "concurrently -n \"server,client\" -c \"magenta,cyan\" \"node server/src/index.js\" \"vite --port 5173\"",
     "dev": "concurrently -n \"server,client\" -c \"magenta,cyan\" \"node --watch server/src/index.js\" \"vite --port 5173\"",
     "client": "vite",
@@ -12,9 +13,11 @@
     "preview": "vite preview",
     "server": "node server/src/index.js",
     "server:dev": "node --watch server/src/index.js",
-    "test:ai": "node server/comprehensive-test.js",
+    "test:auth": "node server/auth-test.js",
+    "test:pdf": "node server/test-pdf.js",
     "test:youtube": "node server/test-youtube.js",
-    "test:pdf": "node server/test-pdf.js"
+    "test:ai": "node server/comprehensive-test.js",
+    "test": "node server/auth-test.js && node server/test-pdf.js && node server/test-youtube.js && node server/comprehensive-test.js"
   },
   "dependencies": {
     "lucide-react": "^1.70.0",
