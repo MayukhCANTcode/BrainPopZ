@@ -151,3 +151,15 @@ body {
   background-color: #11121A;
   border-bottom: 1px solid rgba(34, 38, 56, 0.4);
 }
+
+/* Reduced-motion accessibility safeguard */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

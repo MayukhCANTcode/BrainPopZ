@@ -20,7 +20,7 @@ import Card from '../common/Card';
 import Button from '../common/Button';
 import Badge from '../common/Badge';
 import Mascot from '../common/Mascot';
-import { generateContent, fetchYouTubeTranscript } from '../../services/api';
+import { generateContent, fetchYouTubeTranscript, extractPdfDocument } from '../../services/api';
 import { recordCompletedActivity } from '../../services/gamification';
 
 const SUGGESTED_TOPICS = [
@@ -43,6 +43,8 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
   const [topicInput, setTopicInput] = useState('');
   const [notesInput, setNotesInput] = useState('');
   const [uploadedFileName, setUploadedFileName] = useState('');
+  const [isExtractingPdf, setIsExtractingPdf] = useState(false);
+  const [pdfMetadata, setPdfMetadata] = useState(null);
 
   // YouTube states
   const [youtubeUrl, setYoutubeUrl] = useState('');
@@ -59,12 +61,36 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
   const [generatedResult, setGeneratedResult] = useState(null);
 
   const fileInputRef = useRef(null);
+  const abortControllerRef = useRef(null);
+  const latestRequestIdRef = useRef(0);
 
-  const handleFileUpload = (e) => {
+  const handleFileUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setUploadedFileName(file.name);
+    setErrorMessage('');
+
+    // Handle PDF lecture slides
+    if (file.name.toLowerCase().endsWith('.pdf')) {
+      setIsExtractingPdf(true);
+      try {
+        const result = await extractPdfDocument(file);
+        setPdfMetadata(result);
+        setNotesInput(result.text);
+        setActiveTab('upload');
+      } catch (err) {
+        setErrorMessage(err.message || 'Failed to extract text from PDF document.');
+        setUploadedFileName('');
+        setPdfMetadata(null);
+      } finally {
+        setIsExtractingPdf(false);
+      }
+      return;
+    }
+
+    // Handle plain text / markdown / CSV
+    setPdfMetadata(null);
     const reader = new FileReader();
     reader.onload = (event) => {
       const text = event.target?.result;
@@ -139,6 +165,20 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
       return;
     }
 
+    if (activeTab === 'upload' && pdfMetadata) {
+      customTitle = uploadedFileName.replace(/\.pdf$/i, '');
+      customSubject = 'PDF Lecture Document';
+      customTags = ['PDF Document', `${pdfMetadata.pageCount} Pages`, difficulty];
+    }
+
+    // Cancel any pending in-flight request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+    const currentRequestId = ++latestRequestIdRef.current;
+
     setIsGenerating(true);
     setErrorMessage('');
     setGeneratedResult(null);
@@ -149,7 +189,13 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
         mode,
         difficulty,
         quantity,
+        signal: controller.signal,
       });
+
+      // Guard against stale asynchronous responses overwriting newer user requests
+      if (currentRequestId !== latestRequestIdRef.current) {
+        return;
+      }
 
       setGeneratedResult(result);
 
@@ -310,7 +356,7 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
           <input
             ref={fileInputRef}
             type="file"
-            accept=".txt,.md,.json,.csv,.rtf"
+            accept=".pdf,.txt,.md,.json,.csv,.rtf"
             onChange={handleFileUpload}
             className="hidden"
           />
@@ -472,19 +518,32 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
             </div>
           ) : (
             <div className="space-y-2">
-              {uploadedFileName && activeTab === 'upload' && (
-                <div className="flex items-center justify-between p-2 rounded-lg bg-surface-secondary border border-brand-orange/30 text-xs text-brand-orange">
-                  <div className="flex items-center gap-2">
-                    <FileText className="w-4 h-4" />
-                    <span className="font-medium font-mono">{uploadedFileName}</span>
+              {isExtractingPdf && (
+                <div className="flex items-center gap-2.5 p-3 rounded-lg bg-surface-secondary border border-brand-violet/30 text-xs text-brand-violet-light animate-fadeIn">
+                  <Loader2 className="w-4 h-4 animate-spin text-brand-lime" />
+                  <span>Parsing PDF lecture slides & extracting text...</span>
+                </div>
+              )}
+
+              {uploadedFileName && activeTab === 'upload' && !isExtractingPdf && (
+                <div className="flex items-center justify-between p-2.5 rounded-lg bg-surface-secondary border border-brand-orange/30 text-xs">
+                  <div className="flex items-center gap-2 truncate">
+                    <FileText className="w-4 h-4 text-brand-orange shrink-0 stroke-[1.75]" />
+                    <span className="font-medium font-mono text-white truncate">{uploadedFileName}</span>
+                    {pdfMetadata && (
+                      <span className="text-[10px] text-zinc-400 font-mono shrink-0 ml-1">
+                        ({pdfMetadata.pageCount} pages • {pdfMetadata.wordCount} words)
+                      </span>
+                    )}
                   </div>
                   <button
                     type="button"
                     onClick={() => {
                       setUploadedFileName('');
+                      setPdfMetadata(null);
                       setNotesInput('');
                     }}
-                    className="text-gray-400 hover:text-white text-[11px] cursor-pointer"
+                    className="text-zinc-400 hover:text-white text-[11px] cursor-pointer ml-2 shrink-0"
                   >
                     Clear file
                   </button>

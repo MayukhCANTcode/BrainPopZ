@@ -195,3 +195,42 @@ export async function fetchYouTubeTranscript(url, signal) {
 
   return data.data;
 }
+
+/**
+ * Uploads a PDF document to extract text and slide contents.
+ *
+ * @param {File} file - PDF file object
+ * @param {AbortSignal} [signal]
+ * @returns {Promise<Object>} { pageCount, wordCount, characterCount, estimatedMinutes, text, fileName, fileSizeBytes }
+ */
+export async function extractPdfDocument(file, signal) {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  let response;
+  try {
+    response = await fetch(`${API_BASE_URL}/extract-pdf`, {
+      method: 'POST',
+      credentials: 'include',
+      body: formData,
+      signal,
+    });
+  } catch (networkError) {
+    if (networkError.name === 'AbortError') throw networkError;
+    throw new APIError('Cannot connect to BrainPopZ backend server. Ensure backend is running.', 0);
+  }
+
+  let data;
+  try {
+    data = await response.json();
+  } catch {
+    throw new APIError('Server returned an unparseable response.', response.status);
+  }
+
+  if (!response.ok || !data.success) {
+    const errorMsg = data.message || data.error || `Failed to extract text from PDF (${response.status})`;
+    throw new APIError(errorMsg, response.status, data.details || null);
+  }
+
+  return data.data;
+}

@@ -4,12 +4,17 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "start": "concurrently -n \"server,client\" -c \"magenta,cyan\" \"node server/src/index.js\" \"vite --port 5173\"",
+    "dev": "concurrently -n \"server,client\" -c \"magenta,cyan\" \"node --watch server/src/index.js\" \"vite --port 5173\"",
+    "client": "vite",
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview",
     "server": "node server/src/index.js",
-    "server:dev": "node --watch server/src/index.js"
+    "server:dev": "node --watch server/src/index.js",
+    "test:ai": "node server/comprehensive-test.js",
+    "test:youtube": "node server/test-youtube.js",
+    "test:pdf": "node server/test-pdf.js"
   },
   "dependencies": {
     "lucide-react": "^1.70.0",
@@ -21,6 +26,7 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
     "autoprefixer": "^10.6.2",
+    "concurrently": "^10.0.7",
     "oxlint": "^1.90.0",
     "postcss": "^8.5.32",
     "tailwindcss": "^3.4.19",

@@ -1,7 +1,9 @@
 import { Router } from 'express';
+import multer from 'multer';
 import { GenerateRequestSchema } from './validators.js';
 import { generateStudyAsset } from './gemini.js';
 import { getYouTubeTranscript } from './youtube.js';
+import { extractTextFromPdf } from './pdf.js';
 import {
   verifyGoogleIdToken,
   createSessionToken,
@@ -12,6 +14,18 @@ import {
 } from './auth.js';
 
 export const apiRouter = Router();
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 15 * 1024 * 1024 }, // 15 MB limit
+  fileFilter: (_req, file, cb) => {
+    if (file.mimetype === 'application/pdf' || file.originalname.toLowerCase().endsWith('.pdf')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only PDF documents (.pdf) are supported.'));
+    }
+  },
+});
 
 // Health check endpoint
 apiRouter.get('/health', (req, res) => {
@@ -121,6 +135,51 @@ apiRouter.post('/youtube-transcript', requireAuth, async (req, res) => {
     return res.status(err.status || 500).json({
       error: 'Transcript Extraction Failed',
       message: err.message || 'Unable to fetch transcript from YouTube.',
+    });
+  }
+});
+
+// -------------------------------------------------------------
+// PDF Lecture Slide & Document Extraction Endpoint
+// -------------------------------------------------------------
+apiRouter.post('/extract-pdf', requireAuth, (req, res, next) => {
+  upload.single('file')(req, res, (err) => {
+    if (err instanceof multer.MulterError) {
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({
+          error: 'File Too Large',
+          message: 'The uploaded PDF exceeds the 15MB limit. Please upload a smaller document.',
+        });
+      }
+      return res.status(400).json({ error: 'Upload Error', message: err.message });
+    } else if (err) {
+      return res.status(400).json({ error: 'Invalid File', message: err.message });
+    }
+    next();
+  });
+}, async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({
+      error: 'Bad Request',
+      message: 'Please upload a PDF document (.pdf).',
+    });
+  }
+
+  try {
+    const data = await extractTextFromPdf(req.file.buffer);
+    return res.status(200).json({
+      success: true,
+      data: {
+        ...data,
+        fileName: req.file.originalname,
+        fileSizeBytes: req.file.size,
+      },
+    });
+  } catch (err) {
+    console.error('[PDF] Extraction failed:', err.message);
+    return res.status(err.status || 500).json({
+      error: 'PDF Extraction Failed',
+      message: err.message || 'Failed to extract readable text from PDF.',
     });
   }
 });
