@@ -84,3 +84,4 @@ export default function Confetti({ duration = 3000 }) {
     />
   );
 }
+

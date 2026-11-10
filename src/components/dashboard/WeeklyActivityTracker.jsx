@@ -106,7 +106,7 @@ export default function WeeklyActivityTracker({ onStartQuiz }) {
                     <div
                       className={`w-full rounded transition-all duration-500 ${
                         day.isToday
-                          ? 'bg-gradient-to-t from-brand-violet to-brand-lime'
+                          ? 'bg-brand-violet'
                           : 'bg-brand-lime'
                       }`}
                       style={{ height: `${Math.max(16, heightPercent)}%` }}

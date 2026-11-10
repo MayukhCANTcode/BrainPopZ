@@ -13,8 +13,8 @@ export default function Card({
   ...props
 }) {
   const hoverStyles = hoverEffect
-    ? 'hover:border-surface-active transition-colors duration-150 cursor-pointer'
-    : 'transition-colors duration-150';
+    ? 'hover:border-surface-active hover:-translate-y-0.5 hover:shadow-card-hover transition-all duration-200 cursor-pointer'
+    : 'transition-all duration-150';
 
   return (
     <Component

@@ -91,7 +91,7 @@ export default function Sidebar({
               className="text-left group cursor-pointer focus:outline-none"
               title="Go to BrainPopZ Dashboard"
             >
-              <Logo size="sm" badge="PRO" />
+              <Logo size="sm" />
             </button>
 
             {/* Mobile close button */}

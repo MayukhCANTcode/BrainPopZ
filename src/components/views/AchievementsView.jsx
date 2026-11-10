@@ -61,10 +61,10 @@ export default function AchievementsView() {
       </div>
 
       {/* Level Summary Banner */}
-      <Card padding="p-6" className="relative overflow-hidden border-surface-border bg-gradient-to-r from-surface via-surface to-brand-violet/10">
+      <Card padding="p-6" className="relative overflow-hidden border-surface-border bg-surface">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-brand-violet to-brand-violet-light flex items-center justify-center text-midnight font-heading font-black text-2xl shadow-lg shadow-brand-violet/20 border border-white/20">
+            <div className="w-16 h-16 rounded-2xl bg-brand-violet text-midnight flex items-center justify-center font-heading font-black text-2xl shadow-sm border border-brand-violet/40">
               {levelInfo.level}
             </div>
 
@@ -95,7 +95,7 @@ export default function AchievementsView() {
 
             <div className="w-full bg-midnight h-2.5 rounded-full overflow-hidden border border-surface-border p-0.5">
               <div
-                className="bg-gradient-to-r from-brand-violet to-brand-lime h-full rounded-full transition-all duration-500"
+                className="bg-brand-lime h-full rounded-full transition-all duration-500"
                 style={{ width: `${levelInfo.percentage}%` }}
               />
             </div>
@@ -130,7 +130,7 @@ export default function AchievementsView() {
                 padding="p-4"
                 className={`relative overflow-hidden border transition-all ${
                   isUnlocked
-                    ? 'border-brand-lime/30 bg-gradient-to-b from-surface to-brand-lime/5 shadow-md'
+                    ? 'border-brand-lime/30 bg-surface shadow-sm'
                     : 'border-surface-border bg-surface/50 opacity-75'
                 }`}
               >

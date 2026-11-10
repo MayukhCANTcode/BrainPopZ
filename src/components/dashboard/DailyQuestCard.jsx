@@ -72,7 +72,7 @@ export default function DailyQuestCard({ onNavigate, onStartStudy }) {
   return (
     <Card
       padding="p-5"
-      className="border-surface-border bg-gradient-to-br from-surface via-surface to-surface-elevated/40 flex flex-col justify-between"
+      className="border-surface-border bg-surface flex flex-col justify-between"
     >
       <div>
         <div className="flex items-center justify-between mb-3">

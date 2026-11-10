@@ -128,3 +128,4 @@ export async function getYouTubeTranscript(urlOrId) {
     estimatedMinutes: Math.max(1, Math.round(wordCount / 140)), // ~140 wpm spoken English
   };
 }
+

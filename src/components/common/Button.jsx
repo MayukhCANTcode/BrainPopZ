@@ -17,7 +17,7 @@ export default function Button({
   ...props
 }) {
   const baseStyles =
-    'inline-flex items-center justify-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-violet/50 disabled:opacity-50 disabled:pointer-events-none select-none rounded-lg cursor-pointer';
+    'inline-flex items-center justify-center font-medium transition-all duration-150 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-violet/50 disabled:opacity-50 disabled:pointer-events-none disabled:active:scale-100 select-none rounded-lg cursor-pointer';
 
   const variants = {
     primary:

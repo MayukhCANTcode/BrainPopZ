@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { X, RotateCw, ChevronRight, ChevronLeft, Award, RotateCcw } from 'lucide-react';
+import { X, RotateCw, ChevronRight, ChevronLeft, RotateCcw, Award } from 'lucide-react';
 import Button from '../common/Button';
 import Badge from '../common/Badge';
+import Confetti from '../common/Confetti';
 import { recordCompletedActivity } from '../../services/gamification';
+import { playCardFlipSound, playCelebrationSound } from '../../services/soundEffects';
 
 export default function StudyModal({ deck, onClose, onUpdateDeck }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -27,6 +29,11 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
       ];
 
   const currentCard = cards[currentIndex] || cards[0];
+
+  const toggleFlip = useCallback(() => {
+    playCardFlipSound();
+    setIsFlipped((prev) => !prev);
+  }, []);
 
   const handleNext = useCallback((rating = 'good') => {
     setIsFlipped(false);
@@ -64,6 +71,8 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
         type: 'flashcards',
         cardsReviewed: cards.length,
       });
+
+      playCelebrationSound();
     }
   }, [isCompleted, onUpdateDeck, deck, cardRatings, cards.length]);
 
@@ -91,7 +100,7 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
 
       if (e.key === ' ' || e.key === 'Enter') {
         e.preventDefault();
-        setIsFlipped((prev) => !prev);
+        toggleFlip();
       } else if (e.key === 'ArrowRight') {
         e.preventDefault();
         handleNext();
@@ -107,7 +116,7 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleNext, handlePrev, isCompleted, isFlipped, onClose]);
+  }, [handleNext, handlePrev, isCompleted, isFlipped, onClose, toggleFlip]);
 
   if (!deck) return null;
 
@@ -145,7 +154,7 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
             {/* 3D Flippable Card Area */}
             <div className="perspective-1000 my-4 flex-1 min-h-[280px] sm:min-h-[320px]">
               <div
-                onClick={() => setIsFlipped(!isFlipped)}
+                onClick={toggleFlip}
                 className={`w-full h-full relative preserve-3d transition-transform duration-300 cursor-pointer rounded-2xl select-none ${
                   isFlipped ? 'rotate-y-180' : ''
                 }`}
@@ -254,7 +263,8 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
           </>
         ) : (
           /* Completion State */
-          <div className="py-6 flex flex-col items-center justify-center text-center flex-1 space-y-3 animate-fadeIn">
+          <div className="py-6 flex flex-col items-center justify-center text-center flex-1 space-y-3 animate-fadeIn relative">
+            <Confetti trigger={isCompleted} count={60} />
             <div className="w-12 h-12 rounded-xl bg-surface-elevated text-brand-lime flex items-center justify-center border border-surface-border">
               <Award className="w-6 h-6" />
             </div>

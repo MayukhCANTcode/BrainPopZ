@@ -122,16 +122,10 @@ export default function LoginView({ onLoginSuccess, isRestoringSession }) {
 
   return (
     <div className="min-h-screen bg-midnight flex items-center justify-center p-4 sm:p-6 lg:p-8">
-      {/* Background ambient gradient glow */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
-        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-brand-violet/10 blur-[130px] rounded-full" />
-        <div className="absolute bottom-10 right-10 w-[400px] h-[300px] bg-brand-lime/5 blur-[120px] rounded-full" />
-      </div>
-
       <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
         {/* Left Column: Product Branding & Features */}
         <div className="lg:col-span-6 space-y-6">
-          <Logo size="lg" badge="AI ENGINE" />
+          <Logo size="lg" />
 
           <div className="space-y-2">
             <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-brand-violet/10 border border-brand-violet/20 text-brand-violet-light text-[11px] font-medium">
@@ -139,7 +133,7 @@ export default function LoginView({ onLoginSuccess, isRestoringSession }) {
               <span>Google Identity & Gemini 2.5 Flash</span>
             </div>
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-heading font-bold text-white tracking-tight leading-tight">
-              Master complex topics with <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-violet via-brand-violet-light to-brand-lime">validated active recall</span>.
+              Master complex topics with <span className="text-brand-lime font-bold">validated active recall</span>.
             </h1>
             <p className="text-xs sm:text-sm text-gray-400 leading-relaxed">
               Transform unstructured notes into diagnostic flashcards and adaptive exam-prep quizzes with official Google Gemini AI.

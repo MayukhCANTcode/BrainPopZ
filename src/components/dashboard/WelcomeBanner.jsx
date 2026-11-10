@@ -24,7 +24,7 @@ export default function WelcomeBanner({
         <div className="flex items-center gap-2 mb-0.5">
           <span className="text-lg">👋</span>
           <h1 className="text-xl sm:text-2xl font-heading font-black text-white tracking-tight">
-            Ready to level up, <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-violet-light to-brand-lime">{firstName}</span>?
+            Ready to level up, <span className="text-brand-lime font-bold">{firstName}</span>?
           </h1>
         </div>
         <p className="text-xs text-gray-400 mt-1 max-w-xl">

@@ -202,13 +202,9 @@ export default function HeroGenerator({ onAddNewDeck, onStartQuiz, onStudyDeck }
   return (
     <Card
       padding="p-5 sm:p-6"
-      className="relative overflow-hidden border-surface-border bg-gradient-to-br from-surface via-surface to-surface-secondary/70 shadow-xl"
+      className="relative overflow-hidden border-surface-border bg-surface shadow-md"
     >
-      {/* Playful background accent glow */}
-      <div className="absolute top-0 right-0 w-80 h-80 bg-brand-violet/10 blur-[90px] rounded-full pointer-events-none -z-0" />
-      <div className="absolute bottom-0 left-0 w-60 h-60 bg-brand-lime/5 blur-[80px] rounded-full pointer-events-none -z-0" />
-
-      <div className="relative z-10 space-y-5">
+      <div className="space-y-5">
         {/* Header Banner */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3.5">

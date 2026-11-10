@@ -3,8 +3,14 @@ import { CheckCircle2, XCircle, Play, RotateCcw, Award, ChevronRight, Timer } fr
 import Card from '../common/Card';
 import Badge from '../common/Badge';
 import Button from '../common/Button';
+import Confetti from '../common/Confetti';
 import { multiQuestionQuizzes, upcomingReviews } from '../../data/mockData';
 import { recordCompletedActivity, getGamificationState } from '../../services/gamification';
+import {
+  playCorrectSound,
+  playIncorrectSound,
+  playCelebrationSound,
+} from '../../services/soundEffects';
 
 export default function QuizzesView({ initialQuiz }) {
   const [questions, setQuestions] = useState(
@@ -52,8 +58,10 @@ export default function QuizzesView({ initialQuiz }) {
     if (selectedOption === null) return;
     setIsSubmitted(true);
     if (selectedOption === correctIdx) {
+      playCorrectSound();
       setScore((prev) => prev + 1);
     } else {
+      playIncorrectSound();
       setMissedQuestions((prev) => [...prev, currentQ]);
     }
   };
@@ -71,6 +79,7 @@ export default function QuizzesView({ initialQuiz }) {
         isPerfectQuiz: score === questions.length,
       });
       setGameState(getGamificationState());
+      playCelebrationSound();
     }
   }, [isCompleted, score, questions.length]);
 
@@ -283,7 +292,8 @@ export default function QuizzesView({ initialQuiz }) {
           </>
         ) : (
           /* Quiz Completed Screen */
-          <div className="py-6 flex flex-col items-center justify-center text-center space-y-3 animate-fadeIn">
+          <div className="py-6 flex flex-col items-center justify-center text-center space-y-3 animate-fadeIn relative">
+            <Confetti trigger={isCompleted} count={60} />
             <div className="w-12 h-12 rounded-xl bg-surface-elevated text-brand-lime flex items-center justify-center border border-surface-border">
               <Award className="w-6 h-6" />
             </div>

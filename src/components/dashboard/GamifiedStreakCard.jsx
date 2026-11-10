@@ -34,15 +34,8 @@ export default function GamifiedStreakCard({ onOpenQuests }) {
   return (
     <Card
       padding="p-5"
-      className="relative overflow-hidden border-surface-border bg-gradient-to-br from-surface via-surface to-surface-elevated/40 flex flex-col justify-between"
+      className="relative overflow-hidden border-surface-border bg-surface flex flex-col justify-between"
     >
-      {/* Decorative ambient background glow */}
-      <div
-        className={`absolute -right-8 -top-8 w-36 h-36 rounded-full blur-3xl pointer-events-none transition-all duration-700 ${
-          hasStreak ? 'bg-brand-orange/15' : 'bg-brand-violet/10'
-        }`}
-      />
-
       <div>
         {/* Header: Flame streak & Freeze Shield pill */}
         <div className="flex items-start justify-between gap-3 mb-4">
@@ -50,14 +43,14 @@ export default function GamifiedStreakCard({ onOpenQuests }) {
             <div
               className={`w-12 h-12 rounded-2xl flex items-center justify-center border transition-all duration-300 relative ${
                 hasStreak
-                  ? 'bg-gradient-to-tr from-brand-orange/20 to-amber-500/10 border-brand-orange/40 shadow-lg shadow-brand-orange/10 ring-2 ring-brand-orange/20'
+                  ? 'bg-brand-orange/15 border-brand-orange/40 shadow-sm ring-1 ring-brand-orange/30'
                   : 'bg-surface-elevated border-surface-border text-gray-500'
               }`}
             >
               <Flame
                 className={`w-6 h-6 transition-transform duration-300 ${
                   hasStreak
-                    ? 'text-brand-orange fill-brand-orange animate-pulse scale-110'
+                    ? 'text-brand-orange fill-brand-orange animate-flame scale-110'
                     : 'text-gray-500'
                 }`}
               />
@@ -119,7 +112,7 @@ export default function GamifiedStreakCard({ onOpenQuests }) {
           {/* Level Progress Bar */}
           <div className="w-full bg-surface h-2 rounded-full overflow-hidden p-0.5 border border-surface-border">
             <div
-              className="bg-gradient-to-r from-brand-violet via-brand-violet-light to-brand-lime h-full rounded-full transition-all duration-500 shadow-sm"
+              className="bg-brand-violet h-full rounded-full transition-all duration-500 shadow-sm"
               style={{ width: `${levelInfo.percentage}%` }}
             />
           </div>
