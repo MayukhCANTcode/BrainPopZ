@@ -33,8 +33,8 @@ export default function Logo({
 
       {/* Brand Text */}
       {withText && (
-        <span className={`font-heading font-black tracking-tight text-white ${current.text}`}>
-          BrainPop<span className="text-brand-lime">Z</span>
+        <span className={`font-heading font-black tracking-tight text-zinc-950 ${current.text}`}>
+          BrainPop<span className="text-brand-violet-dark">Z</span>
         </span>
       )}
     </div>

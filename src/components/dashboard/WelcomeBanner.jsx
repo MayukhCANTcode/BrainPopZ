@@ -23,11 +23,11 @@ export default function WelcomeBanner({
       <div>
         <div className="flex items-center gap-2 mb-0.5">
           <span className="text-lg">👋</span>
-          <h1 className="text-xl sm:text-2xl font-heading font-black text-white tracking-tight">
-            Ready to level up, <span className="text-brand-lime font-bold">{firstName}</span>?
+          <h1 className="text-xl sm:text-2xl font-heading font-black text-zinc-950 tracking-tight">
+            Ready to level up, <span className="font-serif italic font-normal text-brand-violet-dark">{firstName}</span>?
           </h1>
         </div>
-        <p className="text-xs text-gray-400 mt-1 max-w-xl">
+        <p className="text-xs text-zinc-600 mt-1 max-w-xl">
           {todayQuote}
         </p>
       </div>

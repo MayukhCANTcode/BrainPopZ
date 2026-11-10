@@ -36,13 +36,13 @@ export default function AchievementsView() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-surface-border">
         <div>
-          <h1 className="text-xl font-heading font-bold text-white tracking-tight flex items-center gap-2">
+          <h1 className="text-xl font-heading font-bold text-zinc-950 tracking-tight flex items-center gap-2">
             <span>Achievements & Badges</span>
             <Badge variant="lime" size="sm">
               {unlockedIds.length} / {ACHIEVEMENTS_LIST.length} Unlocked
             </Badge>
           </h1>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-zinc-500">
             Earn experience points, maintain study streaks, and unlock prestigious academic milestones.
           </p>
         </div>
@@ -53,54 +53,54 @@ export default function AchievementsView() {
             <span>{gameState.streak}d Streak</span>
           </div>
 
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-brand-lime/10 border border-brand-lime/30 text-xs font-semibold text-brand-lime">
-            <Zap className="w-4 h-4 fill-brand-lime" />
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs font-semibold text-emerald-800">
+            <Zap className="w-4 h-4 fill-emerald-600 text-emerald-600" />
             <span>{gameState.xp} XP</span>
           </div>
         </div>
       </div>
 
       {/* Level Summary Banner */}
-      <Card padding="p-6" className="relative overflow-hidden border-surface-border bg-surface">
+      <Card padding="p-6" className="relative overflow-hidden border-surface-border bg-surface shadow-xs">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-brand-violet text-midnight flex items-center justify-center font-heading font-black text-2xl shadow-sm border border-brand-violet/40">
+            <div className="w-16 h-16 rounded-2xl bg-brand-violet-lilac text-midnight-ink flex items-center justify-center font-heading font-black text-2xl shadow-sm border border-[#C5AFFC]">
               {levelInfo.level}
             </div>
 
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-xs font-bold text-brand-violet-light uppercase tracking-wider">
+                <span className="text-xs font-bold text-brand-violet-dark uppercase tracking-wider">
                   Current Rank
                 </span>
-                <span className="text-[10px] text-gray-400 font-mono">
+                <span className="text-[10px] text-zinc-500 font-mono">
                   Tier {levelInfo.level} of 8
                 </span>
               </div>
-              <h2 className="text-xl font-heading font-bold text-white tracking-tight">
+              <h2 className="text-xl font-heading font-bold text-zinc-950 tracking-tight">
                 {levelInfo.title}
               </h2>
-              <p className="text-xs text-gray-400">
-                Total XP accumulated: <span className="text-white font-mono font-semibold">{gameState.xp} XP</span>
+              <p className="text-xs text-zinc-500">
+                Total XP accumulated: <span className="text-zinc-950 font-mono font-semibold">{gameState.xp} XP</span>
               </p>
             </div>
           </div>
 
           {/* XP Progress Bar to next level */}
           <div className="w-full md:max-w-xs space-y-2">
-            <div className="flex justify-between text-xs text-gray-300">
+            <div className="flex justify-between text-xs text-zinc-700">
               <span className="font-medium">Progress to Tier {levelInfo.level + 1}</span>
-              <span className="font-mono font-semibold text-brand-lime">{levelInfo.percentage}%</span>
+              <span className="font-mono font-semibold text-emerald-700">{levelInfo.percentage}%</span>
             </div>
 
-            <div className="w-full bg-midnight h-2.5 rounded-full overflow-hidden border border-surface-border p-0.5">
+            <div className="w-full bg-surface-secondary h-2.5 rounded-full overflow-hidden border border-surface-border p-0.5">
               <div
-                className="bg-brand-lime h-full rounded-full transition-all duration-500"
+                className="bg-emerald-500 h-full rounded-full transition-all duration-500"
                 style={{ width: `${levelInfo.percentage}%` }}
               />
             </div>
 
-            <p className="text-[11px] text-gray-400 text-right">
+            <p className="text-[11px] text-zinc-500 text-right">
               {levelInfo.xpRemaining > 0
                 ? `${levelInfo.xpRemaining} XP required for next rank`
                 : 'Maximum rank achieved!'}
@@ -112,10 +112,10 @@ export default function AchievementsView() {
       {/* Badges Grid */}
       <div>
         <div className="mb-4">
-          <h3 className="text-sm font-semibold text-white tracking-tight">
+          <h3 className="text-sm font-semibold text-zinc-950 tracking-tight">
             Milestone Badges
           </h3>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-zinc-500">
             Complete active recall drills and maintain your habit to unlock each milestone
           </p>
         </div>
@@ -130,16 +130,16 @@ export default function AchievementsView() {
                 padding="p-4"
                 className={`relative overflow-hidden border transition-all ${
                   isUnlocked
-                    ? 'border-brand-lime/30 bg-surface shadow-sm'
-                    : 'border-surface-border bg-surface/50 opacity-75'
+                    ? 'border-emerald-200 bg-surface shadow-xs'
+                    : 'border-surface-border bg-surface-secondary/50 opacity-75'
                 }`}
               >
                 <div className="flex items-start gap-3.5">
                   <div
                     className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shrink-0 border transition-transform ${
                       isUnlocked
-                        ? 'bg-surface-elevated border-brand-lime/40 shadow-inner scale-105'
-                        : 'bg-midnight/70 border-surface-border grayscale opacity-60'
+                        ? 'bg-emerald-50 border-emerald-300 shadow-inner scale-105'
+                        : 'bg-surface-secondary border-surface-border grayscale opacity-60'
                     }`}
                   >
                     <span>{badge.icon}</span>
@@ -147,28 +147,28 @@ export default function AchievementsView() {
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
-                      <h4 className="font-semibold text-xs sm:text-sm text-white truncate">
+                      <h4 className="font-semibold text-xs sm:text-sm text-zinc-950 truncate">
                         {badge.name}
                       </h4>
                       {isUnlocked ? (
-                        <span className="flex items-center gap-1 text-[10px] text-brand-lime font-medium px-1.5 py-0.5 rounded bg-brand-lime/10 border border-brand-lime/25 shrink-0">
-                          <CheckCircle2 className="w-3 h-3" />
+                        <span className="flex items-center gap-1 text-[10px] text-emerald-800 font-medium px-1.5 py-0.5 rounded bg-emerald-50 border border-emerald-200 shrink-0">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                           <span>Unlocked</span>
                         </span>
                       ) : (
-                        <span className="flex items-center gap-1 text-[10px] text-gray-500 font-mono px-1.5 py-0.5 rounded bg-surface-elevated border border-surface-border shrink-0">
+                        <span className="flex items-center gap-1 text-[10px] text-zinc-500 font-mono px-1.5 py-0.5 rounded bg-surface border border-surface-border shrink-0">
                           <Lock className="w-3 h-3" />
                           <span>Locked</span>
                         </span>
                       )}
                     </div>
 
-                    <p className="text-xs text-gray-400 leading-relaxed mb-2">
+                    <p className="text-xs text-zinc-600 leading-relaxed mb-2">
                       {badge.description}
                     </p>
 
                     {/* Requirement tag */}
-                    <div className="text-[10px] font-mono text-gray-500">
+                    <div className="text-[10px] font-mono text-zinc-500">
                       {badge.reqXp && `Requires ${badge.reqXp} XP`}
                       {badge.reqStreak && `Requires ${badge.reqStreak}-day streak`}
                       {badge.reqCards && `Requires ${badge.reqCards} cards mastered`}

@@ -139,10 +139,10 @@ export default function QuizzesView({ initialQuiz }) {
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-surface-border">
         <div>
-          <h1 className="text-xl font-heading font-bold text-white tracking-tight">
+          <h1 className="text-xl font-heading font-extrabold text-zinc-950 tracking-tight">
             Practice Drills
           </h1>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-zinc-600">
             Active recall multiple-choice testing with detailed scientific rationale.
           </p>
         </div>
@@ -156,8 +156,8 @@ export default function QuizzesView({ initialQuiz }) {
             }}
             className={`px-2.5 py-1 rounded-md text-xs font-medium border flex items-center gap-1.5 transition-colors cursor-pointer ${
               isTimerMode
-                ? 'bg-brand-orange/15 border-brand-orange/40 text-brand-orange'
-                : 'bg-surface border-surface-border text-gray-400 hover:text-white'
+                ? 'bg-amber-50 border-amber-300 text-amber-800'
+                : 'bg-surface border-surface-border text-zinc-600 hover:text-zinc-950'
             }`}
           >
             <Timer className="w-3.5 h-3.5" />
@@ -173,13 +173,13 @@ export default function QuizzesView({ initialQuiz }) {
       </div>
 
       {/* Interactive Quiz Card */}
-      <Card padding="p-5 sm:p-6" className="border-surface-border relative overflow-hidden">
+      <Card padding="p-5 sm:p-6" className="border-surface-border relative overflow-hidden bg-surface shadow-sm">
         {/* Countdown Timer Line (Speed Drill) */}
         {isTimerMode && !isSubmitted && !isCompleted && (
-          <div className="absolute top-0 left-0 right-0 h-1 bg-surface-elevated">
+          <div className="absolute top-0 left-0 right-0 h-1 bg-surface-secondary">
             <div
               className={`h-full transition-all duration-1000 ${
-                timeLeft <= 5 ? 'bg-red-400' : 'bg-brand-orange'
+                timeLeft <= 5 ? 'bg-red-500' : 'bg-brand-orange'
               }`}
               style={{ width: `${(timeLeft / 15) * 100}%` }}
             />
@@ -193,13 +193,13 @@ export default function QuizzesView({ initialQuiz }) {
                 <Badge variant="default" size="sm">
                   {currentQ.topic || 'Recall Drill'}
                 </Badge>
-                <span className="text-xs text-gray-400 hidden sm:inline">• {activeQuizTitle}</span>
+                <span className="text-xs text-zinc-500 hidden sm:inline">• {activeQuizTitle}</span>
               </div>
-              <div className="flex items-center gap-3 text-xs text-gray-400">
+              <div className="flex items-center gap-3 text-xs text-zinc-600">
                 {isTimerMode && (
                   <span
                     className={`font-mono font-medium ${
-                      timeLeft <= 5 ? 'text-red-400 animate-pulse' : 'text-brand-orange'
+                      timeLeft <= 5 ? 'text-red-600 animate-pulse' : 'text-amber-700'
                     }`}
                   >
                     ⏱ {timeLeft}s
@@ -208,13 +208,13 @@ export default function QuizzesView({ initialQuiz }) {
                 <span className="font-mono">
                   {currentIdx + 1} of {questions.length}
                 </span>
-                <span className="text-white font-medium">
+                <span className="text-zinc-900 font-semibold">
                   Score: {score}
                 </span>
               </div>
             </div>
 
-            <h3 className="text-sm sm:text-base font-medium text-white mb-4 leading-relaxed">
+            <h3 className="text-sm sm:text-base font-semibold text-zinc-950 mb-4 leading-relaxed font-heading">
               {currentQ.question}
             </h3>
 
@@ -223,18 +223,18 @@ export default function QuizzesView({ initialQuiz }) {
                 const isSelected = selectedOption === idx;
                 const isCorrect = idx === correctIdx;
 
-                let buttonStyle = 'bg-surface-elevated/90 border-surface-border text-zinc-200 hover:border-zinc-600 hover:bg-[#282C40] active:scale-[0.99] cursor-pointer';
+                let buttonStyle = 'bg-surface border-surface-border text-zinc-800 hover:border-zinc-400 hover:bg-surface-secondary active:scale-[0.99] cursor-pointer shadow-xs';
 
                 if (isSubmitted) {
                   if (isCorrect) {
-                    buttonStyle = 'bg-brand-lime/15 border-brand-lime/60 text-brand-lime font-semibold';
+                    buttonStyle = 'bg-emerald-50 border-emerald-400 text-emerald-950 font-semibold shadow-xs';
                   } else if (isSelected && !isCorrect) {
-                    buttonStyle = 'bg-red-500/15 border-red-500/40 text-red-400';
+                    buttonStyle = 'bg-red-50 border-red-300 text-red-900';
                   } else {
-                    buttonStyle = 'bg-surface-elevated/40 border-surface-border/50 text-zinc-500 opacity-50';
+                    buttonStyle = 'bg-surface-secondary/40 border-surface-border text-zinc-400 opacity-60';
                   }
                 } else if (isSelected) {
-                  buttonStyle = 'bg-brand-violet/15 border-brand-violet text-white font-semibold';
+                  buttonStyle = 'bg-purple-50 border-purple-400 text-purple-950 font-semibold shadow-xs';
                 }
 
                 return (
@@ -245,8 +245,8 @@ export default function QuizzesView({ initialQuiz }) {
                     className={`w-full text-left p-3.5 rounded-xl border text-xs transition-all duration-100 flex items-center justify-between ${buttonStyle}`}
                   >
                     <span>{opt}</span>
-                    {isSubmitted && isCorrect && <CheckCircle2 className="w-3.5 h-3.5 text-brand-lime shrink-0 ml-2" />}
-                    {isSubmitted && isSelected && !isCorrect && <XCircle className="w-3.5 h-3.5 text-red-400 shrink-0 ml-2" />}
+                    {isSubmitted && isCorrect && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 ml-2" />}
+                    {isSubmitted && isSelected && !isCorrect && <XCircle className="w-3.5 h-3.5 text-red-500 shrink-0 ml-2" />}
                   </button>
                 );
               })}
@@ -254,8 +254,8 @@ export default function QuizzesView({ initialQuiz }) {
 
             {/* Explanation when submitted */}
             {isSubmitted && (
-              <div className="p-3 rounded-lg bg-surface-elevated border border-surface-border mb-4 text-xs text-gray-300 animate-fadeIn">
-                <span className="font-medium text-brand-lime block mb-0.5">Rationale:</span>
+              <div className="p-3.5 rounded-xl bg-surface-secondary border border-surface-border mb-4 text-xs text-zinc-800 animate-fadeIn">
+                <span className="font-bold text-emerald-800 block mb-0.5">Rationale:</span>
                 {currentQ.explanation}
               </div>
             )}

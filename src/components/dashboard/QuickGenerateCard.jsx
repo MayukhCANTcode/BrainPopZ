@@ -77,26 +77,26 @@ export default function QuickGenerateCard({ onTriggerGeneration, onStudyDeck }) 
   };
 
   return (
-    <Card padding="p-4 sm:p-5" className="border-surface-border">
+    <Card padding="p-4 sm:p-5" className="border-surface-border bg-surface shadow-xs">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
         <div>
-          <h2 className="text-sm font-semibold text-white">
+          <h2 className="text-sm font-semibold text-zinc-950">
             Instant Gemini Generator
           </h2>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-zinc-500">
             Convert a subject prompt, pasted notes, or document into real validated flashcards.
           </p>
         </div>
 
         {/* Minimal segmented control */}
-        <div className="flex items-center p-0.5 rounded-lg bg-surface-elevated border border-surface-border text-xs self-start sm:self-auto">
+        <div className="flex items-center p-0.5 rounded-lg bg-surface-secondary border border-surface-border text-xs self-start sm:self-auto">
           <button
             type="button"
             onClick={() => setActiveTab('topic')}
             className={`px-2.5 py-1 rounded-md font-medium transition-colors cursor-pointer ${
               activeTab === 'topic'
-                ? 'bg-surface text-white border border-surface-border shadow-sm'
-                : 'text-gray-400 hover:text-white'
+                ? 'bg-brand-violet-lilac text-midnight-ink font-semibold shadow-xs'
+                : 'text-zinc-500 hover:text-zinc-950'
             }`}
           >
             Prompt
@@ -106,8 +106,8 @@ export default function QuickGenerateCard({ onTriggerGeneration, onStudyDeck }) 
             onClick={() => setActiveTab('notes')}
             className={`px-2.5 py-1 rounded-md font-medium transition-colors cursor-pointer ${
               activeTab === 'notes'
-                ? 'bg-surface text-white border border-surface-border shadow-sm'
-                : 'text-gray-400 hover:text-white'
+                ? 'bg-brand-violet-lilac text-midnight-ink font-semibold shadow-xs'
+                : 'text-zinc-500 hover:text-zinc-950'
             }`}
           >
             Paste Notes
@@ -117,8 +117,8 @@ export default function QuickGenerateCard({ onTriggerGeneration, onStudyDeck }) 
             onClick={() => setActiveTab('file')}
             className={`px-2.5 py-1 rounded-md font-medium transition-colors cursor-pointer ${
               activeTab === 'file'
-                ? 'bg-surface text-white border border-surface-border shadow-sm'
-                : 'text-gray-400 hover:text-white'
+                ? 'bg-brand-violet-lilac text-midnight-ink font-semibold shadow-xs'
+                : 'text-zinc-500 hover:text-zinc-950'
             }`}
           >
             Upload File
@@ -135,7 +135,7 @@ export default function QuickGenerateCard({ onTriggerGeneration, onStudyDeck }) 
               onChange={(e) => setTopicInput(e.target.value)}
               disabled={isGenerating}
               placeholder="e.g. Krebs Cycle in Cellular Respiration or Dijkstra's Algorithm..."
-              className="w-full bg-surface-elevated border border-surface-border rounded-lg px-3 py-2 text-xs text-white placeholder-gray-400 focus:outline-none focus:border-brand-violet/60 focus:ring-1 focus:ring-brand-violet/50 transition-colors pr-28"
+              className="w-full bg-surface border border-surface-border rounded-lg px-3 py-2 text-xs text-zinc-950 placeholder-zinc-400 focus:outline-none focus:border-brand-violet-dark focus:ring-1 focus:ring-brand-violet-lilac transition-colors pr-28 shadow-xs"
             />
             <div className="absolute right-1.5 top-1/2 -translate-y-1/2">
               <Button

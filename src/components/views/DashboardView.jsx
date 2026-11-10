@@ -63,10 +63,10 @@ export default function DashboardView({
       {/* 4. Today's Goal & Daily Quests */}
       <div>
         <div className="mb-4">
-          <h2 className="text-base font-heading font-bold text-white tracking-tight">
+          <h2 className="text-base font-heading font-extrabold text-zinc-950 tracking-tight">
             Today's Target & Quests
           </h2>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-zinc-600">
             Keep your active streak alive and level up your memory rank
           </p>
         </div>

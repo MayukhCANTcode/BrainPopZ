@@ -22,17 +22,17 @@ export default function RecentDecks({ onStudyDeck, onViewAll }) {
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <div>
-          <h2 className="text-sm font-semibold text-white tracking-tight">
+          <h2 className="text-sm font-semibold text-zinc-950 tracking-tight">
             Recent Flashcard Decks
           </h2>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-zinc-500">
             Decks in active review and spaced repetition queue.
           </p>
         </div>
 
         <button
           onClick={onViewAll}
-          className="text-xs font-medium text-brand-violet-light hover:text-white flex items-center gap-1 transition-colors cursor-pointer"
+          className="text-xs font-medium text-brand-violet-dark hover:text-zinc-950 flex items-center gap-1 transition-colors cursor-pointer"
         >
           <span>View all</span>
           <ArrowRight className="w-3 h-3" />
@@ -47,7 +47,7 @@ export default function RecentDecks({ onStudyDeck, onViewAll }) {
               key={deck.id}
               hoverEffect
               padding="p-4"
-              className="flex flex-col justify-between group border-surface-border"
+              className="flex flex-col justify-between group border-surface-border bg-surface shadow-xs"
             >
               <div>
                 <div className="flex items-center justify-between mb-2">
@@ -57,7 +57,7 @@ export default function RecentDecks({ onStudyDeck, onViewAll }) {
 
                   <button
                     onClick={(e) => toggleBookmark(deck.id, e)}
-                    className="p-1 rounded text-gray-400 hover:text-brand-orange transition-colors cursor-pointer"
+                    className="p-1 rounded text-zinc-400 hover:text-brand-orange transition-colors cursor-pointer"
                     title={deck.isBookmarked ? 'Remove bookmark' : 'Bookmark deck'}
                   >
                     <Bookmark
@@ -70,7 +70,7 @@ export default function RecentDecks({ onStudyDeck, onViewAll }) {
                   </button>
                 </div>
 
-                <h3 className="font-medium text-sm text-white group-hover:text-brand-violet-light transition-colors line-clamp-1 mb-2">
+                <h3 className="font-medium text-sm text-zinc-950 group-hover:text-brand-violet-dark transition-colors line-clamp-1 mb-2">
                   {deck.title}
                 </h3>
 
@@ -78,7 +78,7 @@ export default function RecentDecks({ onStudyDeck, onViewAll }) {
                   {deck.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-[10px] px-1.5 py-0.5 rounded bg-surface-elevated text-gray-400 border border-surface-border font-mono"
+                      className="text-[10px] px-1.5 py-0.5 rounded bg-surface-secondary text-zinc-600 border border-surface-border font-mono"
                     >
                       {tag}
                     </span>
@@ -89,22 +89,22 @@ export default function RecentDecks({ onStudyDeck, onViewAll }) {
               {/* Progress & Study Button Footer */}
               <div className="pt-2.5 border-t border-surface-border">
                 <div className="flex items-center justify-between text-xs mb-1">
-                  <span className="text-gray-400 text-[11px]">
+                  <span className="text-zinc-500 text-[11px]">
                     {deck.masteredCards}/{deck.totalCards} cards
                   </span>
-                  <span className="font-medium text-[11px] text-gray-300">
+                  <span className="font-medium text-[11px] text-zinc-700">
                     {deck.masteryPercentage}%
                   </span>
                 </div>
 
                 {/* Thin minimal progress bar */}
-                <div className="w-full bg-[#0A0A0F] h-1 rounded-full overflow-hidden mb-2.5">
+                <div className="w-full bg-surface-secondary h-1 rounded-full overflow-hidden mb-2.5">
                   <div
                     className={`h-full rounded-full transition-all duration-300 ${
                       deck.masteryPercentage >= 85
-                        ? 'bg-brand-lime'
+                        ? 'bg-emerald-500'
                         : deck.masteryPercentage >= 70
-                        ? 'bg-brand-violet'
+                        ? 'bg-brand-violet-dark'
                         : 'bg-brand-orange'
                     }`}
                     style={{ width: `${deck.masteryPercentage}%` }}
@@ -112,7 +112,7 @@ export default function RecentDecks({ onStudyDeck, onViewAll }) {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1 text-[11px] text-gray-400">
+                  <div className="flex items-center gap-1 text-[11px] text-zinc-500">
                     <Clock className="w-3 h-3" />
                     <span>{deck.lastStudied}</span>
                   </div>

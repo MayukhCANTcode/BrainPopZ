@@ -189,14 +189,14 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-surface-border">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-heading font-bold text-white tracking-tight">
-              AI Generator
+            <h1 className="text-xl font-heading font-bold text-zinc-950 tracking-tight">
+              AI Generator <span className="font-serif italic font-normal text-zinc-500 text-lg">Studio</span>
             </h1>
             <Badge variant="lime" size="sm">
               Live Gemini 2.5
             </Badge>
           </div>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-zinc-600">
             Synthesize real interactive flashcards and quiz questions from syllabus topics or lecture notes using Google Gemini.
           </p>
         </div>
@@ -208,15 +208,15 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Left Column: Form & Configuration */}
-        <Card padding="p-4 sm:p-5" className="lg:col-span-1 border-surface-border space-y-4">
-          <div className="flex items-center gap-2 text-white font-medium text-xs pb-2 border-b border-surface-border">
-            <Sliders className="w-3.5 h-3.5 text-gray-400" />
+        <Card padding="p-4 sm:p-5" className="lg:col-span-1 border-surface-border bg-surface shadow-xs space-y-4">
+          <div className="flex items-center gap-2 text-zinc-950 font-medium text-xs pb-2 border-b border-surface-border">
+            <Sliders className="w-3.5 h-3.5 text-zinc-400" />
             <span>Parameters</span>
           </div>
 
           {/* Output Format */}
           <div>
-            <label className="block text-[11px] font-medium text-gray-400 uppercase tracking-wider mb-1.5">
+            <label className="block text-[11px] font-medium text-zinc-500 uppercase tracking-wider mb-1.5">
               Format
             </label>
             <div className="grid grid-cols-2 gap-1.5 text-xs">
@@ -226,8 +226,8 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
                 disabled={isGenerating}
                 className={`py-2 px-2.5 rounded-lg border text-center font-medium transition-colors cursor-pointer ${
                   format === 'flashcards'
-                    ? 'bg-white text-zinc-950 border-white shadow-xs font-semibold'
-                    : 'bg-surface-elevated/60 border-surface-border text-zinc-400 hover:text-white hover:border-zinc-700'
+                    ? 'bg-brand-violet-lilac text-midnight-ink border-[#C5AFFC] shadow-xs font-semibold'
+                    : 'bg-surface-secondary/70 border-surface-border text-zinc-600 hover:text-zinc-950 hover:border-zinc-400'
                 }`}
               >
                 Flashcards
@@ -238,8 +238,8 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
                 disabled={isGenerating}
                 className={`py-2 px-2.5 rounded-lg border text-center font-medium transition-colors cursor-pointer ${
                   format === 'quiz'
-                    ? 'bg-white text-zinc-950 border-white shadow-xs font-semibold'
-                    : 'bg-surface-elevated/60 border-surface-border text-zinc-400 hover:text-white hover:border-zinc-700'
+                    ? 'bg-brand-violet-lilac text-midnight-ink border-[#C5AFFC] shadow-xs font-semibold'
+                    : 'bg-surface-secondary/70 border-surface-border text-zinc-600 hover:text-zinc-950 hover:border-zinc-400'
                 }`}
               >
                 Practice Quiz
@@ -249,7 +249,7 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
 
           {/* Difficulty setting */}
           <div>
-            <label className="block text-[11px] font-medium text-zinc-400 uppercase tracking-wider mb-1.5">
+            <label className="block text-[11px] font-medium text-zinc-500 uppercase tracking-wider mb-1.5">
               Cognitive Level
             </label>
             <div className="grid grid-cols-3 gap-1 text-xs">
@@ -261,8 +261,8 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
                   disabled={isGenerating}
                   className={`py-1.5 px-2 rounded-lg text-center text-[11px] font-medium capitalize transition-colors cursor-pointer ${
                     difficulty === lvl
-                      ? 'bg-brand-violet/20 border border-brand-violet text-brand-violet-light font-semibold'
-                      : 'bg-surface-elevated/40 border border-surface-border text-zinc-400 hover:text-white hover:border-zinc-700'
+                      ? 'bg-midnight-ink text-white font-semibold'
+                      : 'bg-surface-secondary/70 border border-surface-border text-zinc-600 hover:text-zinc-950 hover:border-zinc-400'
                   }`}
                 >
                   {lvl}
@@ -273,9 +273,9 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
 
           {/* Card Count Slider */}
           <div>
-            <div className="flex justify-between text-xs text-gray-300 mb-1.5">
-              <span className="text-[11px] text-gray-400">Quantity</span>
-              <span className="font-mono text-xs">{deckSize} items</span>
+            <div className="flex justify-between text-xs text-zinc-700 mb-1.5">
+              <span className="text-[11px] text-zinc-500">Quantity</span>
+              <span className="font-mono text-xs font-semibold text-zinc-950">{deckSize} items</span>
             </div>
             <input
               type="range"
@@ -285,20 +285,20 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
               value={deckSize}
               onChange={(e) => setDeckSize(Number(e.target.value))}
               disabled={isGenerating}
-              className="w-full accent-brand-violet cursor-pointer h-1 bg-surface-elevated rounded"
+              className="w-full accent-brand-violet-dark cursor-pointer h-1.5 bg-surface-secondary rounded"
             />
           </div>
 
           {/* Input Area */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="text-[11px] font-medium text-gray-400 uppercase tracking-wider">
+              <label className="text-[11px] font-medium text-zinc-500 uppercase tracking-wider">
                 Topic or Source Material
               </label>
               <button
                 type="button"
                 onClick={() => setShowYouTubeInput(!showYouTubeInput)}
-                className="text-[10px] text-red-400 hover:text-red-300 flex items-center gap-1 cursor-pointer font-medium"
+                className="text-[10px] text-red-600 hover:text-red-700 flex items-center gap-1 cursor-pointer font-medium"
               >
                 <SquarePlay className="w-3 h-3" />
                 <span>{showYouTubeInput ? 'Use Manual Notes' : 'Import from YouTube'}</span>
@@ -307,8 +307,8 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
 
             {/* YouTube Import Drawer */}
             {showYouTubeInput ? (
-              <div className="space-y-2 p-2.5 rounded-lg bg-surface border border-red-500/30 mb-2 animate-fadeIn">
-                <span className="text-[10px] text-gray-400 block">
+              <div className="space-y-2 p-2.5 rounded-lg bg-surface border border-red-300 mb-2 animate-fadeIn">
+                <span className="text-[10px] text-zinc-500 block">
                   Paste any YouTube link to fetch captions & lecture notes:
                 </span>
                 <div className="flex gap-1.5">
@@ -320,12 +320,12 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
                       if (e.key === 'Enter') handleFetchYouTubeTranscript();
                     }}
                     placeholder="https://youtu.be/... or youtube.com/watch?v=..."
-                    className="flex-1 bg-surface-elevated border border-surface-border rounded px-2.5 py-1 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-red-500/50"
+                    className="flex-1 bg-surface border border-surface-border rounded px-2.5 py-1 text-xs text-zinc-950 placeholder-zinc-400 focus:outline-none focus:border-red-500"
                   />
                   <Button
                     variant="primary"
                     size="sm"
-                    className="bg-red-500 hover:bg-red-600 text-white shrink-0 text-xs py-1"
+                    className="bg-red-600 hover:bg-red-700 text-white shrink-0 text-xs py-1"
                     disabled={isFetchingYoutube || !youtubeUrl.trim()}
                     onClick={handleFetchYouTubeTranscript}
                   >
@@ -348,7 +348,7 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
               onChange={(e) => setInputText(e.target.value)}
               disabled={isGenerating}
               placeholder="Paste lecture notes, syllabus concepts, or enter a topic (e.g., Photosynthesis Calvin cycle, TCP handshakes, or Raft consensus)..."
-              className="w-full bg-surface-elevated border border-surface-border rounded-lg p-2.5 text-xs text-white placeholder-gray-400 focus:outline-none focus:border-brand-violet/60 focus:ring-1 focus:ring-brand-violet/50 transition-colors"
+              className="w-full bg-surface border border-surface-border rounded-lg p-2.5 text-xs text-zinc-950 placeholder-zinc-400 focus:outline-none focus:border-brand-violet-dark focus:ring-1 focus:ring-brand-violet-lilac transition-colors"
             />
           </div>
 
@@ -360,7 +360,7 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
                 type="button"
                 onClick={() => setInputText(p)}
                 disabled={isGenerating}
-                className="text-[10px] px-2 py-0.5 rounded bg-surface border border-surface-border text-gray-400 hover:text-white transition-colors cursor-pointer"
+                className="text-[10px] px-2 py-0.5 rounded bg-surface border border-surface-border text-zinc-600 hover:text-zinc-950 hover:border-zinc-400 transition-colors cursor-pointer"
               >
                 {p}
               </button>
@@ -388,9 +388,9 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
 
           {/* Error message with retry */}
           {errorMessage && (
-            <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-300 text-xs space-y-2 animate-fadeIn">
+            <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-800 text-xs space-y-2 animate-fadeIn">
               <div className="flex items-start gap-2">
-                <AlertCircle className="w-4 h-4 shrink-0 text-red-400 mt-0.5" />
+                <AlertCircle className="w-4 h-4 shrink-0 text-red-600 mt-0.5" />
                 <span className="leading-snug">{errorMessage}</span>
               </div>
               <div className="flex justify-end">
@@ -399,7 +399,7 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
                   size="sm"
                   leftIcon={RotateCcw}
                   onClick={handleGenerate}
-                  className="text-xs h-7 border-red-500/30 hover:bg-red-500/20 text-red-200"
+                  className="text-xs h-7 border-red-300 hover:bg-red-100 text-red-700"
                 >
                   Retry
                 </Button>
@@ -408,8 +408,8 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
           )}
 
           {savedSuccess && (
-            <div className="p-2.5 rounded-lg bg-brand-lime/10 border border-brand-lime/20 text-brand-lime text-xs font-medium flex items-center gap-1.5 animate-fadeIn">
-              <CheckCircle2 className="w-3.5 h-3.5" />
+            <div className="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium flex items-center gap-1.5 animate-fadeIn">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
               <span>Saved to My Flashcards!</span>
             </div>
           )}
@@ -418,17 +418,17 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
         {/* Right Column: Card Preview */}
         <div className="lg:col-span-2 space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="font-semibold text-xs text-white flex items-center gap-2 uppercase tracking-wider">
+            <h2 className="font-semibold text-xs text-zinc-950 flex items-center gap-2 uppercase tracking-wider">
               {format === 'flashcards' ? (
                 <>
-                  <Layers className="w-3.5 h-3.5 text-brand-lime" />
+                  <Layers className="w-3.5 h-3.5 text-emerald-600" />
                   <span>
                     {generatedTitle ? `${generatedTitle} (${cards.length} cards)` : `Generated Flashcards (${cards.length})`}
                   </span>
                 </>
               ) : (
                 <>
-                  <Brain className="w-3.5 h-3.5 text-brand-violet" />
+                  <Brain className="w-3.5 h-3.5 text-brand-violet-dark" />
                   <span>
                     {generatedTitle ? `${generatedTitle} (${quizQuestions.length} questions)` : `Generated Quiz (${quizQuestions.length})`}
                   </span>
@@ -461,10 +461,10 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
           </div>
 
           {isGenerating ? (
-            <Card padding="p-12" className="border-surface-border text-center space-y-3">
-              <Loader2 className="w-8 h-8 text-brand-violet animate-spin mx-auto" />
-              <h3 className="text-sm font-semibold text-white">Synthesizing with Google Gemini...</h3>
-              <p className="text-xs text-gray-400 max-w-sm mx-auto">
+            <Card padding="p-12" className="border-surface-border bg-surface shadow-xs text-center space-y-3">
+              <Loader2 className="w-8 h-8 text-brand-violet-dark animate-spin mx-auto" />
+              <h3 className="text-sm font-semibold text-zinc-950">Synthesizing with Google Gemini...</h3>
+              <p className="text-xs text-zinc-500 max-w-sm mx-auto">
                 Extracting core definitions and formulating validated {format} from your study notes.
               </p>
             </Card>
@@ -479,31 +479,31 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
                     key={card.id}
                     onClick={() => toggleFlip(card.id)}
                     padding="p-4"
-                    className={`border transition-colors cursor-pointer min-h-[160px] flex flex-col justify-between select-none ${
+                    className={`border transition-colors cursor-pointer min-h-[160px] flex flex-col justify-between select-none shadow-xs ${
                       isFlipped
-                        ? 'bg-surface-elevated border-brand-lime/30'
-                        : 'border-surface-border hover:border-gray-600'
+                        ? 'bg-surface-secondary border-brand-violet-lilac'
+                        : 'bg-surface border-surface-border hover:border-zinc-400'
                     }`}
                   >
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <Badge variant={isFlipped ? 'lime' : 'default'} size="sm">
+                        <Badge variant={isFlipped ? 'violet' : 'default'} size="sm">
                           {isFlipped ? 'Answer' : card.topic || 'Concept'}
                         </Badge>
-                        <span className="text-[10px] text-gray-400 flex items-center gap-1">
+                        <span className="text-[10px] text-zinc-500 flex items-center gap-1">
                           <RotateCw className="w-3 h-3" />
                           {isFlipped ? 'Question' : 'Flip'}
                         </span>
                       </div>
 
-                      <p className="text-xs font-medium text-white leading-relaxed break-words">
+                      <p className="text-xs font-medium text-zinc-950 leading-relaxed break-words">
                         {isFlipped ? card.answer : card.question}
                       </p>
                     </div>
 
-                    <div className="pt-2 border-t border-surface-border flex items-center justify-between text-[10px] text-gray-400">
+                    <div className="pt-2 border-t border-surface-border flex items-center justify-between text-[10px] text-zinc-500">
                       <span>{card.difficulty || difficulty}</span>
-                      <span className="text-gray-400">Click to flip</span>
+                      <span className="text-zinc-500">Click to flip</span>
                     </div>
                   </Card>
                 );
@@ -514,14 +514,14 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
             <div className="space-y-3">
               {quizQuestions.length > 0 ? (
                 quizQuestions.map((q, idx) => (
-                  <Card key={q.id} padding="p-4" className="border-surface-border">
+                  <Card key={q.id} padding="p-4" className="border-surface-border bg-surface shadow-xs">
                     <div className="flex items-center justify-between mb-2">
                       <Badge variant="default" size="sm">
                         Question {idx + 1}
                       </Badge>
-                      <span className="text-[11px] text-gray-400">Multiple Choice</span>
+                      <span className="text-[11px] text-zinc-500">Multiple Choice</span>
                     </div>
-                    <h4 className="text-xs font-medium text-white mb-2.5">
+                    <h4 className="text-xs font-medium text-zinc-950 mb-2.5">
                       {q.question}
                     </h4>
                     <div className="space-y-1 mb-2.5">
@@ -530,24 +530,24 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
                           key={oIdx}
                           className={`p-2 rounded border text-xs flex items-center justify-between ${
                             oIdx === q.correctIndex
-                              ? 'bg-brand-lime/10 border-brand-lime/30 text-brand-lime font-medium'
-                              : 'bg-surface-elevated border-surface-border text-gray-300'
+                              ? 'bg-emerald-50 border-emerald-300 text-emerald-800 font-medium'
+                              : 'bg-surface-secondary/70 border-surface-border text-zinc-700'
                           }`}
                         >
                           <span>{opt}</span>
-                          {oIdx === q.correctIndex && <CheckCircle2 className="w-3.5 h-3.5 text-brand-lime shrink-0 ml-1.5" />}
+                          {oIdx === q.correctIndex && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 ml-1.5" />}
                         </div>
                       ))}
                     </div>
-                    <p className="text-[10px] text-gray-400 bg-surface-elevated p-2 rounded border border-surface-border">
-                      <strong className="text-gray-300">Explanation:</strong> {q.explanation}
+                    <p className="text-[10px] text-zinc-600 bg-surface-secondary/70 p-2 rounded border border-surface-border">
+                      <strong className="text-zinc-900">Explanation:</strong> {q.explanation}
                     </p>
                   </Card>
                 ))
               ) : (
-                <Card padding="p-8" className="text-center border-surface-border">
-                  <Brain className="w-8 h-8 text-gray-400 mx-auto mb-2 opacity-40" />
-                  <p className="text-xs text-gray-400">
+                <Card padding="p-8" className="text-center border-surface-border bg-surface shadow-xs">
+                  <Brain className="w-8 h-8 text-zinc-400 mx-auto mb-2 opacity-40" />
+                  <p className="text-xs text-zinc-500">
                     Enter notes on the left and click "Generate Quiz with AI" to create interactive questions.
                   </p>
                 </Card>

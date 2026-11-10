@@ -36,14 +36,14 @@ export default function WeeklyActivityTracker({ onStartQuiz }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 pb-3 border-b border-surface-border">
         <div>
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-brand-violet/15 text-brand-violet flex items-center justify-center border border-brand-violet/30">
+            <div className="w-7 h-7 rounded-lg bg-purple-50 text-purple-900 flex items-center justify-center border border-purple-200">
               <Calendar className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-white tracking-tight">
+              <h3 className="text-sm font-bold text-zinc-950 tracking-tight font-heading">
                 Weekly Activity & Heatmap
               </h3>
-              <p className="text-[11px] text-gray-400">
+              <p className="text-[11px] text-zinc-600">
                 Active recall review volume over the past 7 days
               </p>
             </div>
@@ -52,19 +52,19 @@ export default function WeeklyActivityTracker({ onStartQuiz }) {
 
         {/* Quick summary chips */}
         <div className="flex items-center gap-2 flex-wrap">
-          <div className="px-2.5 py-1 rounded-lg bg-surface-elevated border border-surface-border flex items-center gap-1.5 text-xs">
-            <span className="text-gray-400 text-[11px]">Active Days:</span>
-            <span className="font-mono font-semibold text-white">{daysActive} / 7</span>
+          <div className="px-2.5 py-1 rounded-lg bg-surface-secondary border border-surface-border flex items-center gap-1.5 text-xs shadow-xs">
+            <span className="text-zinc-600 text-[11px]">Active Days:</span>
+            <span className="font-mono font-bold text-zinc-900">{daysActive} / 7</span>
           </div>
 
-          <div className="px-2.5 py-1 rounded-lg bg-surface-elevated border border-surface-border flex items-center gap-1.5 text-xs">
-            <span className="text-gray-400 text-[11px]">Cards:</span>
-            <span className="font-mono font-semibold text-brand-lime">+{totalWeeklyCards}</span>
+          <div className="px-2.5 py-1 rounded-lg bg-surface-secondary border border-surface-border flex items-center gap-1.5 text-xs shadow-xs">
+            <span className="text-zinc-600 text-[11px]">Cards:</span>
+            <span className="font-mono font-bold text-emerald-800">+{totalWeeklyCards}</span>
           </div>
 
-          <div className="px-2.5 py-1 rounded-lg bg-surface-elevated border border-surface-border flex items-center gap-1.5 text-xs">
-            <Zap className="w-3 h-3 text-brand-lime fill-brand-lime" />
-            <span className="font-mono font-semibold text-white">+{totalWeeklyXp} XP</span>
+          <div className="px-2.5 py-1 rounded-lg bg-surface-secondary border border-surface-border flex items-center gap-1.5 text-xs shadow-xs">
+            <Zap className="w-3 h-3 text-amber-600 fill-amber-600" />
+            <span className="font-mono font-bold text-zinc-900">+{totalWeeklyXp} XP</span>
           </div>
         </div>
       </div>
@@ -81,38 +81,38 @@ export default function WeeklyActivityTracker({ onStartQuiz }) {
               key={day.date}
               className={`flex flex-col items-center justify-between rounded-xl p-2 sm:p-2.5 transition-all border ${
                 day.isToday
-                  ? 'bg-surface-elevated border-brand-violet/50 shadow-md ring-1 ring-brand-violet/40'
-                  : 'bg-midnight/40 border-surface-border hover:border-gray-700'
+                  ? 'bg-purple-50/70 border-purple-300 shadow-sm ring-1 ring-purple-200'
+                  : 'bg-surface-secondary/60 border-surface-border hover:border-zinc-400'
               }`}
             >
               {/* Day label */}
               <div className="flex flex-col items-center mb-2">
                 <span
                   className={`text-[11px] font-semibold ${
-                    day.isToday ? 'text-brand-violet-light' : 'text-gray-400'
+                    day.isToday ? 'text-purple-900' : 'text-zinc-600'
                   }`}
                 >
                   {day.dayName}
                 </span>
-                <span className="text-[10px] text-gray-500 font-mono">
+                <span className="text-[10px] text-zinc-400 font-mono">
                   {day.dayNumber}
                 </span>
               </div>
 
               {/* Bar Column */}
               <div className="w-full flex flex-col items-center justify-end h-24 my-1">
-                <div className="w-full max-w-[28px] bg-surface rounded-lg h-full flex items-end p-0.5 overflow-hidden border border-surface-border/50">
+                <div className="w-full max-w-[28px] bg-surface rounded-lg h-full flex items-end p-0.5 overflow-hidden border border-surface-border">
                   {hasActivity ? (
                     <div
                       className={`w-full rounded transition-all duration-500 ${
                         day.isToday
-                          ? 'bg-brand-violet'
-                          : 'bg-brand-lime'
+                          ? 'bg-purple-600'
+                          : 'bg-emerald-600'
                       }`}
                       style={{ height: `${Math.max(16, heightPercent)}%` }}
                     />
                   ) : (
-                    <div className="w-full h-1 bg-surface-border/40 rounded-full" />
+                    <div className="w-full h-1 bg-surface-border rounded-full" />
                   )}
                 </div>
               </div>
@@ -121,14 +121,14 @@ export default function WeeklyActivityTracker({ onStartQuiz }) {
               <div className="mt-1 flex flex-col items-center text-center">
                 <span
                   className={`text-[10px] font-mono font-medium ${
-                    day.cards > 0 ? 'text-white' : 'text-gray-600'
+                    day.cards > 0 ? 'text-zinc-900' : 'text-zinc-400'
                   }`}
                 >
                   {day.cards} cards
                 </span>
 
                 {day.isToday && (
-                  <span className="text-[9px] font-semibold px-1 py-0.2 rounded bg-brand-violet/20 text-brand-violet-light border border-brand-violet/30 mt-0.5 uppercase tracking-wider">
+                  <span className="text-[9px] font-semibold px-1 py-0.2 rounded bg-purple-100 text-purple-900 border border-purple-200 mt-0.5 uppercase tracking-wider">
                     Today
                   </span>
                 )}
@@ -140,17 +140,17 @@ export default function WeeklyActivityTracker({ onStartQuiz }) {
 
       {/* Zero activity guidance or encouragement footer */}
       {totalWeeklyCards === 0 && (
-        <div className="mt-4 p-3 rounded-xl bg-midnight/70 border border-surface-border flex items-center justify-between gap-3">
+        <div className="mt-4 p-3 rounded-xl bg-surface-secondary border border-surface-border flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <Flame className="w-4 h-4 text-brand-orange shrink-0" />
-            <p className="text-xs text-gray-300">
+            <Flame className="w-4 h-4 text-amber-600 shrink-0" />
+            <p className="text-xs text-zinc-700">
               Your study streak starts today! Complete your first flashcard review or practice drill to light up your calendar.
             </p>
           </div>
           {onStartQuiz && (
             <button
               onClick={onStartQuiz}
-              className="text-xs text-brand-lime font-medium hover:underline shrink-0 cursor-pointer"
+              className="text-xs text-purple-800 font-semibold hover:underline shrink-0 cursor-pointer"
             >
               Start Drill →
             </button>

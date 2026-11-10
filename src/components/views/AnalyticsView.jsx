@@ -64,21 +64,21 @@ export default function AnalyticsView({ decks = [] }) {
       {/* Header with period toggle */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-surface-border">
         <div>
-          <h1 className="text-xl font-heading font-bold text-white tracking-tight">
+          <h1 className="text-xl font-heading font-bold text-zinc-950 tracking-tight">
             Study Analytics
           </h1>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-zinc-500">
             Real retention rate, recall milestones, and subject mastery based on your active sessions.
           </p>
         </div>
 
-        <div className="flex items-center p-0.5 rounded-lg bg-surface border border-surface-border text-xs">
+        <div className="flex items-center p-0.5 rounded-lg bg-surface border border-surface-border text-xs shadow-xs">
           <button
             onClick={() => setPeriod('week')}
             className={`px-2.5 py-1 rounded-md font-medium transition-colors cursor-pointer ${
               period === 'week'
-                ? 'bg-surface-elevated text-white'
-                : 'text-gray-400 hover:text-white'
+                ? 'bg-brand-violet-lilac text-midnight-ink font-semibold'
+                : 'text-zinc-500 hover:text-zinc-950'
             }`}
           >
             Week
@@ -87,8 +87,8 @@ export default function AnalyticsView({ decks = [] }) {
             onClick={() => setPeriod('month')}
             className={`px-2.5 py-1 rounded-md font-medium transition-colors cursor-pointer ${
               period === 'month'
-                ? 'bg-surface-elevated text-white'
-                : 'text-gray-400 hover:text-white'
+                ? 'bg-brand-violet-lilac text-midnight-ink font-semibold'
+                : 'text-zinc-500 hover:text-zinc-950'
             }`}
           >
             Month
@@ -97,8 +97,8 @@ export default function AnalyticsView({ decks = [] }) {
             onClick={() => setPeriod('all')}
             className={`px-2.5 py-1 rounded-md font-medium transition-colors cursor-pointer ${
               period === 'all'
-                ? 'bg-surface-elevated text-white'
-                : 'text-gray-400 hover:text-white'
+                ? 'bg-brand-violet-lilac text-midnight-ink font-semibold'
+                : 'text-zinc-500 hover:text-zinc-950'
             }`}
           >
             All Time
@@ -108,64 +108,64 @@ export default function AnalyticsView({ decks = [] }) {
 
       {/* Metric Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <Card padding="p-4" className="border-surface-border">
-          <div className="flex items-center justify-between text-gray-400 mb-1">
+        <Card padding="p-4" className="border-surface-border bg-surface shadow-xs">
+          <div className="flex items-center justify-between text-zinc-500 mb-1">
             <span className="text-xs">Deck Mastery</span>
-            <TrendingUp className="w-3.5 h-3.5 text-brand-lime" />
+            <TrendingUp className="w-3.5 h-3.5 text-emerald-600" />
           </div>
-          <div className="text-xl sm:text-2xl font-bold font-heading text-white">
+          <div className="text-xl sm:text-2xl font-bold font-heading text-zinc-950">
             {overallRetention}%
           </div>
-          <p className="text-[11px] text-brand-lime mt-0.5">
+          <p className="text-[11px] text-emerald-700 mt-0.5 font-medium">
             {totalCardsMasteredInDecks} of {totalCardsInLibrary} cards
           </p>
         </Card>
 
-        <Card padding="p-4" className="border-surface-border">
-          <div className="flex items-center justify-between text-gray-400 mb-1">
+        <Card padding="p-4" className="border-surface-border bg-surface shadow-xs">
+          <div className="flex items-center justify-between text-zinc-500 mb-1">
             <span className="text-xs">Study Streak</span>
             <Flame className="w-3.5 h-3.5 text-brand-orange" />
           </div>
-          <div className="text-xl sm:text-2xl font-bold font-heading text-white">
+          <div className="text-xl sm:text-2xl font-bold font-heading text-zinc-950">
             {gameState.streak} {gameState.streak === 1 ? 'Day' : 'Days'}
           </div>
-          <p className="text-[11px] text-brand-orange mt-0.5">
+          <p className="text-[11px] text-amber-700 mt-0.5 font-medium">
             {gameState.freezes} streak freezes saved
           </p>
         </Card>
 
-        <Card padding="p-4" className="border-surface-border">
-          <div className="flex items-center justify-between text-gray-400 mb-1">
+        <Card padding="p-4" className="border-surface-border bg-surface shadow-xs">
+          <div className="flex items-center justify-between text-zinc-500 mb-1">
             <span className="text-xs">Total XP</span>
-            <Zap className="w-3.5 h-3.5 text-brand-violet-light" />
+            <Zap className="w-3.5 h-3.5 text-brand-violet-dark" />
           </div>
-          <div className="text-xl sm:text-2xl font-bold font-heading text-white">
+          <div className="text-xl sm:text-2xl font-bold font-heading text-zinc-950">
             {gameState.xp}
           </div>
-          <p className="text-[11px] text-brand-violet-light mt-0.5">
+          <p className="text-[11px] text-brand-violet-dark mt-0.5 font-medium">
             {levelInfo.xpRemaining} XP to Tier {levelInfo.level + 1}
           </p>
         </Card>
 
-        <Card padding="p-4" className="border-surface-border">
-          <div className="flex items-center justify-between text-gray-400 mb-1">
+        <Card padding="p-4" className="border-surface-border bg-surface shadow-xs">
+          <div className="flex items-center justify-between text-zinc-500 mb-1">
             <span className="text-xs">Academic Level</span>
-            <Award className="w-3.5 h-3.5 text-brand-lime" />
+            <Award className="w-3.5 h-3.5 text-emerald-600" />
           </div>
-          <div className="text-xl sm:text-2xl font-bold font-heading text-white">
+          <div className="text-xl sm:text-2xl font-bold font-heading text-zinc-950">
             Lvl {levelInfo.level}
           </div>
-          <p className="text-[11px] text-gray-400 mt-0.5 truncate">
+          <p className="text-[11px] text-zinc-500 mt-0.5 truncate font-medium">
             {levelInfo.title}
           </p>
         </Card>
       </div>
 
       {/* Subject Breakdown Card */}
-      <Card padding="p-5" className="border-surface-border">
+      <Card padding="p-5" className="border-surface-border bg-surface shadow-xs">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-sm font-semibold text-white">
+            <h3 className="text-sm font-semibold text-zinc-950">
               Subject Mastery
             </h3>
             <p className="text-[11px] text-gray-400">Recall progress mapped by academic discipline</p>

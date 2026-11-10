@@ -22,30 +22,33 @@ export default function Button({
     'inline-flex items-center justify-center font-medium tracking-tight transition-all duration-150 select-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-violet/40 disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]';
 
   const variants = {
-    // Primary: Crisp solid white button with dark text (Claude Console standard CTA)
+    // Primary: Scaler Flow Soft Lavender CTA button with deep ink text
     primary:
-      'bg-white text-zinc-950 hover:bg-zinc-200 border border-transparent shadow-xs',
+      'bg-brand-violet-lilac text-midnight-ink hover:bg-brand-violet-lilacHover border border-[#C5AFFC] shadow-xs font-semibold',
+    // Dark: Deep midnight ink button (high contrast)
+    dark:
+      'bg-midnight-ink text-white hover:bg-[#20222C] border border-midnight-ink shadow-xs font-medium',
     // Violet brand primary action
     violet:
-      'bg-brand-violet text-midnight hover:bg-[#b8a1fc] border border-transparent shadow-xs font-semibold',
-    // Lime success / reward action
+      'bg-brand-violet text-midnight-ink hover:bg-[#9E7DF7] border border-transparent shadow-xs font-semibold',
+    // Lime / Emerald success action
     lime:
-      'bg-brand-lime text-midnight hover:bg-[#d0fa7e] border border-transparent shadow-xs font-semibold',
-    // Secondary: Dark card surface with subtle border
+      'bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 shadow-xs font-semibold',
+    // Secondary: Warm card surface with subtle border
     secondary:
-      'bg-surface-elevated hover:bg-surface-hover text-zinc-200 hover:text-white border border-surface-border shadow-xs',
-    // Outline: Minimal transparent with subtle 1px border
+      'bg-surface hover:bg-surface-secondary text-zinc-800 border border-surface-border shadow-xs',
+    // Outline: Warm minimal outline with subtle 1px border
     outline:
-      'bg-transparent hover:bg-white/[0.06] text-zinc-300 hover:text-white border border-white/10',
+      'bg-white/70 hover:bg-surface-secondary text-zinc-700 hover:text-zinc-950 border border-surface-border shadow-xs',
     // Ghost: Transparent with hover highlight
     ghost:
-      'bg-transparent hover:bg-white/[0.06] text-zinc-400 hover:text-white border border-transparent',
-    // Google: Official dark theme styling matching Claude Console
+      'bg-transparent hover:bg-black/[0.04] text-zinc-600 hover:text-zinc-950 border border-transparent',
+    // Google: Official Google styling
     google:
-      'bg-[#1E1F2A] hover:bg-[#272938] text-white border border-white/10 font-medium shadow-xs',
+      'bg-white hover:bg-zinc-50 text-zinc-800 border border-surface-border font-medium shadow-xs',
     // Danger: Subtle red action
     danger:
-      'bg-red-500/15 hover:bg-red-500/25 text-red-300 border border-red-500/30',
+      'bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 shadow-xs',
   };
 
   const sizes = {

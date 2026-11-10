@@ -11,10 +11,10 @@ export default function UpcomingReviews({ onStartQuiz }) {
       {/* Due Quizzes & Spaced Reviews (2 cols on lg) */}
       <div className="lg:col-span-2">
         <div className="mb-3">
-          <h2 className="text-sm font-semibold text-white tracking-tight">
+          <h2 className="text-sm font-semibold text-zinc-950 tracking-tight">
             Spaced Repetition Queue
           </h2>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-zinc-500">
             Sessions due to prevent memory decay.
           </p>
         </div>
@@ -25,15 +25,15 @@ export default function UpcomingReviews({ onStartQuiz }) {
               key={item.id}
               hoverEffect
               padding="p-3.5"
-              className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-surface-border"
+              className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-surface-border bg-surface shadow-xs"
             >
               <div className="flex items-start gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-surface-elevated text-brand-violet flex items-center justify-center shrink-0 border border-surface-border">
+                <div className="w-8 h-8 rounded-lg bg-surface-secondary text-brand-violet-dark flex items-center justify-center shrink-0 border border-surface-border">
                   <Brain className="w-4 h-4" />
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5 mb-0.5">
-                    <span className="text-xs font-medium text-white">
+                    <span className="text-xs font-medium text-zinc-950">
                       {item.title}
                     </span>
                     <Badge
@@ -43,12 +43,12 @@ export default function UpcomingReviews({ onStartQuiz }) {
                       {item.dueIn}
                     </Badge>
                   </div>
-                  <div className="flex items-center gap-1.5 text-[11px] text-gray-400">
+                  <div className="flex items-center gap-1.5 text-[11px] text-zinc-500">
                     <span>{item.subject}</span>
                     <span>•</span>
                     <span>{item.questions} questions</span>
                     <span>•</span>
-                    <span className="text-gray-400">{item.difficulty}</span>
+                    <span className="text-zinc-500">{item.difficulty}</span>
                   </div>
                 </div>
               </div>
@@ -67,10 +67,10 @@ export default function UpcomingReviews({ onStartQuiz }) {
       </div>
 
       {/* Weekly Activity (1 col on lg) */}
-      <Card padding="p-4" className="flex flex-col justify-between border-surface-border">
+      <Card padding="p-4" className="flex flex-col justify-between border-surface-border bg-surface shadow-xs">
         <div>
           <div className="flex items-center justify-between mb-1">
-            <span className="text-xs font-semibold text-white">
+            <span className="text-xs font-semibold text-zinc-950">
               Weekly Activity
             </span>
             <Badge variant="lime" size="sm">

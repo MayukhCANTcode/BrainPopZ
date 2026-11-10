@@ -128,21 +128,21 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
       }}
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn"
     >
-      <div className="bg-surface border border-surface-border rounded-2xl w-full max-w-xl p-5 sm:p-6 shadow-2xl relative flex flex-col justify-between min-h-[480px] max-h-[90vh]">
+      <div className="bg-white border border-surface-border rounded-2xl w-full max-w-xl p-5 sm:p-6 shadow-2xl relative flex flex-col justify-between min-h-[480px] max-h-[90vh]">
         {/* Top Header */}
         <div className="flex items-center justify-between pb-3 border-b border-surface-border">
           <div className="flex items-center gap-2">
             <Badge variant="default" size="sm">
-              {deck.subject}
+              {deck.subject || 'AI Generated'}
             </Badge>
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-zinc-500 font-mono">
               {!isCompleted ? `Card ${currentIndex + 1} of ${cards.length}` : 'Completed'}
             </span>
           </div>
 
           <button
             onClick={onClose}
-            className="p-1 rounded text-gray-400 hover:text-white hover:bg-surface-elevated transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-950 hover:bg-surface-secondary transition-colors cursor-pointer"
             aria-label="Close Study Session"
           >
             <X className="w-4 h-4" />
@@ -153,9 +153,9 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
         {!isCompleted ? (
           <>
             {/* Progress bar */}
-            <div className="w-full bg-surface-secondary h-1 rounded-full overflow-hidden my-2">
+            <div className="w-full bg-surface-secondary h-1 rounded-full overflow-hidden my-2 border border-surface-border">
               <div
-                className="bg-brand-violet h-full transition-all duration-300"
+                className="bg-brand-violet-dark h-full transition-all duration-300"
                 style={{ width: `${((currentIndex + 1) / cards.length) * 100}%` }}
               />
             </div>
@@ -163,10 +163,10 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
             {/* Interactive Flashcard Face */}
             <div
               onClick={toggleFlip}
-              className={`w-full min-h-[300px] sm:min-h-[320px] p-6 rounded-2xl cursor-pointer select-none transition-all duration-200 flex flex-col justify-between items-center text-center shadow-lg border my-2 ${
+              className={`w-full min-h-[300px] sm:min-h-[320px] p-6 rounded-2xl cursor-pointer select-none transition-all duration-200 flex flex-col justify-between items-center text-center shadow-sm border my-2 ${
                 isFlipped
-                  ? 'bg-surface-elevated border-brand-lime/40 ring-1 ring-brand-lime/20'
-                  : 'bg-surface-elevated border-surface-border hover:border-zinc-500'
+                  ? 'bg-emerald-50/60 border-emerald-300 ring-1 ring-emerald-200'
+                  : 'bg-surface-secondary/70 border-surface-border hover:border-zinc-400'
               }`}
             >
               {/* Card Header Badge */}
@@ -174,14 +174,14 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
                 <span
                   className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${
                     isFlipped
-                      ? 'bg-brand-lime/10 border-brand-lime/30 text-brand-lime'
-                      : 'bg-brand-violet/10 border-brand-violet/30 text-brand-violet-light'
+                      ? 'bg-emerald-100 border-emerald-300 text-emerald-800'
+                      : 'bg-purple-100 border-purple-200 text-purple-900'
                   }`}
                 >
                   {isFlipped ? 'Answer' : 'Question'}
                 </span>
                 {currentCard.difficulty && (
-                  <span className="text-[10px] text-zinc-400 font-mono">
+                  <span className="text-[10px] text-zinc-500 font-mono">
                     • {currentCard.difficulty}
                   </span>
                 )}
@@ -190,11 +190,11 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
               {/* Card Content Area */}
               <div className="flex-1 w-full my-auto py-4 overflow-y-auto flex items-center justify-center">
                 {isFlipped ? (
-                  <p className="text-sm sm:text-base font-normal text-zinc-100 max-w-lg leading-relaxed break-words px-2 animate-fadeIn">
+                  <p className="text-sm sm:text-base font-normal text-zinc-900 max-w-lg leading-relaxed break-words px-2 animate-fadeIn">
                     {currentCard.answer || currentCard.a}
                   </p>
                 ) : (
-                  <p className="text-base sm:text-lg font-heading font-semibold text-white max-w-lg leading-relaxed break-words px-2 animate-fadeIn">
+                  <p className="text-base sm:text-lg font-heading font-semibold text-zinc-950 max-w-lg leading-relaxed break-words px-2 animate-fadeIn">
                     {currentCard.question || currentCard.q}
                   </p>
                 )}
@@ -203,7 +203,7 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
               {/* Card Footer Hint */}
               <div
                 className={`flex items-center gap-1.5 text-xs shrink-0 ${
-                  isFlipped ? 'text-brand-lime' : 'text-zinc-400'
+                  isFlipped ? 'text-emerald-700 font-medium' : 'text-zinc-500'
                 }`}
               >
                 <RotateCw className="w-3.5 h-3.5" />
@@ -232,21 +232,21 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
                 <div className="flex items-center gap-1.5 sm:gap-2">
                   <button
                     onClick={() => handleNext('hard')}
-                    className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-brand-orange/15 text-brand-orange border border-brand-orange/30 text-xs font-medium hover:bg-brand-orange/25 transition-colors cursor-pointer"
+                    className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-amber-50 text-amber-800 border border-amber-200 text-xs font-semibold hover:bg-amber-100 transition-colors cursor-pointer"
                     title="Press 1"
                   >
                     1 • Hard
                   </button>
                   <button
                     onClick={() => handleNext('good')}
-                    className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-brand-violet/15 text-brand-violet-light border border-brand-violet/30 text-xs font-medium hover:bg-brand-violet/25 transition-colors cursor-pointer"
+                    className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-purple-50 text-purple-800 border border-purple-200 text-xs font-semibold hover:bg-purple-100 transition-colors cursor-pointer"
                     title="Press 2"
                   >
                     2 • Good
                   </button>
                   <button
                     onClick={() => handleNext('easy')}
-                    className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-brand-lime/15 text-brand-lime border border-brand-lime/30 text-xs font-medium hover:bg-brand-lime/25 transition-colors cursor-pointer"
+                    className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold hover:bg-emerald-100 transition-colors cursor-pointer"
                     title="Press 3"
                   >
                     3 • Easy
@@ -258,7 +258,7 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
                   size="sm"
                   leftIcon={RotateCw}
                   onClick={toggleFlip}
-                  className="text-xs text-zinc-300 hover:text-white"
+                  className="text-xs text-zinc-700 hover:text-zinc-950"
                 >
                   Flip Card
                 </Button>
@@ -284,22 +284,22 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
             </div>
 
             <div>
-              <h3 className="text-base font-semibold text-white">
+              <h3 className="text-base font-bold text-zinc-950 font-heading">
                 Study Session Complete
               </h3>
-              <p className="text-xs text-gray-400 mt-0.5 max-w-xs">
+              <p className="text-xs text-zinc-600 mt-0.5 max-w-xs">
                 You reviewed all {cards.length} cards in "{deck.title}".
               </p>
             </div>
 
             <div className="flex items-center gap-3 py-1">
-              <div className="px-3 py-2 rounded-lg bg-surface-elevated border border-surface-border text-center">
-                <span className="text-[10px] text-gray-400 block">Reviewed</span>
-                <span className="text-sm font-semibold text-brand-lime">+{cards.length} cards</span>
+              <div className="px-3 py-2 rounded-lg bg-surface-secondary border border-surface-border text-center">
+                <span className="text-[10px] text-zinc-500 block">Reviewed</span>
+                <span className="text-sm font-semibold text-emerald-700">+{cards.length} cards</span>
               </div>
-              <div className="px-3 py-2 rounded-lg bg-surface-elevated border border-surface-border text-center">
-                <span className="text-[10px] text-gray-400 block">Streak</span>
-                <span className="text-sm font-semibold text-brand-orange">+25 XP</span>
+              <div className="px-3 py-2 rounded-lg bg-surface-secondary border border-surface-border text-center">
+                <span className="text-[10px] text-zinc-500 block">Streak</span>
+                <span className="text-sm font-semibold text-amber-700">+25 XP</span>
               </div>
             </div>
 

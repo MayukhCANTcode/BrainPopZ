@@ -266,15 +266,15 @@ export default function HeroGenerator({
         {/* Header Banner */}
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-brand-violet/10 border border-brand-violet/25 text-brand-violet-light text-[11px] font-semibold mb-2">
-              <Sparkles className="w-3.5 h-3.5 text-brand-lime" />
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-purple-50 border border-purple-200 text-purple-900 text-[11px] font-semibold mb-2">
+              <Sparkles className="w-3.5 h-3.5 text-brand-orange" />
               <span>AI Study Studio</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-heading font-extrabold text-white tracking-tight">
-              Turn your notes into knowledge.
+            <h1 className="text-2xl sm:text-3xl font-heading font-extrabold text-zinc-950 tracking-tight">
+              Turn your notes into knowledge. <span className="font-serif italic font-normal text-zinc-600">Build for mastery.</span>
             </h1>
-            <p className="text-xs sm:text-sm text-gray-400 mt-1 leading-relaxed">
-              Create flashcards and quizzes from anything you're learning.
+            <p className="text-xs sm:text-sm text-zinc-600 mt-1 leading-relaxed">
+              Create flashcards and diagnostic quizzes from anything you're learning.
             </p>
           </div>
 
@@ -288,8 +288,8 @@ export default function HeroGenerator({
               }}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer ${
                 mode === 'flashcards'
-                  ? 'bg-white text-zinc-950 font-semibold shadow-xs'
-                  : 'text-zinc-400 hover:text-white'
+                  ? 'bg-midnight-ink text-white font-semibold shadow-xs'
+                  : 'text-zinc-600 hover:text-zinc-950'
               }`}
             >
               <Layers className="w-3.5 h-3.5 stroke-[1.75]" />
@@ -303,8 +303,8 @@ export default function HeroGenerator({
               }}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer ${
                 mode === 'quiz'
-                  ? 'bg-white text-zinc-950 font-semibold shadow-xs'
-                  : 'text-zinc-400 hover:text-white'
+                  ? 'bg-midnight-ink text-white font-semibold shadow-xs'
+                  : 'text-zinc-600 hover:text-zinc-950'
               }`}
             >
               <Brain className="w-3.5 h-3.5 stroke-[1.75]" />
@@ -320,8 +320,8 @@ export default function HeroGenerator({
             onClick={() => setActiveTab('topic')}
             className={`px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition-colors cursor-pointer ${
               activeTab === 'topic'
-                ? 'bg-surface-secondary text-white border border-surface-border'
-                : 'text-gray-400 hover:text-white'
+                ? 'bg-surface text-zinc-950 border border-surface-border shadow-xs'
+                : 'text-zinc-500 hover:text-zinc-950'
             }`}
           >
             💡 Enter a Topic
@@ -331,8 +331,8 @@ export default function HeroGenerator({
             onClick={() => setActiveTab('notes')}
             className={`px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition-colors cursor-pointer ${
               activeTab === 'notes'
-                ? 'bg-surface-secondary text-white border border-surface-border'
-                : 'text-gray-400 hover:text-white'
+                ? 'bg-surface text-zinc-950 border border-surface-border shadow-xs'
+                : 'text-zinc-500 hover:text-zinc-950'
             }`}
           >
             📝 Paste Notes
@@ -345,8 +345,8 @@ export default function HeroGenerator({
             }}
             className={`px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition-colors cursor-pointer flex items-center gap-1.5 ${
               activeTab === 'upload'
-                ? 'bg-surface-secondary text-white border border-surface-border'
-                : 'text-gray-400 hover:text-white'
+                ? 'bg-surface text-zinc-950 border border-surface-border shadow-xs'
+                : 'text-zinc-500 hover:text-zinc-950'
             }`}
           >
             <UploadCloud className="w-3.5 h-3.5 text-brand-orange" />
@@ -357,11 +357,11 @@ export default function HeroGenerator({
             onClick={() => setActiveTab('youtube')}
             className={`px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition-colors cursor-pointer flex items-center gap-1.5 ${
               activeTab === 'youtube'
-                ? 'bg-red-500/15 text-red-300 border border-red-500/30'
-                : 'text-gray-400 hover:text-white'
+                ? 'bg-red-50 text-red-800 border border-red-200'
+                : 'text-zinc-500 hover:text-zinc-950'
             }`}
           >
-            <SquarePlay className="w-3.5 h-3.5 text-red-400" />
+            <SquarePlay className="w-3.5 h-3.5 text-red-600" />
             <span>YouTube Video</span>
           </button>
           <input
@@ -389,18 +389,18 @@ export default function HeroGenerator({
                 }}
                 disabled={isGenerating}
                 placeholder="E.g., Quantum Entanglement, Cellular Respiration, Raft Consensus Algorithm..."
-                className="w-full bg-surface-secondary border border-surface-border rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-brand-violet/70 transition-colors shadow-inner"
+                className="w-full bg-surface-secondary border border-surface-border rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-brand-violet focus:ring-1 focus:ring-brand-violet/40 transition-colors shadow-inner"
               />
 
               {/* Suggested Topic Chips */}
               <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                <span className="text-[11px] text-gray-500 font-medium mr-1">Suggestions:</span>
+                <span className="text-[11px] text-zinc-500 font-medium mr-1">Suggestions:</span>
                 {SUGGESTED_TOPICS.map((item, idx) => (
                   <button
                     key={idx}
                     type="button"
                     onClick={() => handleSelectSuggestedTopic(item)}
-                    className="px-2.5 py-1 rounded-full bg-surface-secondary/70 border border-surface-border text-[11px] text-gray-300 hover:text-brand-lime hover:border-brand-lime/40 transition-colors cursor-pointer"
+                    className="px-2.5 py-1 rounded-full bg-surface border border-surface-border text-[11px] text-zinc-700 hover:text-zinc-950 hover:border-zinc-400 transition-colors cursor-pointer shadow-xs"
                   >
                     {item.label}
                   </button>
@@ -570,9 +570,9 @@ export default function HeroGenerator({
                 }}
                 disabled={isGenerating}
                 placeholder="Paste lecture notes, study guide excerpts, or textbook paragraphs here..."
-                className="w-full bg-surface-secondary border border-surface-border rounded-xl p-4 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-brand-violet/70 transition-colors shadow-inner resize-y"
+                className="w-full bg-surface-secondary border border-surface-border rounded-xl p-4 text-xs text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-brand-violet focus:ring-1 focus:ring-brand-violet/40 transition-colors shadow-inner resize-y"
               />
-              <div className="flex justify-between text-[11px] text-gray-500">
+              <div className="flex justify-between text-[11px] text-zinc-500">
                 <span>Supports up to 25,000 characters</span>
                 <span className="font-mono">{notesInput.length} chars</span>
               </div>
@@ -584,7 +584,7 @@ export default function HeroGenerator({
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 pt-1">
           {/* Difficulty Selection */}
           <div className="sm:col-span-6 space-y-1">
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 block">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 block">
               Cognitive Level
             </span>
             <div className="grid grid-cols-3 gap-1.5">
@@ -599,8 +599,8 @@ export default function HeroGenerator({
                   onClick={() => setDifficulty(diff.id)}
                   className={`py-1.5 px-2 rounded-lg text-xs transition-colors cursor-pointer ${
                     difficulty === diff.id
-                      ? 'bg-zinc-100 text-zinc-950 font-medium shadow-xs'
-                      : 'bg-surface-secondary border border-surface-border text-zinc-400 hover:text-white hover:border-zinc-700'
+                      ? 'bg-midnight-ink text-white font-semibold shadow-xs'
+                      : 'bg-surface border border-surface-border text-zinc-700 hover:text-zinc-950 hover:border-zinc-400'
                   }`}
                 >
                   {diff.label}
@@ -611,7 +611,7 @@ export default function HeroGenerator({
 
           {/* Quantity Selector */}
           <div className="sm:col-span-6 space-y-1">
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 block">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 block">
               Quantity ({mode === 'flashcards' ? 'Cards' : 'Questions'})
             </span>
             <div className="flex items-center gap-1.5">
@@ -622,8 +622,8 @@ export default function HeroGenerator({
                   onClick={() => setQuantity(num)}
                   className={`flex-1 py-1.5 rounded-lg text-xs font-mono transition-colors cursor-pointer ${
                     quantity === num
-                      ? 'bg-white text-zinc-950 font-semibold shadow-xs'
-                      : 'bg-surface-secondary border border-surface-border text-zinc-400 hover:text-white hover:border-zinc-700'
+                      ? 'bg-midnight-ink text-white font-semibold shadow-xs'
+                      : 'bg-surface border border-surface-border text-zinc-700 hover:text-zinc-950 hover:border-zinc-400'
                   }`}
                 >
                   {num}
@@ -657,8 +657,8 @@ export default function HeroGenerator({
           <div className="p-4 rounded-xl bg-surface-secondary border border-brand-lime/40 space-y-3 animate-fadeIn">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-brand-lime shrink-0" />
-                <span className="text-xs font-bold text-white">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span className="text-xs font-bold text-zinc-900">
                   Successfully Generated: "{generatedResult.title}"
                 </span>
                 <Badge variant="lime" size="sm">
@@ -667,7 +667,7 @@ export default function HeroGenerator({
               </div>
             </div>
 
-            <p className="text-xs text-gray-300">
+            <p className="text-xs text-zinc-600">
               {generatedResult.type === 'flashcards'
                 ? `Saved ${generatedResult.cards.length} flashcards to your library.`
                 : `Created ${generatedResult.questions.length} diagnostic quiz questions.`}
@@ -729,16 +729,16 @@ export default function HeroGenerator({
 
         {/* Generating Feedback Card with Mascot */}
         {isGenerating && (
-          <div className="p-4 rounded-xl bg-surface-secondary/80 border border-brand-violet/40 flex items-center gap-3.5 animate-fadeIn">
+          <div className="p-4 rounded-xl bg-surface-secondary/80 border border-purple-200 flex items-center gap-3.5 animate-fadeIn">
             <Mascot size="sm" animation="float" />
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <Loader2 className="w-3.5 h-3.5 text-brand-lime animate-spin shrink-0" />
-                <span className="text-xs font-semibold text-white">
+                <Loader2 className="w-3.5 h-3.5 text-purple-600 animate-spin shrink-0" />
+                <span className="text-xs font-semibold text-zinc-900">
                   Crafting your active recall deck with Gemini AI...
                 </span>
               </div>
-              <p className="text-[11px] text-gray-400 truncate">
+              <p className="text-[11px] text-zinc-500 truncate">
                 Formatting rigorous questions and validating scientific rationales.
               </p>
             </div>
@@ -751,16 +751,16 @@ export default function HeroGenerator({
           fullWidth
           disabled={isGenerating || isFetchingTranscript}
           onClick={handleGenerate}
-          className="h-10 text-sm font-medium"
+          className="h-10 text-sm font-semibold shadow-sm"
         >
           {isGenerating ? (
             <span className="flex items-center justify-center gap-2">
-              <Loader2 className="w-4 h-4 animate-spin text-zinc-950" />
+              <Loader2 className="w-4 h-4 animate-spin text-midnight-ink" />
               <span>Generating with Google Gemini AI...</span>
             </span>
           ) : (
             <span className="flex items-center justify-center gap-2">
-              <Sparkles className="w-4 h-4 text-brand-lime" />
+              <Sparkles className="w-4 h-4 text-purple-700" />
               <span>
                 {activeTab === 'youtube' && youtubeData
                   ? `Generate ${quantity} ${mode === 'flashcards' ? 'Flashcards' : 'Quiz Questions'} from YouTube`

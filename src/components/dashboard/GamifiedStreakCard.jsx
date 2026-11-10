@@ -65,14 +65,14 @@ export default function GamifiedStreakCard({ onOpenQuests }) {
 
             <div>
               <div className="flex items-baseline gap-1.5">
-                <span className="text-2xl font-heading font-black text-white tracking-tight">
+                <span className="text-2xl font-heading font-black text-zinc-950 tracking-tight">
                   {gameState.streak}
                 </span>
-                <span className="text-xs font-semibold text-gray-300 uppercase tracking-wider">
+                <span className="text-xs font-semibold text-zinc-600 uppercase tracking-wider">
                   {gameState.streak === 1 ? 'Day Streak' : 'Days Streak'}
                 </span>
               </div>
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-zinc-500">
                 {hasStreak
                   ? 'The flame is burning! Keep learning today.'
                   : 'Start your streak today with a quick drill!'}
@@ -82,43 +82,43 @@ export default function GamifiedStreakCard({ onOpenQuests }) {
 
           {/* Streak Freeze Indicator */}
           <div
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-cyan-400 text-xs font-medium cursor-help"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-cyan-700 text-xs font-medium cursor-help"
             title="Streak Freezes automatically protect your streak if you miss a day."
           >
-            <Shield className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+            <Shield className="w-3.5 h-3.5 text-cyan-600 shrink-0" />
             <span className="font-mono font-semibold">{gameState.freezes}</span>
             <span className="hidden sm:inline text-[11px]">Freezes</span>
           </div>
         </div>
 
         {/* Level & XP Progression */}
-        <div className="p-3 rounded-xl bg-midnight/60 border border-surface-border mb-3">
+        <div className="p-3 rounded-xl bg-surface-secondary/70 border border-surface-border mb-3">
           <div className="flex items-center justify-between text-xs mb-1.5">
             <div className="flex items-center gap-1.5">
-              <span className="px-1.5 py-0.5 rounded bg-brand-violet/20 text-brand-violet-light font-bold text-[10px] uppercase tracking-wide border border-brand-violet/30">
+              <span className="px-1.5 py-0.5 rounded bg-brand-violet-lilac text-brand-violet-dark font-bold text-[10px] uppercase tracking-wide border border-[#C5AFFC]">
                 Lvl {levelInfo.level}
               </span>
-              <span className="text-white font-semibold text-xs tracking-tight">
+              <span className="text-zinc-900 font-semibold text-xs tracking-tight">
                 {levelInfo.title}
               </span>
             </div>
 
             <div className="flex items-center gap-1 text-xs">
-              <Zap className="w-3.5 h-3.5 text-brand-lime fill-brand-lime" />
-              <span className="text-white font-mono font-bold">{gameState.xp}</span>
-              <span className="text-gray-400 text-[11px]">/ {levelInfo.maxXp} XP</span>
+              <Zap className="w-3.5 h-3.5 text-emerald-600 fill-emerald-600" />
+              <span className="text-zinc-950 font-mono font-bold">{gameState.xp}</span>
+              <span className="text-zinc-500 text-[11px]">/ {levelInfo.maxXp} XP</span>
             </div>
           </div>
 
           {/* Level Progress Bar */}
           <div className="w-full bg-surface h-2 rounded-full overflow-hidden p-0.5 border border-surface-border">
             <div
-              className="bg-brand-violet h-full rounded-full transition-all duration-500 shadow-sm"
+              className="bg-brand-violet-dark h-full rounded-full transition-all duration-500 shadow-sm"
               style={{ width: `${levelInfo.percentage}%` }}
             />
           </div>
 
-          <div className="flex justify-between items-center text-[10px] text-gray-400 mt-1.5">
+          <div className="flex justify-between items-center text-[10px] text-zinc-500 mt-1.5">
             <span>{levelInfo.percentage}% to Level {levelInfo.level + 1}</span>
             <span>{levelInfo.xpRemaining} XP to unlock next tier</span>
           </div>
@@ -127,11 +127,11 @@ export default function GamifiedStreakCard({ onOpenQuests }) {
         {/* Daily Goal Progress */}
         <div className="space-y-1.5">
           <div className="flex items-center justify-between text-xs">
-            <span className="text-gray-300 font-medium flex items-center gap-1.5 text-xs">
-              <Sparkles className="w-3.5 h-3.5 text-brand-lime" />
+            <span className="text-zinc-700 font-medium flex items-center gap-1.5 text-xs">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
               <span>Today's Study Goal</span>
             </span>
-            <span className="font-mono text-xs text-white font-semibold">
+            <span className="font-mono text-xs text-zinc-900 font-semibold">
               {gameState.cardsReviewedToday} / {gameState.dailyGoalTarget || 20} cards
             </span>
           </div>
@@ -140,19 +140,19 @@ export default function GamifiedStreakCard({ onOpenQuests }) {
             <div
               className={`h-full rounded-full transition-all duration-500 ${
                 dailyProgressPercent >= 100
-                  ? 'bg-brand-lime shadow-lg shadow-brand-lime/20'
+                  ? 'bg-emerald-500 shadow-lg shadow-emerald-500/20'
                   : 'bg-brand-orange'
               }`}
               style={{ width: `${dailyProgressPercent}%` }}
             />
           </div>
 
-          <div className="flex items-center justify-between text-[11px] text-gray-400 pt-0.5">
+          <div className="flex items-center justify-between text-[11px] text-zinc-500 pt-0.5">
             <div className="flex items-center gap-1.5">
               {dailyProgressPercent >= 100 ? (
                 <>
                   <Mascot size="xs" animation="bounce" />
-                  <span className="text-brand-lime font-semibold">🎉 Daily goal crushed! Streak protected.</span>
+                  <span className="text-emerald-700 font-semibold">🎉 Daily goal crushed! Streak protected.</span>
                 </>
               ) : (
                 <span>
@@ -163,7 +163,7 @@ export default function GamifiedStreakCard({ onOpenQuests }) {
             {onOpenQuests && (
               <button
                 onClick={onOpenQuests}
-                className="text-brand-violet-light hover:text-white transition-colors cursor-pointer text-[11px] font-semibold shrink-0"
+                className="text-brand-violet-dark hover:text-zinc-950 transition-colors cursor-pointer text-[11px] font-semibold shrink-0"
               >
                 View Quests →
               </button>

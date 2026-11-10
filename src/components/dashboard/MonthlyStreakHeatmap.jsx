@@ -143,14 +143,14 @@ export default function MonthlyStreakHeatmap({ className = '' }) {
       {/* Header: Title, Active Count, & Month Controls */}
       <div className="flex items-center justify-between gap-1 mb-2.5">
         <div className="flex items-center gap-1.5 min-w-0">
-          <CalendarIcon className="w-3.5 h-3.5 text-brand-lime shrink-0" />
-          <span className="font-semibold text-white truncate text-[11px] tracking-tight">
+          <CalendarIcon className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+          <span className="font-semibold text-zinc-950 truncate text-[11px] tracking-tight">
             {monthName} {year}
           </span>
           {!isCurrentMonth && (
             <button
               onClick={handleResetToToday}
-              className="px-1.5 py-0.2 rounded bg-surface-elevated hover:bg-surface-hover text-[9px] text-brand-violet-light border border-surface-border transition-colors cursor-pointer"
+              className="px-1.5 py-0.2 rounded bg-surface-secondary hover:bg-surface text-[9px] text-brand-violet-dark border border-surface-border transition-colors cursor-pointer"
               title="Return to current month"
             >
               Today
@@ -162,7 +162,7 @@ export default function MonthlyStreakHeatmap({ className = '' }) {
         <div className="flex items-center gap-0.5 shrink-0">
           <button
             onClick={handlePrevMonth}
-            className="p-1 rounded text-gray-400 hover:text-white hover:bg-surface-elevated transition-colors cursor-pointer"
+            className="p-1 rounded text-zinc-500 hover:text-zinc-950 hover:bg-surface-secondary transition-colors cursor-pointer"
             aria-label="Previous month"
             title="Previous month"
           >
@@ -170,7 +170,7 @@ export default function MonthlyStreakHeatmap({ className = '' }) {
           </button>
           <button
             onClick={handleNextMonth}
-            className="p-1 rounded text-gray-400 hover:text-white hover:bg-surface-elevated transition-colors cursor-pointer"
+            className="p-1 rounded text-zinc-500 hover:text-zinc-950 hover:bg-surface-secondary transition-colors cursor-pointer"
             aria-label="Next month"
             title="Next month"
           >
@@ -184,7 +184,7 @@ export default function MonthlyStreakHeatmap({ className = '' }) {
         {weekDayHeaders.map((day, idx) => (
           <span
             key={`header-${idx}`}
-            className="text-[9px] font-semibold text-gray-400 uppercase tracking-wider"
+            className="text-[9px] font-semibold text-zinc-400 uppercase tracking-wider"
           >
             {day}
           </span>
@@ -203,26 +203,26 @@ export default function MonthlyStreakHeatmap({ className = '' }) {
             );
           }
 
-          // LeetCode Color Scale (Custom Midnight + Lime Palette)
-          let cellStyle = 'bg-[#181A26] text-gray-400 border border-surface-border/40';
+          // Warm Ivory + Emerald Activity Scale
+          let cellStyle = 'bg-surface-secondary text-zinc-600 border border-surface-border/60';
 
           if (cell.level === 1) {
             cellStyle =
-              'bg-brand-lime/20 text-brand-lime border border-brand-lime/30 font-semibold shadow-xs';
+              'bg-emerald-100 text-emerald-800 border border-emerald-300 font-semibold shadow-xs';
           } else if (cell.level === 2) {
             cellStyle =
-              'bg-brand-lime/55 text-midnight border border-brand-lime/70 font-bold shadow-xs';
+              'bg-emerald-300 text-emerald-950 border border-emerald-400 font-bold shadow-xs';
           } else if (cell.level === 3) {
             cellStyle =
-              'bg-brand-lime text-midnight border border-brand-lime font-black shadow-sm shadow-brand-lime/30';
+              'bg-emerald-500 text-white border border-emerald-600 font-black shadow-xs';
           }
 
           if (cell.isFuture) {
-            cellStyle = 'bg-[#141520] text-gray-600 border border-surface-border/20 opacity-40';
+            cellStyle = 'bg-surface-secondary/40 text-zinc-400 border border-surface-border/30 opacity-40';
           }
 
           const ringStyle = cell.isToday
-            ? 'ring-1.5 ring-brand-violet ring-offset-1 ring-offset-surface'
+            ? 'ring-1.5 ring-brand-violet-dark ring-offset-1 ring-offset-surface'
             : '';
 
           return (
@@ -238,7 +238,7 @@ export default function MonthlyStreakHeatmap({ className = '' }) {
 
               {/* Indicator dot on today if 0 cards yet */}
               {cell.isToday && cell.level === 0 && (
-                <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-brand-violet animate-pulse" />
+                <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-brand-violet-dark animate-pulse" />
               )}
             </div>
           );
@@ -246,7 +246,7 @@ export default function MonthlyStreakHeatmap({ className = '' }) {
       </div>
 
       {/* Dynamic Hover Tooltip Banner */}
-      <div className="mt-2 min-h-[22px] px-2 py-1 rounded-md bg-midnight border border-surface-border flex items-center justify-between text-[10px]">
+      <div className="mt-2 min-h-[22px] px-2 py-1 rounded-md bg-surface-secondary/80 border border-surface-border flex items-center justify-between text-[10px]">
         {hoveredDay ? (
           <>
             <span className="text-gray-300 font-medium truncate">

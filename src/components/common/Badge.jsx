@@ -11,19 +11,21 @@ export default function Badge({
   className = '',
 }) {
   const variantStyles = {
-    default: 'bg-surface-elevated text-gray-200 border-surface-border shadow-xs',
-    violet: 'bg-brand-violet/15 text-brand-violet-light border-brand-violet/30 font-semibold shadow-xs',
-    lime: 'bg-brand-lime/15 text-brand-lime border-brand-lime/30 font-semibold shadow-xs',
-    orange: 'bg-brand-orange/15 text-brand-orange border-brand-orange/30 font-semibold shadow-xs',
-    outline: 'bg-transparent text-gray-300 border-surface-border',
+    default: 'bg-surface-secondary text-zinc-700 border-surface-border shadow-xs',
+    violet: 'bg-purple-50 text-purple-800 border-purple-200 font-semibold shadow-xs',
+    lime: 'bg-emerald-50 text-emerald-800 border-emerald-200 font-semibold shadow-xs',
+    orange: 'bg-amber-50 text-amber-800 border-amber-200 font-semibold shadow-xs',
+    dark: 'bg-midnight-ink text-white border-midnight-ink font-medium shadow-xs',
+    outline: 'bg-transparent text-zinc-600 border-surface-border',
   };
 
   const dotColors = {
-    default: 'bg-gray-400',
-    violet: 'bg-brand-violet',
-    lime: 'bg-brand-lime',
-    orange: 'bg-brand-orange',
-    outline: 'bg-gray-400',
+    default: 'bg-zinc-400',
+    violet: 'bg-purple-600',
+    lime: 'bg-emerald-600',
+    orange: 'bg-amber-600',
+    dark: 'bg-white',
+    outline: 'bg-zinc-400',
   };
 
   const sizeStyles = {

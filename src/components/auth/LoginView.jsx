@@ -123,9 +123,9 @@ export default function LoginView({ onLoginSuccess, isRestoringSession }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#0D0E14] bg-dot-grid text-zinc-100 flex flex-col justify-between selection:bg-brand-violet/20">
+    <div className="min-h-screen bg-[#FAF7F0] bg-dot-grid text-zinc-900 flex flex-col justify-between selection:bg-brand-violet-lilac selection:text-zinc-950">
       {/* Top Header - Clean logo only */}
-      <header className="w-full px-6 py-5 flex items-center justify-between border-b border-white/[0.04] max-w-7xl mx-auto">
+      <header className="w-full px-6 py-5 flex items-center justify-between border-b border-[#E8E2D5] max-w-7xl mx-auto">
         <div className="flex items-center gap-2">
           <Logo size="sm" />
         </div>
@@ -134,22 +134,22 @@ export default function LoginView({ onLoginSuccess, isRestoringSession }) {
       {/* Main Centered Hero & Form Card */}
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-12 sm:py-16">
         <div className="w-full max-w-[420px] mx-auto text-center space-y-6">
-          {/* Hero Headlines */}
+          {/* Hero Headlines with Editorial Styling */}
           <div className="space-y-3">
-            <h1 className="text-3xl sm:text-4xl font-heading font-bold text-white tracking-tight leading-tight">
-              Build on the<br />BrainPopZ Platform
+            <h1 className="text-3xl sm:text-4xl font-heading font-extrabold text-zinc-950 tracking-tight leading-tight">
+              Build on the<br />BrainPopZ Platform. <span className="font-serif italic font-normal text-zinc-600">Learn effortlessly.</span>
             </h1>
-            <p className="text-xs sm:text-sm text-zinc-400 max-w-sm mx-auto leading-relaxed">
+            <p className="text-xs sm:text-sm text-zinc-600 max-w-sm mx-auto leading-relaxed">
               Create active recall flashcards and diagnostic quizzes with frontier Gemini models and managed study infrastructure.
             </p>
           </div>
 
           {/* Form Card */}
-          <div className="bg-[#161722]/90 border border-white/[0.08] rounded-2xl p-6 sm:p-7 shadow-2xl backdrop-blur-md text-left space-y-5">
+          <div className="bg-white border border-[#E8E2D5] rounded-2xl p-6 sm:p-7 shadow-xl text-left space-y-5">
             {/* Error Message Banner */}
             {errorMessage && (
-              <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-300 text-xs flex items-start gap-2 animate-fadeIn">
-                <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5 stroke-[1.75]" />
+              <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs flex items-start gap-2 animate-fadeIn">
+                <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5 stroke-[1.75]" />
                 <span className="leading-snug">{errorMessage}</span>
               </div>
             )}
@@ -164,10 +164,10 @@ export default function LoginView({ onLoginSuccess, isRestoringSession }) {
                 type="button"
                 onClick={handleFallbackGoogleSignIn}
                 disabled={isLoading}
-                className="w-full h-11 px-4 rounded-lg bg-[#20212E] hover:bg-[#282A3A] border border-white/10 text-white font-medium text-xs sm:text-sm flex items-center justify-center gap-3 transition-colors cursor-pointer shadow-xs active:scale-[0.99]"
+                className="w-full h-11 px-4 rounded-lg bg-white hover:bg-zinc-50 border border-zinc-300 text-zinc-800 font-medium text-xs sm:text-sm flex items-center justify-center gap-3 transition-colors cursor-pointer shadow-xs active:scale-[0.99]"
               >
                 {isLoading ? (
-                  <Loader2 className="w-4 h-4 animate-spin text-zinc-300" />
+                  <Loader2 className="w-4 h-4 animate-spin text-zinc-600" />
                 ) : (
                   <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
                     <path
@@ -195,15 +195,15 @@ export default function LoginView({ onLoginSuccess, isRestoringSession }) {
             {/* Terms and Privacy Policy Notice */}
             <p className="text-[11px] text-zinc-500 text-center leading-normal pt-2">
               By continuing, you agree to BrainPopZ's{' '}
-              <a href="#terms" className="text-zinc-400 underline hover:text-white">
+              <a href="#terms" className="text-zinc-800 underline hover:text-black">
                 Commercial Terms
               </a>{' '}
               and{' '}
-              <a href="#usage" className="text-zinc-400 underline hover:text-white">
+              <a href="#usage" className="text-zinc-800 underline hover:text-black">
                 Usage Policy
               </a>
               , and acknowledge our{' '}
-              <a href="#privacy" className="text-zinc-400 underline hover:text-white">
+              <a href="#privacy" className="text-zinc-800 underline hover:text-black">
                 Privacy Policy
               </a>
               .
@@ -213,7 +213,7 @@ export default function LoginView({ onLoginSuccess, isRestoringSession }) {
       </main>
 
       {/* Footer */}
-      <footer className="w-full px-6 py-6 border-t border-white/[0.04] text-center text-xs text-zinc-500">
+      <footer className="w-full px-6 py-6 border-t border-[#E8E2D5] text-center text-xs text-zinc-500">
         <p>Built with Google Gemini 2.5 Flash • Active Recall & Spaced Repetition Engine</p>
       </footer>
     </div>

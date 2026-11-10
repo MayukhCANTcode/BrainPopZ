@@ -82,31 +82,31 @@ export default function SettingsView({ user, onResetDecks }) {
   return (
     <div className="space-y-4 max-w-3xl">
       <div className="pb-4 border-b border-surface-border">
-        <h1 className="text-xl font-heading font-bold text-white tracking-tight">
+        <h1 className="text-xl font-heading font-bold text-zinc-950 tracking-tight">
           Settings
         </h1>
-        <p className="text-xs text-gray-400">
+        <p className="text-xs text-zinc-500">
           Manage your study targets, repetition algorithms, and account preferences.
         </p>
       </div>
 
-      <Card padding="p-5" className="border-surface-border space-y-5">
+      <Card padding="p-5" className="border-surface-border bg-surface shadow-xs space-y-5">
         {/* Profile section */}
         <div className="flex items-center gap-3.5 pb-4 border-b border-surface-border">
           <img
             src={user?.picture || currentUser.avatarUrl}
             alt={user?.name || currentUser.name}
-            className="w-12 h-12 rounded-full object-cover border border-surface-border bg-surface-elevated"
+            className="w-12 h-12 rounded-full object-cover border border-surface-border bg-surface-secondary"
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = currentUser.avatarUrl;
             }}
           />
           <div>
-            <h2 className="text-sm font-semibold text-white">
+            <h2 className="text-sm font-semibold text-zinc-950">
               {user?.name || currentUser.name}
             </h2>
-            <p className="text-xs text-gray-400">{user?.email || currentUser.email}</p>
+            <p className="text-xs text-zinc-500">{user?.email || currentUser.email}</p>
             <div className="mt-1">
               <Badge variant={user?.id ? 'lime' : 'default'} size="sm">
                 {user?.id ? 'Verified Google Scholar' : currentUser.role}
@@ -117,17 +117,17 @@ export default function SettingsView({ user, onResetDecks }) {
 
         {/* Study Preferences */}
         <div className="space-y-3">
-          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+          <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">
             Study Configuration
           </h3>
 
           {/* Daily Goal Control */}
-          <div className="flex items-center justify-between p-3 rounded-lg bg-surface-elevated border border-surface-border">
+          <div className="flex items-center justify-between p-3 rounded-lg bg-surface-secondary/70 border border-surface-border">
             <div>
-              <p className="text-xs font-medium text-white">
+              <p className="text-xs font-medium text-zinc-950">
                 Daily Flashcard Goal
               </p>
-              <p className="text-[11px] text-gray-400">
+              <p className="text-[11px] text-zinc-500">
                 Target cards to review per day.
               </p>
             </div>
@@ -135,18 +135,18 @@ export default function SettingsView({ user, onResetDecks }) {
               <button
                 type="button"
                 onClick={() => setDailyGoal((prev) => Math.max(5, prev - 5))}
-                className="w-7 h-7 rounded bg-surface border border-surface-border flex items-center justify-center text-gray-400 hover:text-white cursor-pointer"
+                className="w-7 h-7 rounded bg-surface border border-surface-border flex items-center justify-center text-zinc-500 hover:text-zinc-950 cursor-pointer shadow-xs"
                 aria-label="Decrease daily goal"
               >
                 <Minus className="w-3 h-3" />
               </button>
-              <span className="text-xs font-mono font-medium text-white min-w-[55px] text-center">
+              <span className="text-xs font-mono font-medium text-zinc-950 min-w-[55px] text-center">
                 {dailyGoal} cards
               </span>
               <button
                 type="button"
                 onClick={() => setDailyGoal((prev) => Math.min(100, prev + 5))}
-                className="w-7 h-7 rounded bg-surface border border-surface-border flex items-center justify-center text-gray-400 hover:text-white cursor-pointer"
+                className="w-7 h-7 rounded bg-surface border border-surface-border flex items-center justify-center text-zinc-500 hover:text-zinc-950 cursor-pointer shadow-xs"
                 aria-label="Increase daily goal"
               >
                 <Plus className="w-3 h-3" />
@@ -155,12 +155,12 @@ export default function SettingsView({ user, onResetDecks }) {
           </div>
 
           {/* Spaced repetition toggle */}
-          <div className="flex items-center justify-between p-3 rounded-lg bg-surface-elevated border border-surface-border">
+          <div className="flex items-center justify-between p-3 rounded-lg bg-surface-secondary/70 border border-surface-border">
             <div>
-              <p className="text-xs font-medium text-white">
+              <p className="text-xs font-medium text-zinc-950">
                 Spaced Repetition Engine (SM-2)
               </p>
-              <p className="text-[11px] text-gray-400">
+              <p className="text-[11px] text-zinc-500">
                 Calculates review intervals based on difficulty ratings.
               </p>
             </div>
@@ -168,7 +168,7 @@ export default function SettingsView({ user, onResetDecks }) {
               type="button"
               onClick={() => setSpacedRepetition(!spacedRepetition)}
               className={`w-9 h-5 flex items-center rounded-full p-0.5 transition-colors cursor-pointer ${
-                spacedRepetition ? 'bg-brand-violet' : 'bg-surface'
+                spacedRepetition ? 'bg-brand-violet-dark' : 'bg-surface-secondary'
               }`}
             >
               <div
@@ -180,12 +180,12 @@ export default function SettingsView({ user, onResetDecks }) {
           </div>
 
           {/* Sound effects toggle */}
-          <div className="flex items-center justify-between p-3 rounded-lg bg-surface-elevated border border-surface-border">
+          <div className="flex items-center justify-between p-3 rounded-lg bg-surface-secondary/70 border border-surface-border">
             <div>
-              <p className="text-xs font-medium text-white">
+              <p className="text-xs font-medium text-zinc-950">
                 Audio Cues
               </p>
-              <p className="text-[11px] text-gray-400">
+              <p className="text-[11px] text-zinc-500">
                 Auditory feedback on flip and correct drill responses.
               </p>
             </div>
@@ -193,7 +193,7 @@ export default function SettingsView({ user, onResetDecks }) {
               type="button"
               onClick={() => setSoundEffects(!soundEffects)}
               className={`w-9 h-5 flex items-center rounded-full p-0.5 transition-colors cursor-pointer ${
-                soundEffects ? 'bg-brand-violet' : 'bg-surface'
+                soundEffects ? 'bg-brand-violet-dark' : 'bg-surface-secondary'
               }`}
             >
               <div
@@ -204,22 +204,22 @@ export default function SettingsView({ user, onResetDecks }) {
             </button>
           </div>
 
-          <div className="flex items-center justify-between p-3 rounded-lg bg-surface-elevated border border-surface-border">
+          <div className="flex items-center justify-between p-3 rounded-lg bg-surface-secondary/70 border border-surface-border">
             <div>
-              <p className="text-xs font-medium text-white">
+              <p className="text-xs font-medium text-zinc-950">
                 Theme
               </p>
-              <p className="text-[11px] text-gray-400">
-                Duolingo-inspired playful dark theme.
+              <p className="text-[11px] text-zinc-500">
+                Warm editorial ivory aesthetic with floating streak dock.
               </p>
             </div>
-            <span className="text-xs text-brand-lime font-mono font-medium">Midnight Colorful</span>
+            <span className="text-xs text-brand-violet-dark font-mono font-medium">Warm Ivory & Ink</span>
           </div>
         </div>
 
         {savedSuccess && (
-          <div className="p-2.5 rounded-lg bg-brand-lime/10 border border-brand-lime/20 text-brand-lime text-xs font-medium flex items-center gap-1.5 animate-fadeIn">
-            <CheckCircle2 className="w-3.5 h-3.5" />
+          <div className="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium flex items-center gap-1.5 animate-fadeIn">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
             <span>Preferences saved successfully!</span>
           </div>
         )}
@@ -232,21 +232,21 @@ export default function SettingsView({ user, onResetDecks }) {
       </Card>
 
       {/* Data Management & Testing Utilities */}
-      <Card padding="p-5" className="border-surface-border space-y-4">
+      <Card padding="p-5" className="border-surface-border bg-surface shadow-xs space-y-4">
         <div className="flex items-center gap-2 pb-2 border-b border-surface-border">
           <AlertTriangle className="w-4 h-4 text-brand-orange" />
-          <h3 className="text-xs font-semibold text-white uppercase tracking-wider">
+          <h3 className="text-xs font-semibold text-zinc-950 uppercase tracking-wider">
             Data Management & Baseline Reset
           </h3>
         </div>
 
-        <p className="text-xs text-gray-400">
+        <p className="text-xs text-zinc-500">
           Reset local study metrics or clear stored flashcard sets. Useful for verifying fresh user onboarding.
         </p>
 
         {resetMessage && (
-          <div className="p-2.5 rounded-lg bg-brand-orange/10 border border-brand-orange/25 text-brand-orange text-xs font-medium flex items-center gap-1.5 animate-fadeIn">
-            <CheckCircle2 className="w-3.5 h-3.5" />
+          <div className="p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs font-medium flex items-center gap-1.5 animate-fadeIn">
+            <CheckCircle2 className="w-3.5 h-3.5 text-amber-600" />
             <span>{resetMessage}</span>
           </div>
         )}
@@ -264,7 +264,7 @@ export default function SettingsView({ user, onResetDecks }) {
           <Button
             variant="outline"
             size="sm"
-            className="text-red-400 border-red-500/30 hover:bg-red-500/10"
+            className="text-red-600 border-red-200 hover:bg-red-50"
             onClick={handleClearAllDecks}
           >
             Clear Stored Decks

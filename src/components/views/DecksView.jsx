@@ -35,10 +35,10 @@ export default function DecksView({ onNavigate, onStudyDeck, decks = [], onToggl
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-surface-border">
         <div>
-          <h1 className="text-xl font-heading font-bold text-white tracking-tight">
+          <h1 className="text-xl font-heading font-extrabold text-zinc-950 tracking-tight">
             Flashcard Decks
           </h1>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-zinc-600">
             {decks.length} total decks in your study library. Click any deck to view and manage cards.
           </p>
         </div>
@@ -56,13 +56,13 @@ export default function DecksView({ onNavigate, onStudyDeck, decks = [], onToggl
       {/* Filter and Search Bar */}
       <div className="flex flex-col md:flex-row items-center gap-2.5">
         <div className="relative flex-1 w-full">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-400" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Filter decks by title, topic, or tag..."
-            className="w-full bg-surface border border-surface-border text-xs text-white placeholder-gray-400 rounded-md pl-8 pr-3 py-1.5 focus:outline-none focus:border-brand-violet/60"
+            className="w-full bg-surface border border-surface-border text-xs text-zinc-900 placeholder-zinc-400 rounded-md pl-8 pr-3 py-1.5 focus:outline-none focus:border-brand-violet/60"
           />
         </div>
 
@@ -72,11 +72,11 @@ export default function DecksView({ onNavigate, onStudyDeck, decks = [], onToggl
             onClick={() => setOnlyBookmarked(!onlyBookmarked)}
             className={`px-2.5 py-1 rounded-md text-xs font-medium whitespace-nowrap transition-colors border flex items-center gap-1.5 cursor-pointer ${
               onlyBookmarked
-                ? 'bg-brand-orange/10 border-brand-orange/30 text-brand-orange'
-                : 'bg-surface border-surface-border text-gray-400 hover:text-white'
+                ? 'bg-amber-50 border-amber-300 text-amber-800'
+                : 'bg-surface border-surface-border text-zinc-600 hover:text-zinc-950'
             }`}
           >
-            <Bookmark className={`w-3 h-3 ${onlyBookmarked ? 'fill-brand-orange' : ''}`} />
+            <Bookmark className={`w-3 h-3 ${onlyBookmarked ? 'fill-amber-600 text-amber-600' : ''}`} />
             <span>Bookmarked</span>
           </button>
 
@@ -86,8 +86,8 @@ export default function DecksView({ onNavigate, onStudyDeck, decks = [], onToggl
               onClick={() => setSelectedSubject(sub)}
               className={`px-2.5 py-1 rounded-md text-xs font-medium whitespace-nowrap transition-colors border cursor-pointer ${
                 selectedSubject === sub
-                  ? 'bg-surface-elevated border-brand-violet/40 text-white'
-                  : 'bg-surface border-surface-border text-gray-400 hover:text-white'
+                  ? 'bg-midnight-ink text-white border-midnight-ink font-semibold shadow-xs'
+                  : 'bg-surface border-surface-border text-zinc-600 hover:text-zinc-950'
               }`}
             >
               {sub}

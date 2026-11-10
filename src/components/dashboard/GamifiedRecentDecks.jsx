@@ -21,15 +21,15 @@ export default function GamifiedRecentDecks({
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-base font-heading font-bold text-white tracking-tight flex items-center gap-2">
+          <h2 className="text-base font-heading font-extrabold text-zinc-950 tracking-tight flex items-center gap-2">
             <span>Continue Learning</span>
             {hasDecks && (
-              <span className="text-[10px] font-mono text-gray-400 bg-surface-elevated px-2 py-0.5 rounded-full border border-surface-border">
+              <span className="text-[10px] font-mono text-zinc-600 bg-surface-secondary px-2 py-0.5 rounded-full border border-surface-border">
                 {decks.length} {decks.length === 1 ? 'deck' : 'decks'}
               </span>
             )}
           </h2>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-zinc-600">
             Recently studied decks in your active spaced recall queue
           </p>
         </div>
@@ -37,7 +37,7 @@ export default function GamifiedRecentDecks({
         {hasDecks && (
           <button
             onClick={onViewAll}
-            className="text-xs font-semibold text-brand-violet-light hover:text-white flex items-center gap-1 transition-colors cursor-pointer"
+            className="text-xs font-semibold text-brand-violet-dark hover:text-black flex items-center gap-1 transition-colors cursor-pointer"
           >
             <span>View all in library</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -47,15 +47,15 @@ export default function GamifiedRecentDecks({
 
       {/* When Empty: Warm Mascot empty state with Starter Pack Loader */}
       {!hasDecks ? (
-        <Card padding="p-8 sm:p-10" className="border-surface-border text-center flex flex-col items-center justify-center">
+        <Card padding="p-8 sm:p-10" className="border-surface-border text-center flex flex-col items-center justify-center bg-surface shadow-xs">
           <div className="mb-4">
             <Mascot size="lg" animation="float" />
           </div>
 
-          <h3 className="text-base sm:text-lg font-heading font-bold text-white mb-1.5">
+          <h3 className="text-base sm:text-lg font-heading font-extrabold text-zinc-950 mb-1.5">
             Your Study Shelf is Ready!
           </h3>
-          <p className="text-xs text-gray-400 max-w-md mb-5 leading-relaxed">
+          <p className="text-xs text-zinc-600 max-w-md mb-5 leading-relaxed">
             You don't have any saved flashcard decks yet. Enter any concept above to generate adaptive cards with Google Gemini AI, or load a curated starter pack.
           </p>
 
@@ -122,7 +122,7 @@ export default function GamifiedRecentDecks({
                     )}
                   </div>
 
-                  <h3 className="font-semibold text-xs sm:text-sm text-white group-hover:text-brand-violet-light transition-colors line-clamp-1 mb-2">
+                  <h3 className="font-semibold text-xs sm:text-sm text-zinc-950 group-hover:text-purple-700 transition-colors line-clamp-1 mb-2">
                     {deck.title}
                   </h3>
 
@@ -131,7 +131,7 @@ export default function GamifiedRecentDecks({
                       {deck.tags.slice(0, 3).map((tag) => (
                         <span
                           key={tag}
-                          className="text-[10px] px-1.5 py-0.5 rounded bg-surface-elevated text-gray-400 border border-surface-border font-mono"
+                          className="text-[10px] px-1.5 py-0.5 rounded bg-surface-secondary text-zinc-600 border border-surface-border font-mono"
                         >
                           {tag}
                         </span>
@@ -144,10 +144,10 @@ export default function GamifiedRecentDecks({
                 <div className="pt-3 border-t border-surface-border space-y-2.5">
                   <div className="space-y-1">
                     <div className="flex items-center justify-between text-[11px]">
-                      <span className="text-gray-400">
+                      <span className="text-zinc-500">
                         {mastered} / {cardCount} cards mastered
                       </span>
-                      <span className="font-semibold text-gray-300 font-mono">
+                      <span className="font-semibold text-zinc-700 font-mono">
                         {mastery}%
                       </span>
                     </div>

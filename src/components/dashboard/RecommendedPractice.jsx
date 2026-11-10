@@ -50,13 +50,13 @@ export default function RecommendedPractice({ onStartQuiz, onSelectTopic }) {
       {/* Section Header */}
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-base font-heading font-bold text-white tracking-tight flex items-center gap-2">
+          <h2 className="text-base font-heading font-bold text-zinc-950 tracking-tight flex items-center gap-2">
             <span>Recommended Practice</span>
             <Badge variant="lime" size="sm">
               High-Yield
             </Badge>
           </h2>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-zinc-500">
             Scientifically curated active recall topics to sharpen diagnostic accuracy
           </p>
         </div>
@@ -69,7 +69,7 @@ export default function RecommendedPractice({ onStartQuiz, onSelectTopic }) {
             key={topic.id}
             hoverEffect
             padding="p-4 sm:p-5"
-            className="flex flex-col justify-between border-surface-border bg-surface"
+            className="flex flex-col justify-between border-surface-border bg-surface shadow-xs"
           >
             <div>
               {/* Badges row */}
@@ -77,17 +77,17 @@ export default function RecommendedPractice({ onStartQuiz, onSelectTopic }) {
                 <Badge variant={topic.badgeVariant} size="sm">
                   {topic.subject}
                 </Badge>
-                <div className="flex items-center gap-1 text-[11px] text-gray-400 font-mono">
-                  <Clock className="w-3 h-3 text-gray-500" />
+                <div className="flex items-center gap-1 text-[11px] text-zinc-500 font-mono">
+                  <Clock className="w-3 h-3 text-zinc-400" />
                   <span>{topic.estimatedTime}</span>
                 </div>
               </div>
 
               {/* Title & Description */}
-              <h3 className="text-sm font-semibold text-white mb-1.5 leading-snug">
+              <h3 className="text-sm font-semibold text-zinc-950 mb-1.5 leading-snug">
                 {topic.title}
               </h3>
-              <p className="text-xs text-gray-400 leading-relaxed line-clamp-2 mb-4">
+              <p className="text-xs text-zinc-600 leading-relaxed line-clamp-2 mb-4">
                 {topic.description}
               </p>
             </div>

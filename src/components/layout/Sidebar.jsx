@@ -115,32 +115,32 @@ export default function Sidebar({
           <div className="grid grid-cols-2 gap-1.5 px-1 mb-4">
             <div
               onClick={() => handleNav('achievements')}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-surface-secondary border border-surface-border text-zinc-300 cursor-pointer hover:border-zinc-700 hover:text-white transition-colors"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-surface border border-surface-border text-zinc-700 cursor-pointer hover:border-zinc-400 hover:text-zinc-950 transition-colors shadow-xs"
               title="Current Active Streak"
             >
               <Flame className="w-3.5 h-3.5 text-brand-orange shrink-0 stroke-[1.75]" />
               <div className="truncate flex items-baseline gap-1">
-                <span className="font-mono font-medium text-xs text-white">{gameState.streak}</span>
-                <span className="text-[10px] text-zinc-400">streak</span>
+                <span className="font-mono font-semibold text-xs text-zinc-900">{gameState.streak}</span>
+                <span className="text-[10px] text-zinc-500">streak</span>
               </div>
             </div>
 
             <div
               onClick={() => handleNav('achievements')}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-surface-secondary border border-surface-border text-zinc-300 cursor-pointer hover:border-zinc-700 hover:text-white transition-colors"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-surface border border-surface-border text-zinc-700 cursor-pointer hover:border-zinc-400 hover:text-zinc-950 transition-colors shadow-xs"
               title="Total XP Earned"
             >
               <Zap className="w-3.5 h-3.5 text-brand-lime shrink-0 stroke-[1.75]" />
               <div className="truncate flex items-baseline gap-1">
-                <span className="font-mono font-medium text-xs text-white">{gameState.xp}</span>
-                <span className="text-[10px] text-zinc-400">XP</span>
+                <span className="font-mono font-semibold text-xs text-zinc-900">{gameState.xp}</span>
+                <span className="text-[10px] text-zinc-500">XP</span>
               </div>
             </div>
           </div>
 
           {/* Navigation Links - Standard, minimal, outline icons */}
           <div className="space-y-0.5">
-            <p className="px-2.5 text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-1.5">
+            <p className="px-2.5 text-[10px] font-semibold text-zinc-500 uppercase tracking-wider mb-1.5">
               Platform
             </p>
             {navItems.map((item) => {
@@ -153,14 +153,14 @@ export default function Sidebar({
                   onClick={() => handleNav(item.id)}
                   className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors duration-150 cursor-pointer group ${
                     isActive
-                      ? 'bg-white/[0.08] text-white border border-white/[0.08]'
-                      : 'text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04] border border-transparent'
+                      ? 'bg-brand-violet-lilac text-midnight-ink font-semibold border border-[#C5AFFC] shadow-xs'
+                      : 'text-zinc-600 hover:text-zinc-950 hover:bg-surface-secondary border border-transparent'
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
                     <Icon
                       className={`w-[18px] h-[18px] shrink-0 stroke-[1.75] transition-colors ${
-                        isActive ? 'text-white' : 'text-zinc-400 group-hover:text-zinc-200'
+                        isActive ? 'text-midnight-ink' : 'text-zinc-500 group-hover:text-zinc-800'
                       }`}
                     />
                     <span>{item.label}</span>
@@ -173,7 +173,7 @@ export default function Sidebar({
                   )}
 
                   {typeof item.count === 'number' && item.count > 0 && (
-                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-surface-elevated text-zinc-400 border border-surface-border font-mono">
+                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-surface text-zinc-600 border border-surface-border font-mono">
                       {item.count}
                     </span>
                   )}
@@ -183,18 +183,18 @@ export default function Sidebar({
           </div>
 
           {/* Clean Live Daily Progress Card */}
-          <div className="mt-5 px-3 py-2.5 rounded-xl bg-surface border border-surface-border space-y-2">
+          <div className="mt-5 px-3 py-2.5 rounded-xl bg-surface border border-surface-border space-y-2 shadow-xs">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-zinc-300 flex items-center gap-1.5 text-xs font-medium">
+              <span className="text-zinc-700 flex items-center gap-1.5 text-xs font-medium">
                 <Flame className="w-3.5 h-3.5 text-brand-orange shrink-0 stroke-[1.75]" />
                 <span>Daily Cards</span>
               </span>
-              <span className="text-white text-xs font-mono font-medium">
+              <span className="text-zinc-900 text-xs font-mono font-semibold">
                 {gameState.cardsReviewedToday}/{gameState.dailyGoalTarget || 20}
               </span>
             </div>
 
-            <div className="w-full bg-[#0A0A0F] h-1.5 rounded-full overflow-hidden border border-surface-border/40">
+            <div className="w-full bg-surface-secondary h-1.5 rounded-full overflow-hidden border border-surface-border">
               <div
                 className={`h-full rounded-full transition-all duration-300 ${
                   dailyGoalPercent >= 100 ? 'bg-brand-lime' : 'bg-brand-orange'
@@ -203,11 +203,11 @@ export default function Sidebar({
               />
             </div>
 
-            <div className="flex justify-between items-center text-[10px] text-zinc-400 pt-0.5">
+            <div className="flex justify-between items-center text-[10px] text-zinc-500 pt-0.5">
               <span>Tier {levelInfo.level} • {levelInfo.title}</span>
               <button
                 onClick={() => handleNav('achievements')}
-                className="text-brand-violet-light hover:underline cursor-pointer"
+                className="text-brand-violet-dark hover:underline cursor-pointer font-medium"
               >
                 Badges →
               </button>
@@ -230,18 +230,18 @@ export default function Sidebar({
                 <img
                   src={user.picture}
                   alt={user?.name || 'User Profile'}
-                  className="w-7 h-7 rounded-full object-cover border border-surface-border shrink-0 bg-surface-elevated"
+                  className="w-7 h-7 rounded-full object-cover border border-surface-border shrink-0 bg-surface"
                 />
               ) : (
-                <div className="w-7 h-7 rounded-full bg-brand-violet/20 text-brand-violet-light flex items-center justify-center font-medium text-xs border border-brand-violet/30 shrink-0">
+                <div className="w-7 h-7 rounded-full bg-brand-violet-lilac text-midnight-ink flex items-center justify-center font-bold text-xs border border-[#C5AFFC] shrink-0">
                   {user?.name ? user.name[0].toUpperCase() : 'U'}
                 </div>
               )}
               <div className="truncate">
-                <p className="text-xs font-medium text-white truncate group-hover:text-zinc-200 transition-colors">
+                <p className="text-xs font-semibold text-zinc-900 truncate group-hover:text-zinc-700 transition-colors">
                   {user?.name || 'Scholar'}
                 </p>
-                <p className="text-[10px] text-zinc-400 truncate">
+                <p className="text-[10px] text-zinc-500 truncate">
                   {user?.email || 'scholar@university.edu'}
                 </p>
               </div>
@@ -251,7 +251,7 @@ export default function Sidebar({
               <button
                 onClick={onLogout}
                 title="Sign out of Google"
-                className="p-1.5 text-zinc-400 hover:text-red-400 hover:bg-surface-elevated rounded-md transition-colors cursor-pointer shrink-0"
+                className="p-1.5 text-zinc-400 hover:text-red-600 hover:bg-surface-secondary rounded-md transition-colors cursor-pointer shrink-0"
                 aria-label="Sign Out"
               >
                 <LogOut className="w-3.5 h-3.5 stroke-[1.75]" />

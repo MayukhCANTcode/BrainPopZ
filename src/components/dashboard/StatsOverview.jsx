@@ -78,9 +78,9 @@ export default function StatsOverview() {
         const Icon = stat.icon;
 
         return (
-          <Card key={stat.id} padding="p-4" hoverEffect className="border-surface-border">
-            <div className="flex items-center justify-between text-gray-400 mb-2">
-              <span className="text-xs font-semibold text-gray-300">
+          <Card key={stat.id} padding="p-4" hoverEffect className="border-surface-border bg-surface shadow-xs">
+            <div className="flex items-center justify-between text-zinc-500 mb-2">
+              <span className="text-xs font-semibold text-zinc-700">
                 {stat.label}
               </span>
               <div className={`p-1.5 rounded-lg border ${stat.badgeBg}`}>
@@ -88,11 +88,11 @@ export default function StatsOverview() {
               </div>
             </div>
 
-            <div className="text-xl sm:text-2xl font-black font-heading text-white tracking-tight">
+            <div className="text-xl sm:text-2xl font-black font-heading text-zinc-950 tracking-tight">
               {stat.value}
             </div>
 
-            <div className="mt-1 text-[11px] text-gray-400">
+            <div className="mt-1 text-[11px] text-zinc-500">
               {stat.caption}
             </div>
           </Card>

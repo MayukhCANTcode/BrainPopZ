@@ -92,11 +92,11 @@ export default function DeckDetailModal({ deck, isOpen, onClose, onStartStudy, o
               <Badge variant={deck.badgeColor || 'default'} size="sm">
                 {deck.subject}
               </Badge>
-              <span className="text-xs text-gray-400 font-mono">
+              <span className="text-xs text-zinc-500 font-mono">
                 {cards.length} cards
               </span>
             </div>
-            <h2 className="text-base sm:text-lg font-semibold text-white tracking-tight">
+            <h2 className="text-base sm:text-lg font-semibold text-zinc-950 tracking-tight">
               {deck.title}
             </h2>
           </div>
@@ -104,18 +104,18 @@ export default function DeckDetailModal({ deck, isOpen, onClose, onStartStudy, o
           <div className="flex items-center gap-1.5">
             <button
               onClick={handleExportMarkdown}
-              className="p-1.5 rounded-md text-gray-400 hover:text-white hover:bg-surface-elevated transition-colors cursor-pointer"
+              className="p-1.5 rounded-md text-zinc-500 hover:text-zinc-950 hover:bg-surface-secondary transition-colors cursor-pointer"
               title="Export as Markdown"
             >
               {copiedExport ? (
-                <Check className="w-4 h-4 text-brand-lime" />
+                <Check className="w-4 h-4 text-emerald-600" />
               ) : (
                 <Download className="w-4 h-4" />
               )}
             </button>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-md text-gray-400 hover:text-white hover:bg-surface-elevated transition-colors cursor-pointer"
+              className="p-1.5 rounded-md text-zinc-500 hover:text-zinc-950 hover:bg-surface-secondary transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -123,15 +123,15 @@ export default function DeckDetailModal({ deck, isOpen, onClose, onStartStudy, o
         </div>
 
         {/* Action & Search Bar */}
-        <div className="p-3 sm:px-5 border-b border-surface-border flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 bg-surface-elevated/40">
+        <div className="p-3 sm:px-5 border-b border-surface-border flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 bg-surface-secondary/50">
           <div className="relative flex-1">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-400" />
             <input
               type="text"
               value={searchCard}
               onChange={(e) => setSearchCard(e.target.value)}
               placeholder="Search cards in this deck..."
-              className="w-full bg-surface border border-surface-border text-xs text-white placeholder-gray-400 rounded-md pl-8 pr-3 py-1.5 focus:outline-none focus:border-brand-violet/60"
+              className="w-full bg-surface border border-surface-border text-xs text-zinc-950 placeholder-zinc-400 rounded-md pl-8 pr-3 py-1.5 focus:outline-none focus:border-brand-violet-dark"
             />
           </div>
 
@@ -164,10 +164,10 @@ export default function DeckDetailModal({ deck, isOpen, onClose, onStartStudy, o
           {isAddingCard && (
             <form
               onSubmit={handleAddCardSubmit}
-              className="p-3.5 rounded-lg bg-surface-elevated border border-surface-border space-y-2.5 animate-fadeIn"
+              className="p-3.5 rounded-lg bg-surface-secondary border border-surface-border space-y-2.5 animate-fadeIn"
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-white">Create New Card</span>
+                <span className="text-xs font-semibold text-zinc-950">Create New Card</span>
                 <div className="flex items-center gap-1 text-[11px]">
                   {['Foundational', 'Medium', 'Hard'].map((lvl) => (
                     <button
@@ -176,8 +176,8 @@ export default function DeckDetailModal({ deck, isOpen, onClose, onStartStudy, o
                       onClick={() => setNewDifficulty(lvl)}
                       className={`px-2 py-0.5 rounded border text-[10px] transition-colors cursor-pointer ${
                         newDifficulty === lvl
-                          ? 'bg-brand-violet/20 border-brand-violet text-brand-violet-light font-medium'
-                          : 'border-surface-border text-gray-400'
+                          ? 'bg-brand-violet-lilac border-[#C5AFFC] text-brand-violet-dark font-medium'
+                          : 'border-surface-border text-zinc-500'
                       }`}
                     >
                       {lvl}
@@ -191,7 +191,7 @@ export default function DeckDetailModal({ deck, isOpen, onClose, onStartStudy, o
                 value={newQuestion}
                 onChange={(e) => setNewQuestion(e.target.value)}
                 placeholder="Front: Question or concept..."
-                className="w-full bg-surface border border-surface-border rounded-md px-3 py-1.5 text-xs text-white placeholder-gray-400 focus:outline-none focus:border-brand-violet/60"
+                className="w-full bg-surface border border-surface-border rounded-md px-3 py-1.5 text-xs text-zinc-950 placeholder-zinc-400 focus:outline-none focus:border-brand-violet-dark"
                 autoFocus
               />
 
@@ -200,7 +200,7 @@ export default function DeckDetailModal({ deck, isOpen, onClose, onStartStudy, o
                 value={newAnswer}
                 onChange={(e) => setNewAnswer(e.target.value)}
                 placeholder="Back: Answer or explanation..."
-                className="w-full bg-surface border border-surface-border rounded-md px-3 py-1.5 text-xs text-white placeholder-gray-400 focus:outline-none focus:border-brand-violet/60"
+                className="w-full bg-surface border border-surface-border rounded-md px-3 py-1.5 text-xs text-zinc-950 placeholder-zinc-400 focus:outline-none focus:border-brand-violet-dark"
               />
 
               <div className="flex justify-end gap-2 pt-1">
@@ -229,11 +229,11 @@ export default function DeckDetailModal({ deck, isOpen, onClose, onStartStudy, o
             filteredCards.map((card, idx) => (
               <div
                 key={idx}
-                className="p-3.5 rounded-lg bg-surface-elevated/60 border border-surface-border/80 group hover:border-gray-600 transition-colors"
+                className="p-3.5 rounded-lg bg-surface border border-surface-border group hover:border-zinc-400 transition-colors shadow-xs"
               >
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-mono font-medium text-gray-400">
+                    <span className="text-[10px] font-mono font-medium text-zinc-500">
                       #{idx + 1}
                     </span>
                     <Badge variant="default" size="sm">
@@ -243,7 +243,7 @@ export default function DeckDetailModal({ deck, isOpen, onClose, onStartStudy, o
 
                   <button
                     onClick={() => handleDeleteCard(idx)}
-                    className="p-1 rounded text-gray-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                    className="p-1 rounded text-zinc-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                     title="Delete card"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -252,30 +252,30 @@ export default function DeckDetailModal({ deck, isOpen, onClose, onStartStudy, o
 
                 <div className="space-y-1.5 text-xs">
                   <div>
-                    <span className="text-[10px] uppercase font-semibold text-gray-400 block mb-0.5">
+                    <span className="text-[10px] uppercase font-semibold text-zinc-500 block mb-0.5">
                       Question
                     </span>
-                    <p className="font-medium text-white leading-relaxed">{card.question || card.q}</p>
+                    <p className="font-medium text-zinc-950 leading-relaxed">{card.question || card.q}</p>
                   </div>
-                  <div className="pt-1.5 border-t border-surface-border/50">
-                    <span className="text-[10px] uppercase font-semibold text-brand-lime block mb-0.5">
+                  <div className="pt-1.5 border-t border-surface-border/60">
+                    <span className="text-[10px] uppercase font-semibold text-brand-violet-dark block mb-0.5">
                       Answer
                     </span>
-                    <p className="text-gray-300 leading-relaxed">{card.answer || card.a}</p>
+                    <p className="text-zinc-700 leading-relaxed">{card.answer || card.a}</p>
                   </div>
                 </div>
               </div>
             ))
           ) : (
-            <div className="p-8 text-center text-xs text-gray-400">
-              <BookOpen className="w-6 h-6 text-gray-500 mx-auto mb-2 opacity-50" />
+            <div className="p-8 text-center text-xs text-zinc-500">
+              <BookOpen className="w-6 h-6 text-zinc-400 mx-auto mb-2 opacity-50" />
               <p>No cards match your search "{searchCard}".</p>
             </div>
           )}
         </div>
 
         {/* Modal Footer */}
-        <div className="p-3 sm:px-5 border-t border-surface-border flex items-center justify-between text-xs text-gray-400 bg-surface">
+        <div className="p-3 sm:px-5 border-t border-surface-border flex items-center justify-between text-xs text-zinc-500 bg-surface">
           <span>
             {cards.length} cards in deck • {deck.masteryPercentage || 0}% mastered
           </span>
