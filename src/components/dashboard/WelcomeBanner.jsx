@@ -22,7 +22,6 @@ export default function WelcomeBanner({
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-surface-border">
       <div>
         <div className="flex items-center gap-2 mb-0.5">
-          <span className="text-lg">👋</span>
           <h1 className="text-xl sm:text-2xl font-heading font-black text-zinc-950 tracking-tight">
             Ready to level up, <span className="font-serif italic font-normal text-brand-violet-dark">{firstName}</span>?
           </h1>

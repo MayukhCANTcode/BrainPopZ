@@ -23,21 +23,6 @@ import Mascot from '../common/Mascot';
 import { generateContent, fetchYouTubeTranscript, extractPdfDocument } from '../../services/api';
 import { recordCompletedActivity } from '../../services/gamification';
 
-const SUGGESTED_TOPICS = [
-  { label: '⚡ Quantum Computing', topic: 'Quantum Superposition, Qubits and Quantum Entanglement' },
-  { label: '🧬 CRISPR-Cas9', topic: 'CRISPR Cas9 Gene Editing Mechanism and Guide RNA' },
-  { label: '💻 Raft Consensus', topic: 'Raft Consensus Algorithm Leader Election and Log Replication' },
-  { label: '🧠 Synaptic Plasticity', topic: 'Synaptic Plasticity, Long-Term Potentiation (LTP) and NMDA Receptors' },
-  { label: '🌌 Black Holes', topic: 'General Relativity, Event Horizon and Hawking Radiation' },
-];
-
-const SUGGESTED_YOUTUBE_VIDEOS = [
-  { label: '⚛️ MIT: Quantum Mechanics', url: 'https://www.youtube.com/watch?v=lZ3bPUKo5zc' },
-  { label: '🧬 CrashCourse: Photosynthesis', url: 'https://www.youtube.com/watch?v=sQK3Yr4Sc_k' },
-  { label: '🧠 Khan Academy: Neurons', url: 'https://www.youtube.com/watch?v=7EyhsOewnH4' },
-  { label: '💻 Computerphile: Raft Consensus', url: 'https://www.youtube.com/watch?v=vYp4LYbnnW8' },
-];
-
 export default function HeroGenerator({
   onAddNewDeck,
   onStartQuiz,
@@ -110,12 +95,6 @@ export default function HeroGenerator({
     reader.readAsText(file);
   };
 
-  const handleSelectSuggestedTopic = (suggested) => {
-    setTopicInput(suggested.topic);
-    setActiveTab('topic');
-    setErrorMessage('');
-  };
-
   const handleFetchTranscript = async (overrideUrl) => {
     const targetUrl = (overrideUrl || youtubeUrl).trim();
     if (!targetUrl) {
@@ -140,7 +119,7 @@ export default function HeroGenerator({
     let effectiveNotes = '';
     let customTitle = '';
     let customSubject = 'AI Generated';
-    let customTags = ['Gemini AI', difficulty];
+    let customTags = ['AI', difficulty];
 
     if (activeTab === 'topic') {
       effectiveNotes = topicInput.trim();
@@ -152,7 +131,7 @@ export default function HeroGenerator({
       effectiveNotes = `Source: YouTube Video "${youtubeData.title}" by ${youtubeData.author}\n\nTranscript:\n${youtubeData.transcript.slice(0, 30000)}`;
       customTitle = youtubeData.title;
       customSubject = 'YouTube Lecture';
-      customTags = ['YouTube', 'Gemini AI', difficulty];
+      customTags = ['YouTube', 'AI', difficulty];
     } else {
       effectiveNotes = notesInput.trim();
     }
@@ -267,8 +246,8 @@ export default function HeroGenerator({
         {/* Header Banner */}
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-purple-50 border border-purple-200 text-purple-900 text-[11px] font-semibold mb-2">
-              <Sparkles className="w-3.5 h-3.5 text-brand-orange" />
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-secondary border border-surface-border text-zinc-800 text-[11px] font-semibold mb-2">
+              <Sparkles className="w-3.5 h-3.5 text-zinc-600 dark:text-zinc-400" />
               <span>AI Study Studio</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-heading font-extrabold text-zinc-950 tracking-tight">
@@ -314,29 +293,31 @@ export default function HeroGenerator({
           </div>
         </div>
 
-        {/* Input Navigation Tabs */}
+        {/* Input Navigation Tabs - Clean, monochrome stroke icons */}
         <div className="flex items-center gap-2 border-b border-surface-border/80 pb-2 text-xs overflow-x-auto">
           <button
             type="button"
             onClick={() => setActiveTab('topic')}
-            className={`px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition-colors cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition-colors cursor-pointer flex items-center gap-1.5 ${
               activeTab === 'topic'
                 ? 'bg-surface text-zinc-950 border border-surface-border shadow-xs'
                 : 'text-zinc-500 hover:text-zinc-950'
             }`}
           >
-            💡 Enter a Topic
+            <FileText className="w-3.5 h-3.5 text-zinc-700 dark:text-zinc-300" />
+            <span>Enter a Topic</span>
           </button>
           <button
             type="button"
             onClick={() => setActiveTab('notes')}
-            className={`px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition-colors cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition-colors cursor-pointer flex items-center gap-1.5 ${
               activeTab === 'notes'
                 ? 'bg-surface text-zinc-950 border border-surface-border shadow-xs'
                 : 'text-zinc-500 hover:text-zinc-950'
             }`}
           >
-            📝 Paste Notes
+            <Layers className="w-3.5 h-3.5 text-zinc-700 dark:text-zinc-300" />
+            <span>Paste Notes</span>
           </button>
           <button
             type="button"
@@ -350,7 +331,7 @@ export default function HeroGenerator({
                 : 'text-zinc-500 hover:text-zinc-950'
             }`}
           >
-            <UploadCloud className="w-3.5 h-3.5 text-brand-orange" />
+            <UploadCloud className="w-3.5 h-3.5 text-zinc-700 dark:text-zinc-300" />
             <span>Upload Document</span>
           </button>
           <button
@@ -358,11 +339,11 @@ export default function HeroGenerator({
             onClick={() => setActiveTab('youtube')}
             className={`px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition-colors cursor-pointer flex items-center gap-1.5 ${
               activeTab === 'youtube'
-                ? 'bg-red-50 text-red-800 border border-red-200'
+                ? 'bg-surface text-zinc-950 border border-surface-border shadow-xs'
                 : 'text-zinc-500 hover:text-zinc-950'
             }`}
           >
-            <SquarePlay className="w-3.5 h-3.5 text-red-600" />
+            <SquarePlay className="w-3.5 h-3.5 text-zinc-700 dark:text-zinc-300" />
             <span>YouTube Video</span>
           </button>
           <input
@@ -390,30 +371,15 @@ export default function HeroGenerator({
                 }}
                 disabled={isGenerating}
                 placeholder="E.g., Quantum Entanglement, Cellular Respiration, Raft Consensus Algorithm..."
-                className="w-full bg-surface-secondary border border-surface-border rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-brand-violet focus:ring-1 focus:ring-brand-violet/40 transition-colors shadow-inner"
+                className="w-full bg-surface-secondary border border-surface-border rounded-xl px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-zinc-500 transition-colors shadow-inner"
               />
-
-              {/* Suggested Topic Chips */}
-              <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                <span className="text-[11px] text-zinc-500 font-medium mr-1">Suggestions:</span>
-                {SUGGESTED_TOPICS.map((item, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => handleSelectSuggestedTopic(item)}
-                    className="px-2.5 py-1 rounded-full bg-surface border border-surface-border text-[11px] text-zinc-700 hover:text-zinc-950 hover:border-zinc-400 transition-colors cursor-pointer shadow-xs"
-                  >
-                    {item.label}
-                  </button>
-                ))}
-              </div>
             </div>
           ) : activeTab === 'youtube' ? (
             <div className="space-y-3">
               {/* YouTube Link Input and Fetch Action */}
               <div className="flex flex-col sm:flex-row items-center gap-2">
                 <div className="relative flex-1 w-full">
-                  <SquarePlay className="w-4 h-4 text-red-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <SquarePlay className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
                     value={youtubeUrl}
@@ -426,14 +392,14 @@ export default function HeroGenerator({
                     }}
                     disabled={isFetchingTranscript || isGenerating}
                     placeholder="Paste YouTube link (e.g. https://www.youtube.com/watch?v=... or https://youtu.be/...)"
-                    className="w-full bg-surface-secondary border border-surface-border rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-red-500/60 transition-colors shadow-inner"
+                    className="w-full bg-surface-secondary border border-surface-border rounded-xl pl-10 pr-4 py-2.5 text-xs text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:border-zinc-500 transition-colors shadow-inner"
                   />
                 </div>
 
                 <Button
                   variant="primary"
                   size="sm"
-                  className="w-full sm:w-auto shrink-0 bg-red-500 hover:bg-red-600 border-none text-white font-medium"
+                  className="w-full sm:w-auto shrink-0 font-medium"
                   disabled={isFetchingTranscript || !youtubeUrl.trim()}
                   onClick={() => handleFetchTranscript()}
                 >
@@ -448,23 +414,6 @@ export default function HeroGenerator({
                 </Button>
               </div>
 
-              {/* Suggested Educational YouTube Video Chips */}
-              {!youtubeData && (
-                <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
-                  <span className="text-[11px] text-gray-500 font-medium mr-1">Sample Lectures:</span>
-                  {SUGGESTED_YOUTUBE_VIDEOS.map((item, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => handleFetchTranscript(item.url)}
-                      className="px-2.5 py-1 rounded-full bg-surface-secondary/70 border border-surface-border text-[11px] text-gray-300 hover:text-red-300 hover:border-red-500/40 transition-colors cursor-pointer"
-                    >
-                      {item.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-
               {/* Loaded YouTube Video Preview Card */}
               {youtubeData && (
                 <div className="p-3.5 rounded-xl bg-surface-secondary border border-surface-border space-y-3 animate-fadeIn">
@@ -477,18 +426,18 @@ export default function HeroGenerator({
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-1.5 mb-1">
-                        <Badge variant="lime" size="sm">
+                        <Badge variant="neo" size="sm">
                           Transcript Loaded
                         </Badge>
-                        <span className="text-[10px] text-gray-400 font-mono">
+                        <span className="text-[10px] text-zinc-500 font-mono">
                           {youtubeData.wordCount} words • ~{youtubeData.estimatedMinutes} min
                         </span>
                       </div>
 
-                      <h4 className="text-xs sm:text-sm font-semibold text-white line-clamp-1">
+                      <h4 className="text-xs sm:text-sm font-semibold text-zinc-950 line-clamp-1">
                         {youtubeData.title}
                       </h4>
-                      <p className="text-[11px] text-gray-400 truncate">
+                      <p className="text-[11px] text-zinc-500 truncate">
                         Channel: {youtubeData.author}
                       </p>
                     </div>
@@ -497,7 +446,7 @@ export default function HeroGenerator({
                       href={youtubeData.url}
                       target="_blank"
                       rel="noreferrer"
-                      className="p-1 rounded text-gray-400 hover:text-white hover:bg-surface-elevated transition-colors cursor-pointer shrink-0"
+                      className="p-1 rounded text-zinc-500 hover:text-zinc-950 hover:bg-surface-elevated transition-colors cursor-pointer shrink-0"
                       title="Open video on YouTube"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
@@ -509,7 +458,7 @@ export default function HeroGenerator({
                     <button
                       type="button"
                       onClick={() => setShowFullTranscript(!showFullTranscript)}
-                      className="text-[11px] text-brand-violet-light hover:text-white flex items-center gap-1 transition-colors cursor-pointer"
+                      className="text-[11px] text-zinc-600 hover:text-zinc-950 flex items-center gap-1 transition-colors cursor-pointer"
                     >
                       <span>{showFullTranscript ? 'Hide transcript preview' : 'View transcript preview'}</span>
                       {showFullTranscript ? (
@@ -520,7 +469,7 @@ export default function HeroGenerator({
                     </button>
 
                     {showFullTranscript && (
-                      <div className="mt-2 p-2.5 rounded-lg bg-midnight/70 border border-surface-border text-xs text-gray-300 max-h-40 overflow-y-auto font-mono text-[11px] leading-relaxed animate-fadeIn">
+                      <div className="mt-2 p-2.5 rounded-lg bg-surface border border-surface-border text-xs text-zinc-700 max-h-40 overflow-y-auto font-mono text-[11px] leading-relaxed animate-fadeIn">
                         {youtubeData.transcript}
                       </div>
                     )}
@@ -531,19 +480,19 @@ export default function HeroGenerator({
           ) : (
             <div className="space-y-2">
               {isExtractingPdf && (
-                <div className="flex items-center gap-2.5 p-3 rounded-lg bg-surface-secondary border border-brand-violet/30 text-xs text-brand-violet-light animate-fadeIn">
-                  <Loader2 className="w-4 h-4 animate-spin text-brand-lime" />
+                <div className="flex items-center gap-2.5 p-3 rounded-lg bg-surface-secondary border border-surface-border text-xs text-zinc-700 animate-fadeIn">
+                  <Loader2 className="w-4 h-4 animate-spin text-zinc-600" />
                   <span>Parsing PDF lecture slides & extracting text...</span>
                 </div>
               )}
 
               {uploadedFileName && activeTab === 'upload' && !isExtractingPdf && (
-                <div className="flex items-center justify-between p-2.5 rounded-lg bg-surface-secondary border border-brand-orange/30 text-xs">
+                <div className="flex items-center justify-between p-2.5 rounded-lg bg-surface-secondary border border-surface-border text-xs">
                   <div className="flex items-center gap-2 truncate">
-                    <FileText className="w-4 h-4 text-brand-orange shrink-0 stroke-[1.75]" />
-                    <span className="font-medium font-mono text-white truncate">{uploadedFileName}</span>
+                    <FileText className="w-4 h-4 text-zinc-700 shrink-0 stroke-[1.75]" />
+                    <span className="font-medium font-mono text-zinc-900 truncate">{uploadedFileName}</span>
                     {pdfMetadata && (
-                      <span className="text-[10px] text-zinc-400 font-mono shrink-0 ml-1">
+                      <span className="text-[10px] text-zinc-500 font-mono shrink-0 ml-1">
                         ({pdfMetadata.pageCount} pages • {pdfMetadata.wordCount} words)
                       </span>
                     )}
@@ -555,7 +504,7 @@ export default function HeroGenerator({
                       setPdfMetadata(null);
                       setNotesInput('');
                     }}
-                    className="text-zinc-400 hover:text-white text-[11px] cursor-pointer ml-2 shrink-0"
+                    className="text-zinc-500 hover:text-zinc-950 text-[11px] cursor-pointer ml-2 shrink-0"
                   >
                     Clear file
                   </button>
@@ -571,7 +520,7 @@ export default function HeroGenerator({
                 }}
                 disabled={isGenerating}
                 placeholder="Paste lecture notes, study guide excerpts, or textbook paragraphs here..."
-                className="w-full bg-surface-secondary border border-surface-border rounded-xl p-4 text-xs text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-brand-violet focus:ring-1 focus:ring-brand-violet/40 transition-colors shadow-inner resize-y"
+                className="w-full bg-surface-secondary border border-surface-border rounded-xl p-4 text-xs text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-zinc-500 transition-colors shadow-inner resize-y"
               />
               <div className="flex justify-between text-[11px] text-zinc-500">
                 <span>Supports up to 25,000 characters</span>
@@ -636,9 +585,9 @@ export default function HeroGenerator({
 
         {/* Error Notification */}
         {errorMessage && (
-          <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/25 text-red-300 text-xs flex items-center justify-between gap-2 animate-fadeIn">
+          <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/25 text-red-600 dark:text-red-400 text-xs flex items-center justify-between gap-2 animate-fadeIn">
             <div className="flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+              <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
               <span>{errorMessage}</span>
             </div>
             <Button
@@ -646,7 +595,7 @@ export default function HeroGenerator({
               size="sm"
               leftIcon={RotateCcw}
               onClick={handleGenerate}
-              className="text-xs h-7 border-red-500/30 hover:bg-red-500/20 text-red-200 shrink-0"
+              className="text-xs h-7 border-red-500/30 text-red-600 dark:text-red-400 shrink-0"
             >
               Retry
             </Button>
@@ -655,14 +604,14 @@ export default function HeroGenerator({
 
         {/* Success Preview Card */}
         {generatedResult && (
-          <div className="p-4 rounded-xl bg-surface-secondary border border-brand-lime/40 space-y-3 animate-fadeIn">
+          <div className="p-4 rounded-xl bg-surface-secondary border border-surface-border space-y-3 animate-fadeIn">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span className="text-xs font-bold text-zinc-900">
                   Successfully Generated: "{generatedResult.title}"
                 </span>
-                <Badge variant="lime" size="sm">
+                <Badge variant="neo" size="sm">
                   +25 XP Earned
                 </Badge>
               </div>
@@ -690,7 +639,7 @@ export default function HeroGenerator({
                       masteryPercentage: 0,
                       lastStudied: 'Just now',
                       badgeColor: activeTab === 'youtube' ? 'coral' : 'violet',
-                      tags: ['Gemini AI', difficulty],
+                      tags: ['AI', difficulty],
                       isBookmarked: false,
                       cards: (generatedResult.cards || []).map((c) => ({
                         question: c.question,
@@ -711,7 +660,7 @@ export default function HeroGenerator({
                 </Button>
               ) : (
                 <Button
-                  variant="lime"
+                  variant="primary"
                   size="sm"
                   leftIcon={Play}
                   onClick={() => {
@@ -730,13 +679,13 @@ export default function HeroGenerator({
 
         {/* Generating Feedback Card with Mascot */}
         {isGenerating && (
-          <div className="p-4 rounded-xl bg-surface-secondary/80 border border-purple-200 flex items-center gap-3.5 animate-fadeIn">
+          <div className="p-4 rounded-xl bg-surface-secondary/80 border border-surface-border flex items-center gap-3.5 animate-fadeIn">
             <Mascot size="sm" animation="float" />
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <Loader2 className="w-3.5 h-3.5 text-purple-600 animate-spin shrink-0" />
+                <Loader2 className="w-3.5 h-3.5 text-zinc-700 animate-spin shrink-0" />
                 <span className="text-xs font-semibold text-zinc-900">
-                  Crafting your active recall deck with Gemini AI...
+                  Crafting your active recall deck with AI...
                 </span>
               </div>
               <p className="text-[11px] text-zinc-500 truncate">
@@ -757,15 +706,15 @@ export default function HeroGenerator({
           {isGenerating ? (
             <span className="flex items-center justify-center gap-2">
               <Loader2 className="w-4 h-4 animate-spin text-midnight-ink" />
-              <span>Generating with Google Gemini AI...</span>
+              <span>Generating with AI...</span>
             </span>
           ) : (
             <span className="flex items-center justify-center gap-2">
-              <Sparkles className="w-4 h-4 text-purple-700" />
+              <Sparkles className="w-4 h-4 text-zinc-700 dark:text-zinc-300" />
               <span>
                 {activeTab === 'youtube' && youtubeData
                   ? `Generate ${quantity} ${mode === 'flashcards' ? 'Flashcards' : 'Quiz Questions'} from YouTube`
-                  : `Generate ${quantity} ${mode === 'flashcards' ? 'Flashcards' : 'Quiz Questions'} with Gemini AI`}
+                  : `Generate ${quantity} ${mode === 'flashcards' ? 'Flashcards' : 'Quiz Questions'} with AI`}
               </span>
             </span>
           )}

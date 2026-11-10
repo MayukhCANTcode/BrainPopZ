@@ -280,7 +280,7 @@ export default function StudyModal({ deck, onClose, onUpdateDeck }) {
             <Confetti trigger={isCompleted} count={70} />
             
             <div className="mb-1">
-              <Mascot size="lg" animation="bounce" bubble="Deck Mastered! 🧠" />
+              <Mascot size="lg" animation="bounce" bubble="Deck Mastered!" />
             </div>
 
             <div>

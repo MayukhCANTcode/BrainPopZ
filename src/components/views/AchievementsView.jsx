@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Zap, Flame, CheckCircle2, Lock } from 'lucide-react';
+import {
+  Zap,
+  Flame,
+  CheckCircle2,
+  Lock,
+  Trophy,
+  Target,
+  BookOpen,
+  Shield,
+} from 'lucide-react';
 import Card from '../common/Card';
 import Badge from '../common/Badge';
 import {
@@ -7,6 +16,25 @@ import {
   getLevelInfo,
   ACHIEVEMENTS_LIST,
 } from '../../services/gamification';
+
+const renderBadgeIcon = (id) => {
+  switch (id) {
+    case 'first_spark':
+      return <Zap className="w-6 h-6 text-zinc-900 dark:text-zinc-100 stroke-[1.75]" />;
+    case 'streak_3':
+      return <Flame className="w-6 h-6 text-zinc-900 dark:text-zinc-100 stroke-[1.75]" />;
+    case 'streak_7':
+      return <Trophy className="w-6 h-6 text-zinc-900 dark:text-zinc-100 stroke-[1.75]" />;
+    case 'quiz_ace':
+      return <Target className="w-6 h-6 text-zinc-900 dark:text-zinc-100 stroke-[1.75]" />;
+    case 'century_club':
+      return <BookOpen className="w-6 h-6 text-zinc-900 dark:text-zinc-100 stroke-[1.75]" />;
+    case 'freeze_shield':
+      return <Shield className="w-6 h-6 text-zinc-900 dark:text-zinc-100 stroke-[1.75]" />;
+    default:
+      return <Trophy className="w-6 h-6 text-zinc-900 dark:text-zinc-100 stroke-[1.75]" />;
+  }
+};
 
 export default function AchievementsView() {
   const [gameState, setGameState] = useState(() => getGamificationState());
@@ -61,16 +89,16 @@ export default function AchievementsView() {
       </div>
 
       {/* Level Summary Banner */}
-      <Card padding="p-6" className="relative overflow-hidden border-surface-border bg-surface shadow-xs">
+      <Card variant="neo" padding="p-6 sm:p-7" className="relative overflow-hidden bg-white">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-brand-violet-lilac text-midnight-ink flex items-center justify-center font-heading font-black text-2xl shadow-sm border border-[#C5AFFC]">
+            <div className="w-16 h-16 rounded-2xl bg-[#EADEFA] text-midnight-ink flex items-center justify-center font-heading font-black text-2xl border-2 border-midnight-ink shadow-neo-sm">
               {levelInfo.level}
             </div>
 
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-xs font-bold text-brand-violet-dark uppercase tracking-wider">
+                <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">
                   Current Rank
                 </span>
                 <span className="text-[10px] text-zinc-500 font-mono">
@@ -128,21 +156,21 @@ export default function AchievementsView() {
               <Card
                 key={badge.id}
                 padding="p-4"
-                className={`relative overflow-hidden border transition-all ${
+                className={`relative overflow-hidden transition-all ${
                   isUnlocked
-                    ? 'border-emerald-200 bg-surface shadow-xs'
-                    : 'border-surface-border bg-surface-secondary/50 opacity-75'
+                    ? 'border-2 border-midnight-ink bg-white shadow-neo-sm hover:translate-x-[1px] hover:translate-y-[1px]'
+                    : 'border border-surface-border bg-surface-secondary/40 opacity-70'
                 }`}
               >
                 <div className="flex items-start gap-3.5">
                   <div
-                    className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shrink-0 border transition-transform ${
+                    className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 border-2 transition-transform ${
                       isUnlocked
-                        ? 'bg-emerald-50 border-emerald-300 shadow-inner scale-105'
-                        : 'bg-surface-secondary border-surface-border grayscale opacity-60'
+                        ? 'bg-amber-50 dark:bg-zinc-800 border-midnight-ink shadow-[1px_1px_0px_#111218] scale-105'
+                        : 'bg-surface-secondary border-surface-border opacity-50'
                     }`}
                   >
-                    <span>{badge.icon}</span>
+                    {renderBadgeIcon(badge.id)}
                   </div>
 
                   <div className="flex-1 min-w-0">

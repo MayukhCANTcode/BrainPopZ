@@ -162,7 +162,7 @@ export default function AnalyticsView({ decks = [] }) {
       </div>
 
       {/* Subject Breakdown Card */}
-      <Card padding="p-5" className="border-surface-border bg-surface shadow-xs">
+      <Card variant="neo" padding="p-5 sm:p-6" className="bg-white">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-sm font-semibold text-zinc-950">
@@ -201,7 +201,7 @@ export default function AnalyticsView({ decks = [] }) {
             <BookOpen className="w-8 h-8 text-gray-600 mb-2" />
             <p className="text-xs">No study sets created yet.</p>
             <p className="text-[11px] text-gray-500 mt-0.5">
-              Generate decks with Gemini AI to view discipline-specific analytics.
+              Generate decks with AI to view discipline-specific analytics.
             </p>
           </div>
         )}

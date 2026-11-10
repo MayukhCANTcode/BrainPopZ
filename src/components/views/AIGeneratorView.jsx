@@ -169,7 +169,7 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
         masteryPercentage: 0,
         lastStudied: 'Just now',
         badgeColor: 'violet',
-        tags: ['Gemini AI', difficulty],
+        tags: ['AI', difficulty],
         isBookmarked: false,
         cards: cards.map((c) => ({
           question: c.question,
@@ -193,11 +193,11 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
               AI Generator <span className="font-serif italic font-normal text-zinc-500 text-lg">Studio</span>
             </h1>
             <Badge variant="lime" size="sm">
-              Live Gemini 2.5
+              Live AI
             </Badge>
           </div>
           <p className="text-xs text-zinc-600">
-            Synthesize real interactive flashcards and quiz questions from syllabus topics or lecture notes using Google Gemini.
+            Synthesize real interactive flashcards and quiz questions from syllabus topics or lecture notes using AI.
           </p>
         </div>
 
@@ -379,7 +379,7 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
             {isGenerating ? (
               <span className="flex items-center gap-1.5">
                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                Synthesizing with Gemini...
+                Synthesizing with AI...
               </span>
             ) : (
               `Generate ${format === 'quiz' ? 'Quiz with AI' : 'Flashcards with AI'}`
@@ -463,7 +463,7 @@ export default function AIGeneratorView({ onSaveDeck, onStartQuiz }) {
           {isGenerating ? (
             <Card padding="p-12" className="border-surface-border bg-surface shadow-xs text-center space-y-3">
               <Loader2 className="w-8 h-8 text-brand-violet-dark animate-spin mx-auto" />
-              <h3 className="text-sm font-semibold text-zinc-950">Synthesizing with Google Gemini...</h3>
+              <h3 className="text-sm font-semibold text-zinc-950">Synthesizing with AI...</h3>
               <p className="text-xs text-zinc-500 max-w-sm mx-auto">
                 Extracting core definitions and formulating validated {format} from your study notes.
               </p>

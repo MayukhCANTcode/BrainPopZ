@@ -15,7 +15,7 @@ export class APIError extends Error {
 }
 
 /**
- * Sends notes and generation instructions to the BrainPopZ Gemini backend.
+ * Sends notes and generation instructions to the BrainPopZ AI backend.
  *
  * @param {Object} params
  * @param {string} params.notes - Raw study notes or concept prompt

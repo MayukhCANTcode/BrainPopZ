@@ -3,26 +3,24 @@ import {
   Menu,
   Search,
   Bell,
-  Sparkles,
   Flame,
   X,
   BookOpen,
-  Keyboard,
   Zap,
+  Sun,
+  Moon,
 } from 'lucide-react';
-import Button from '../common/Button';
 import { notificationsList } from '../../data/mockData';
 import { getGamificationState } from '../../services/gamification';
 
 export default function Header({
   user,
-  currentTab = 'dashboard',
   onOpenMobile,
-  onQuickGenerate,
   onNavigate,
   onStudyDeck,
-  onOpenShortcuts,
   decks = [],
+  theme = 'light',
+  onToggleTheme,
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -110,11 +108,11 @@ export default function Header({
         isScrolled ? 'header-glass-scrolled' : 'header-glass-top'
       }`}
     >
-      {/* Left side: Mobile menu toggle + Search */}
+      {/* Left side: Mobile menu toggle + Global Search */}
       <div className="flex items-center gap-3 flex-1 max-w-md">
         <button
           onClick={onOpenMobile}
-          className="lg:hidden p-1.5 rounded-md text-zinc-500 hover:text-zinc-950 hover:bg-surface-secondary border border-surface-border cursor-pointer"
+          className="lg:hidden p-1.5 rounded-md text-zinc-500 hover:text-zinc-950 dark:hover:text-white hover:bg-surface-secondary border border-surface-border cursor-pointer"
           aria-label="Open Navigation Menu"
         >
           <Menu className="w-4 h-4" />
@@ -134,7 +132,7 @@ export default function Header({
           {searchQuery ? (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-950 p-0.5 cursor-pointer"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-950 dark:hover:text-white p-0.5 cursor-pointer"
             >
               <X className="w-3 h-3" />
             </button>
@@ -163,9 +161,9 @@ export default function Header({
                       className="w-full text-left p-2 rounded-md hover:bg-surface-secondary flex items-center justify-between group transition-colors cursor-pointer"
                     >
                       <div className="flex items-center gap-2">
-                        <BookOpen className="w-3.5 h-3.5 text-brand-violet-dark" />
+                        <BookOpen className="w-3.5 h-3.5 text-zinc-700 dark:text-zinc-300" />
                         <div>
-                          <p className="text-xs font-medium text-zinc-950 group-hover:text-brand-violet-dark">
+                          <p className="text-xs font-medium text-zinc-950 group-hover:text-blue-600">
                             {deck.title}
                           </p>
                           <span className="text-[10px] text-zinc-500">
@@ -189,37 +187,14 @@ export default function Header({
         {/* Mobile search button toggle */}
         <button
           onClick={() => setIsSearchOpen(!isSearchOpen)}
-          className="sm:hidden p-1.5 rounded-md text-zinc-500 hover:text-zinc-950 hover:bg-surface-secondary border border-surface-border cursor-pointer"
+          className="sm:hidden p-1.5 rounded-md text-zinc-500 hover:text-zinc-950 dark:hover:text-white hover:bg-surface-secondary border border-surface-border cursor-pointer"
           aria-label="Toggle Search"
         >
           <Search className="w-3.5 h-3.5" />
         </button>
       </div>
 
-      {/* Center Nav Links (Scaler Flow Style) */}
-      <nav className="hidden xl:flex items-center gap-1">
-        {[
-          { id: 'dashboard', label: 'OVERVIEW' },
-          { id: 'quizzes', label: 'PRACTICE DRILLS' },
-          { id: 'decks', label: 'MY DECKS' },
-          { id: 'analytics', label: 'ANALYTICS' },
-          { id: 'achievements', label: 'REWARDS' },
-        ].map((item) => (
-          <button
-            key={item.id}
-            onClick={() => onNavigate && onNavigate(item.id)}
-            className={`px-3 py-1 rounded-full text-[11px] font-bold tracking-wider transition-all cursor-pointer ${
-              currentTab === item.id
-                ? 'bg-midnight-ink text-white shadow-xs'
-                : 'text-zinc-600 hover:text-zinc-950 hover:bg-surface-secondary'
-            }`}
-          >
-            {item.label}
-          </button>
-        ))}
-      </nav>
-
-      {/* Right side: Streak indicator, Notifications, Hotkeys, Quick Action */}
+      {/* Right side: Streak indicator, Notifications, Dark/Light Mode Toggle, Profile Avatar */}
       <div className="flex items-center gap-2">
         {/* Streak quick chip */}
         <button
@@ -227,7 +202,7 @@ export default function Header({
           className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface border border-surface-border text-xs text-zinc-700 hover:border-zinc-400 hover:text-zinc-950 transition-colors cursor-pointer shadow-xs"
           title="View Active Study Streak"
         >
-          <Flame className="w-3.5 h-3.5 text-brand-orange shrink-0 stroke-[1.75]" />
+          <Flame className="w-3.5 h-3.5 text-zinc-700 dark:text-zinc-300 shrink-0 stroke-[1.75]" />
           <span className="font-mono font-medium text-zinc-950">{gameState.streak}d</span>
           <span className="text-[10px] text-zinc-500">streak</span>
         </button>
@@ -238,29 +213,33 @@ export default function Header({
           className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface border border-surface-border text-xs text-zinc-700 hover:border-zinc-400 hover:text-zinc-950 transition-colors cursor-pointer shadow-xs"
           title="View Total XP Earned"
         >
-          <Zap className="w-3.5 h-3.5 text-emerald-600 shrink-0 stroke-[1.75]" />
+          <Zap className="w-3.5 h-3.5 text-zinc-700 dark:text-zinc-300 shrink-0 stroke-[1.75]" />
           <span className="font-mono font-medium text-zinc-950">{gameState.xp}</span>
           <span className="text-[10px] text-zinc-500">XP</span>
         </button>
 
-        {/* Keyboard shortcuts trigger */}
+        {/* Dark / Light Mode Toggle */}
         <button
-          onClick={onOpenShortcuts}
-          className="hidden sm:flex items-center p-1.5 rounded-md text-zinc-500 hover:text-zinc-950 hover:bg-surface-secondary transition-colors cursor-pointer"
-          title="Keyboard Shortcuts (?)"
-          aria-label="View Keyboard Shortcuts"
+          onClick={onToggleTheme}
+          className="p-2 rounded-lg text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-surface-secondary border border-surface-border transition-colors cursor-pointer shadow-xs"
+          title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          aria-label="Toggle Dark and Light Mode"
         >
-          <Keyboard className="w-4 h-4" />
+          {theme === 'dark' ? (
+            <Sun className="w-4 h-4 stroke-[2]" />
+          ) : (
+            <Moon className="w-4 h-4 stroke-[2]" />
+          )}
         </button>
 
         {/* Notifications Popover */}
         <div className="relative" ref={notifRef}>
           <button
             onClick={() => setIsNotifOpen(!isNotifOpen)}
-            className="p-1.5 rounded-md text-zinc-500 hover:text-zinc-950 hover:bg-surface-secondary transition-colors relative cursor-pointer"
+            className="p-2 rounded-lg text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-surface-secondary border border-surface-border transition-colors relative cursor-pointer shadow-xs"
             aria-label="Notifications"
           >
-            <Bell className="w-4 h-4" />
+            <Bell className="w-4 h-4 stroke-[1.75]" />
             {unreadCount > 0 && (
               <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-emerald-500" />
             )}
@@ -273,7 +252,7 @@ export default function Header({
                 {unreadCount > 0 && (
                   <button
                     onClick={markAllRead}
-                    className="text-[10px] text-brand-violet-dark hover:underline cursor-pointer"
+                    className="text-[10px] text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
                   >
                     Mark read
                   </button>
@@ -286,7 +265,7 @@ export default function Header({
                     key={n.id}
                     className={`p-2 rounded-lg border text-xs transition-colors ${
                       n.unread
-                        ? 'bg-brand-violet-lilac/30 border-[#C5AFFC]'
+                        ? 'bg-surface-secondary border-surface-border'
                         : 'bg-transparent border-surface-border/50 opacity-60'
                     }`}
                   >
@@ -302,21 +281,10 @@ export default function Header({
           )}
         </div>
 
-        {/* Primary CTA: Scaler Flow Royal Blue Button */}
-        <Button
-          variant="blue"
-          size="sm"
-          rightIcon={Sparkles}
-          onClick={onQuickGenerate}
-          className="rounded-lg shadow-sm font-semibold"
-        >
-          <span>Generate with AI →</span>
-        </Button>
-
         {/* User Profile Avatar */}
         <button
           onClick={() => onNavigate && onNavigate('settings')}
-          className="flex items-center p-0.5 rounded-full hover:ring-2 hover:ring-brand-violet/40 transition-all cursor-pointer focus:outline-none shrink-0"
+          className="flex items-center p-0.5 rounded-full hover:ring-2 hover:ring-zinc-400 transition-all cursor-pointer focus:outline-none shrink-0"
           title={user?.name ? `${user.name} (Settings)` : 'Account Settings'}
           aria-label="User Profile and Settings"
         >
@@ -327,7 +295,7 @@ export default function Header({
               className="w-7 h-7 rounded-full object-cover border border-surface-border bg-surface-elevated"
             />
           ) : (
-            <div className="w-7 h-7 rounded-full bg-brand-violet/20 text-brand-violet-light flex items-center justify-center font-bold text-xs border border-brand-violet/30">
+            <div className="w-7 h-7 rounded-full bg-surface-secondary text-zinc-900 flex items-center justify-center font-bold text-xs border border-surface-border">
               {user?.name ? user.name[0].toUpperCase() : 'U'}
             </div>
           )}
@@ -336,23 +304,23 @@ export default function Header({
 
       {/* Expandable Mobile Search bar */}
       {isSearchOpen && (
-        <div className="sm:hidden absolute top-14 left-0 right-0 bg-midnight border-b border-surface-border p-2.5 z-40 animate-fadeIn">
+        <div className="sm:hidden absolute top-14 left-0 right-0 bg-surface border-b border-surface-border p-2.5 z-40 animate-fadeIn">
           <div className="relative">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-400" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search flashcards, topics..."
               autoFocus
-              className="w-full bg-surface border border-surface-border text-xs text-gray-200 placeholder-gray-400 rounded-md pl-8 pr-8 py-1.5 focus:outline-none focus:border-brand-violet"
+              className="w-full bg-surface border border-surface-border text-xs text-zinc-950 placeholder-zinc-400 rounded-md pl-8 pr-8 py-1.5 focus:outline-none focus:border-zinc-500"
             />
             <button
               onClick={() => {
                 setSearchQuery('');
                 setIsSearchOpen(false);
               }}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 p-0.5 cursor-pointer"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 p-0.5 cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
             </button>

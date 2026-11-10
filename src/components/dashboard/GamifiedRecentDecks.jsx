@@ -56,7 +56,7 @@ export default function GamifiedRecentDecks({
             Your Study Shelf is Ready!
           </h3>
           <p className="text-xs text-zinc-600 max-w-md mb-5 leading-relaxed">
-            You don't have any saved flashcard decks yet. Enter any concept above to generate adaptive cards with Google Gemini AI, or load a curated starter pack.
+            You don't have any saved flashcard decks yet. Enter any concept above to generate adaptive cards with AI, or load a curated starter pack.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-3">
@@ -66,7 +66,7 @@ export default function GamifiedRecentDecks({
               leftIcon={Sparkles}
               onClick={onNavigateToGenerator}
             >
-              Generate with Gemini AI
+              Generate with AI
             </Button>
 
             {onLoadDemoPack && (

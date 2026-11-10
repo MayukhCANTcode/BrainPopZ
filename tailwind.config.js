@@ -9,20 +9,20 @@ export default {
     extend: {
       colors: {
         midnight: {
-          DEFAULT: '#FAF7F0',    // Warm Ivory Canvas
-          darker: '#F3EDE2',
-          lighter: '#FFFFFF',
-          ink: '#111218',        // High-contrast ink for dark accents & floating dock
+          DEFAULT: 'var(--bg-canvas, #FAF7F0)',
+          darker: 'var(--bg-canvas-subtle, #F3EDE2)',
+          lighter: 'var(--surface-bg, #FFFFFF)',
+          ink: '#111218',
         },
         surface: {
-          DEFAULT: '#FFFFFF',    // Crisp white card surface
-          card: '#FFFFFF',
-          secondary: '#F5EFE4',  // Tinted warm ivory secondary
-          elevated: '#FFFFFF',
-          hover: '#F2ECE0',
-          active: '#EAE1D2',
-          border: '#E8E2D5',     // Warm refined border
-          'border-subtle': '#EFE9DC',
+          DEFAULT: 'var(--surface-bg, #FFFFFF)',
+          card: 'var(--surface-bg, #FFFFFF)',
+          secondary: 'var(--surface-secondary, #F5EFE4)',
+          elevated: 'var(--surface-bg, #FFFFFF)',
+          hover: 'var(--surface-hover, #F2ECE0)',
+          active: 'var(--surface-active, #EAE1D2)',
+          border: 'var(--surface-border, #E8E2D5)',
+          'border-subtle': 'var(--surface-border-subtle, #EFE9DC)',
         },
         brand: {
           violet: {

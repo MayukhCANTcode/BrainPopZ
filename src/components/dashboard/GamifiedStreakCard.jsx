@@ -152,11 +152,11 @@ export default function GamifiedStreakCard({ onOpenQuests }) {
               {dailyProgressPercent >= 100 ? (
                 <>
                   <Mascot size="xs" animation="bounce" />
-                  <span className="text-emerald-700 font-semibold">🎉 Daily goal crushed! Streak protected.</span>
+                  <span className="text-emerald-700 font-semibold">Daily goal crushed! Streak protected.</span>
                 </>
               ) : (
                 <span>
-                  🔥 {(gameState.dailyGoalTarget || 20) - gameState.cardsReviewedToday} more cards to hit today's target
+                  {(gameState.dailyGoalTarget || 20) - gameState.cardsReviewedToday} more cards to hit today's target
                 </span>
               )}
             </div>

@@ -10,10 +10,11 @@ export default function MainLayout({
   onSelectTab,
   onQuickGenerate,
   onStudyDeck,
-  onOpenShortcuts,
   user,
   onLogout,
   decks = [],
+  theme = 'light',
+  onToggleTheme,
 }) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -51,7 +52,7 @@ export default function MainLayout({
   };
 
   return (
-    <div className="min-h-screen bg-midnight bg-dot-grid-subtle text-zinc-900 flex">
+    <div className="min-h-screen bg-midnight bg-dot-grid-subtle text-zinc-900 flex transition-colors">
       {/* Sidebar Navigation */}
       <Sidebar
         currentTab={currentTab}
@@ -68,13 +69,12 @@ export default function MainLayout({
         {/* Top Header */}
         <Header
           user={user}
-          currentTab={currentTab}
           onOpenMobile={() => setIsMobileOpen(true)}
-          onQuickGenerate={onQuickGenerate}
           onNavigate={onSelectTab}
           onStudyDeck={onStudyDeck}
-          onOpenShortcuts={onOpenShortcuts}
           decks={decks}
+          theme={theme}
+          onToggleTheme={onToggleTheme}
         />
 
         {/* Dynamic Page Content */}
@@ -90,7 +90,7 @@ export default function MainLayout({
               <span className="text-zinc-500 tracking-widest text-[9px]">••••••</span>
               <span className="text-zinc-400 font-sans text-[11px] uppercase tracking-wider font-semibold hidden sm:inline">Active Streak</span>
               <span className="flex items-center gap-1 text-brand-orange font-bold text-xs">
-                <Flame className="w-3.5 h-3.5 fill-brand-orange/30" />
+                <Flame className="w-3.5 h-3.5 fill-brand-orange/30 text-brand-orange" />
                 <span>{gameState.streak}d</span>
               </span>
             </div>
@@ -99,7 +99,7 @@ export default function MainLayout({
             <button
               onClick={onQuickGenerate}
               className="px-3 py-1 rounded-full bg-brand-violet-lilac hover:bg-brand-violet-lilacHover text-midnight-ink font-semibold text-xs flex items-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95 shrink-0"
-              title="Create new active recall deck with Gemini AI"
+              title="Create new active recall deck with AI"
             >
               <Sparkles className="w-3 h-3 text-purple-700" />
               <span>Generate now</span>
@@ -112,11 +112,11 @@ export default function MainLayout({
         {showScrollTop && (
           <button
             onClick={scrollToTop}
-            className="fixed bottom-6 right-6 z-40 p-2.5 rounded-xl bg-white/90 backdrop-blur-xl border border-surface-border text-zinc-700 hover:text-zinc-950 hover:bg-surface-secondary shadow-lg transition-all duration-200 active:scale-95 cursor-pointer flex items-center gap-1.5 text-xs font-medium animate-fadeIn"
+            className="fixed bottom-6 right-6 z-40 p-2.5 rounded-xl bg-surface/90 backdrop-blur-xl border border-surface-border text-zinc-700 hover:text-zinc-950 hover:bg-surface-secondary shadow-lg transition-all duration-200 active:scale-95 cursor-pointer flex items-center gap-1.5 text-xs font-medium animate-fadeIn"
             aria-label="Scroll to top"
             title="Scroll to top"
           >
-            <ArrowUp className="w-4 h-4 text-brand-orange" />
+            <ArrowUp className="w-4 h-4 text-zinc-600 dark:text-zinc-300" />
             <span className="hidden sm:inline font-mono text-[11px]">Top</span>
           </button>
         )}

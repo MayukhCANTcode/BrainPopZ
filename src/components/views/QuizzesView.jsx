@@ -300,7 +300,7 @@ export default function QuizzesView({ initialQuiz }) {
               <Mascot
                 size="lg"
                 animation="bounce"
-                bubble={score === questions.length ? 'Flawless 100%! 🧠' : 'Great practice session! ⚡'}
+                bubble={score === questions.length ? 'Flawless 100%!' : 'Great practice session!'}
               />
             </div>
 

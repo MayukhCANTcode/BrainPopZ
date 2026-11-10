@@ -140,12 +140,12 @@ export default function LoginView({ onLoginSuccess, isRestoringSession }) {
               Build on the<br />BrainPopZ Platform. <span className="font-serif italic font-normal text-zinc-600">Learn effortlessly.</span>
             </h1>
             <p className="text-xs sm:text-sm text-zinc-600 max-w-sm mx-auto leading-relaxed">
-              Create active recall flashcards and diagnostic quizzes with frontier Gemini models and managed study infrastructure.
+              Create active recall flashcards and diagnostic quizzes with frontier AI models and managed study infrastructure.
             </p>
           </div>
 
           {/* Form Card */}
-          <div className="bg-white border border-[#E8E2D5] rounded-2xl p-6 sm:p-7 shadow-xl text-left space-y-5">
+          <div className="bg-white border-2 border-midnight-ink rounded-2xl p-6 sm:p-7 shadow-neo-lg text-left space-y-5">
             {/* Error Message Banner */}
             {errorMessage && (
               <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs flex items-start gap-2 animate-fadeIn">
@@ -164,7 +164,7 @@ export default function LoginView({ onLoginSuccess, isRestoringSession }) {
                 type="button"
                 onClick={handleFallbackGoogleSignIn}
                 disabled={isLoading}
-                className="w-full h-11 px-4 rounded-lg bg-white hover:bg-zinc-50 border border-zinc-300 text-zinc-800 font-medium text-xs sm:text-sm flex items-center justify-center gap-3 transition-colors cursor-pointer shadow-xs active:scale-[0.99]"
+                className="w-full h-11 px-4 rounded-xl bg-white hover:bg-zinc-50 border-2 border-midnight-ink text-zinc-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-3 transition-all cursor-pointer shadow-neo-sm hover:translate-x-[1px] hover:translate-y-[1px] active:scale-[0.99]"
               >
                 {isLoading ? (
                   <Loader2 className="w-4 h-4 animate-spin text-zinc-600" />
@@ -214,7 +214,7 @@ export default function LoginView({ onLoginSuccess, isRestoringSession }) {
 
       {/* Footer */}
       <footer className="w-full px-6 py-6 border-t border-[#E8E2D5] text-center text-xs text-zinc-500">
-        <p>Built with Google Gemini 2.5 Flash • Active Recall & Spaced Repetition Engine</p>
+        <p>Built with AI • Active Recall & Spaced Repetition Engine</p>
       </footer>
     </div>
   );

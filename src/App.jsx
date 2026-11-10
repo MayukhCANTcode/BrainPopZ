@@ -9,7 +9,6 @@ import AnalyticsView from './components/views/AnalyticsView';
 import SettingsView from './components/views/SettingsView';
 import AchievementsView from './components/views/AchievementsView';
 import StudyModal from './components/dashboard/StudyModal';
-import ShortcutsModal from './components/common/ShortcutsModal';
 import { recentDecks } from './data/mockData';
 import { getCurrentUser, loginWithGoogle, logoutUser } from './services/api';
 
@@ -18,8 +17,36 @@ function App() {
   const [isRestoringSession, setIsRestoringSession] = useState(true);
   const [currentTab, setCurrentTab] = useState('dashboard');
   const [activeStudyDeck, setActiveStudyDeck] = useState(null);
-  const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
   const [activeCustomQuiz, setActiveCustomQuiz] = useState(null);
+
+  // Dark / Light Mode state
+  const [theme, setTheme] = useState(() => {
+    try {
+      const savedTheme = localStorage.getItem('brainpopz_theme');
+      if (savedTheme) return savedTheme;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    } catch {
+      return 'light';
+    }
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+    try {
+      localStorage.setItem('brainpopz_theme', theme);
+    } catch (e) {
+      console.warn('Unable to persist theme to localStorage', e);
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
 
   // Restore authenticated session from HTTP-only cookie on application mount
   useEffect(() => {
@@ -74,20 +101,6 @@ function App() {
     }
   }, [decksList]);
 
-  // Global hotkey '?' to open shortcuts modal
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      // Don't trigger if user is typing in an input or textarea
-      if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
-      if (e.key === '?') {
-        e.preventDefault();
-        setIsShortcutsOpen((prev) => !prev);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
-
   const handleStudyDeck = (deck) => {
     setActiveStudyDeck(deck);
   };
@@ -96,12 +109,12 @@ function App() {
     if (quizQuestionsOrPayload && !Array.isArray(quizQuestionsOrPayload) && quizQuestionsOrPayload.questions) {
       setActiveCustomQuiz({
         questions: quizQuestionsOrPayload.questions,
-        title: quizQuestionsOrPayload.title || 'Custom Gemini AI Quiz',
+        title: quizQuestionsOrPayload.title || 'Custom AI Quiz',
       });
     } else if (Array.isArray(quizQuestionsOrPayload)) {
       setActiveCustomQuiz({
         questions: quizQuestionsOrPayload,
-        title: title || 'Custom Gemini AI Quiz',
+        title: title || 'Custom AI Quiz',
       });
     } else {
       setActiveCustomQuiz(null);
@@ -132,7 +145,7 @@ function App() {
         masteryPercentage: 0,
         lastStudied: "Just now",
         badgeColor: "violet",
-        tags: ["Gemini 2.5", "Adaptive"],
+        tags: ["AI", "Adaptive"],
         isBookmarked: false,
         cards: [
           {
@@ -231,10 +244,11 @@ function App() {
         onSelectTab={setCurrentTab}
         onQuickGenerate={() => setCurrentTab('ai-generator')}
         onStudyDeck={handleStudyDeck}
-        onOpenShortcuts={() => setIsShortcutsOpen(true)}
         user={user}
         onLogout={handleLogout}
         decks={decksList}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       >
         {renderActiveView()}
       </MainLayout>
@@ -247,12 +261,6 @@ function App() {
           onUpdateDeck={handleUpdateDeck}
         />
       )}
-
-      {/* Keyboard Shortcuts Cheatsheet Modal */}
-      <ShortcutsModal
-        isOpen={isShortcutsOpen}
-        onClose={() => setIsShortcutsOpen(false)}
-      />
     </>
   );
 }

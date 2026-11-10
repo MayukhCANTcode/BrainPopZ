@@ -46,7 +46,7 @@ export default function QuickGenerateCard({ onTriggerGeneration, onStudyDeck }) 
         masteryPercentage: 0,
         lastStudied: 'Just now',
         badgeColor: 'violet',
-        tags: ['Gemini 2.5', 'Adaptive'],
+        tags: ['AI', 'Adaptive'],
         isBookmarked: false,
         cards: result.cards.map((c) => ({
           question: c.question,
@@ -81,7 +81,7 @@ export default function QuickGenerateCard({ onTriggerGeneration, onStudyDeck }) 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
         <div>
           <h2 className="text-sm font-semibold text-zinc-950">
-            Instant Gemini Generator
+            Instant AI Generator
           </h2>
           <p className="text-xs text-zinc-500">
             Convert a subject prompt, pasted notes, or document into real validated flashcards.
@@ -169,7 +169,7 @@ export default function QuickGenerateCard({ onTriggerGeneration, onStudyDeck }) 
                 disabled={!topicInput.trim() || isGenerating}
                 leftIcon={isGenerating ? Loader2 : Sparkles}
               >
-                {isGenerating ? 'Synthesizing with Gemini...' : 'Generate Flashcards'}
+                {isGenerating ? 'Synthesizing with AI...' : 'Generate Flashcards'}
               </Button>
             </div>
           </div>

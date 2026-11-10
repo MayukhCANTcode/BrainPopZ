@@ -27,7 +27,7 @@ export default function DailyQuestCard({ onNavigate, onStartStudy }) {
     {
       id: 'quest-gen',
       title: 'Synthesize Topic',
-      desc: 'Generate 1 study set with Gemini AI',
+      desc: 'Generate 1 study set with AI',
       icon: Sparkles,
       iconColor: 'text-brand-violet-light',
       bgIcon: 'bg-brand-violet/15 border-brand-violet/30',
