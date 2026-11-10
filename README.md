@@ -10,11 +10,14 @@ Built with a minimalist, dark-themed SaaS aesthetic inspired by shadcn/ui, Brain
 
 - **🔐 Google Identity Services Authentication**: Full Google Sign-In authentication flow using Google's official GIS SDK, backend ID token validation via `google-auth-library`, and secure HTTP-only cookies.
 - **⚡ Real Google Gemini AI Synthesis**: Generates high-yield active recall flashcard decks and 4-option diagnostic quizzes directly from unstructured text.
+- **🎥 YouTube Video Transcript Extractor**: Paste any YouTube lecture or video link to extract transcripts and subtitles automatically via `youtube-transcript` and YouTube oEmbed, generating adaptive flashcards and practice quizzes directly from video content.
+- **🎮 Playful Gamification Engine**: Duolingo-inspired learning experience with XP leveling, day streaks, streak freeze protection shields, daily card goals, and real (non-fabricated) activity tracking.
 - **🛡️ Strict Runtime Zod Schema Validation**: Every AI response is validated on the backend against strict schemas before rendering. Zero unvalidated JSON or hallucinations pass to the UI.
 - **🔄 Automatic Model Fallback**: Primary synthesis on `gemini-2.5-flash` with graceful fallback to `gemini-3.5-flash` under model pressure or temporary server load.
 - **🗂️ Persistent Deck Management**: Save, browse, search, and export decks directly to Markdown. Decks are preserved across browser refreshes via `localStorage`.
 - **⏱️ Timed & Diagnostic Quiz Drills**: Take quizzes with an optional 15-second speed timer per question, immediate rationale feedback, dynamic scoring, and a **Retest Incorrect Answers** drill mode.
 - **🃏 3D Flippable Study Session**: Interactive active recall modal with flip transitions, keyboard shortcuts (Space, Arrow keys, 1-3 ratings), and progress tracking.
+- **✨ Tactile Micro-Animations & Web Audio**: Smooth button compressions, card hover lifts, dynamic streak flame flickering, synthesized page-flip & answer sounds, and celebratory canvas confetti.
 - **🔒 Secure Architecture**: Zero API keys or secrets exposed to the client. Gemini API key and session secrets reside solely in the backend environment.
 - **📱 Fully Responsive**: Custom Tailwind CSS design system with desktop, tablet, and mobile drawer navigation.
 
@@ -270,4 +273,6 @@ In compliance with assignment evaluation criteria:
 - **Phase 2: Interactive Modules & Accessibility**: ~3.5 hours (Study modal, 3D flip card, practice quiz drill, deck detail inspector, shortcuts).
 - **Phase 3: Backend Express & Gemini API Integration**: ~3.5 hours (SDK configuration, prompt engineering, Zod schemas, error handling).
 - **Phase 4: Reliability Audit, Model Verification & Testing**: ~3 hours (Comprehensive 28-test suite, fallback logic, security review, documentation).
-- **Total Development Time**: **~14 hours**.
+- **Phase 5: Google OAuth & Session Security**: ~2.5 hours (GIS login flow, `google-auth-library` server verification, HTTP-only session cookies).
+- **Phase 6: YouTube Transcript Engine & Gamification**: ~3.5 hours (YouTube caption extractor, Duolingo gamification engine, Web Audio synthesis, micro-animations).
+- **Total Development Time**: **~20 hours**.
