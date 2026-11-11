@@ -1,11 +1,9 @@
 import React from 'react';
 import HeroGenerator from '../dashboard/HeroGenerator';
-import FlowMilestonesGrid from '../dashboard/FlowMilestonesGrid';
 import WeeklyActivityTracker from '../dashboard/WeeklyActivityTracker';
 import GamifiedRecentDecks from '../dashboard/GamifiedRecentDecks';
 import GamifiedStreakCard from '../dashboard/GamifiedStreakCard';
 import DailyQuestCard from '../dashboard/DailyQuestCard';
-import RecommendedPractice from '../dashboard/RecommendedPractice';
 
 export default function DashboardView({
   user: _user,
@@ -29,16 +27,7 @@ export default function DashboardView({
         onStartGeneratedQuiz={onStartQuiz}
       />
 
-      {/* 2. Scaler Flow-Style Mastery & Milestone Grid */}
-      <FlowMilestonesGrid
-        decks={decks}
-        onStartDrill={() => onNavigate('quizzes')}
-      />
-
-      {/* 3. Weekly Activity — 7-day real activity visualization */}
-      <WeeklyActivityTracker onStartQuiz={() => onNavigate('quizzes')} />
-
-      {/* 4. Continue Learning — Recently studied decks or welcoming empty shelf */}
+      {/* 2. Continue Learning — Recently studied decks or welcoming empty shelf */}
       <GamifiedRecentDecks
         decks={decks}
         onStudyDeck={onStudyDeck}
@@ -67,7 +56,7 @@ export default function DashboardView({
         onNavigateToGenerator={() => onNavigate('ai-generator')}
       />
 
-      {/* 4. Today's Goal & Daily Quests */}
+      {/* 3. Today's Target & Quests */}
       <div>
         <div className="mb-4">
           <h2 className="text-base font-heading font-extrabold text-zinc-950 tracking-tight">
@@ -92,13 +81,8 @@ export default function DashboardView({
         </div>
       </div>
 
-      {/* 5. Recommended Practice — Curated high-yield topics & quizzes */}
-      <RecommendedPractice
-        onStartQuiz={onStartQuiz}
-        onSelectTopic={(_topicPrompt) => {
-          onNavigate('ai-generator');
-        }}
-      />
+      {/* 4. Weekly Activity — 7-day real activity visualization */}
+      <WeeklyActivityTracker onStartQuiz={() => onNavigate('quizzes')} />
     </div>
   );
 }
