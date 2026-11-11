@@ -5,9 +5,6 @@ import {
   Award,
   Flame,
   MessageSquare,
-  Video,
-  FileText,
-  Clock,
   Check,
 } from 'lucide-react';
 import Card from '../common/Card';
@@ -221,47 +218,6 @@ export default function FlowMilestonesGrid({ decks = [], onStartDrill }) {
           >
             Start Drill →
           </button>
-        </div>
-      </div>
-
-      {/* Bottom Warm Stone Tray ("PLUS" style) */}
-      <div className="bg-[#F2EFE5] border border-surface-border rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
-        <div className="shrink-0">
-          <span className="px-2.5 py-1 rounded-md bg-white/90 border border-stone-300 text-stone-700 font-bold text-[10px] tracking-wider uppercase">
-            PLUS
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 flex-1">
-          <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-lg bg-surface border border-surface-border flex items-center justify-center shrink-0">
-              <Video className="w-4 h-4 text-zinc-700" />
-            </div>
-            <div>
-              <div className="text-xs font-bold text-zinc-950">YouTube Transcripts</div>
-              <p className="text-[11px] text-zinc-600">Auto-convert video lectures into recall decks</p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-lg bg-surface border border-surface-border flex items-center justify-center shrink-0">
-              <FileText className="w-4 h-4 text-zinc-700" />
-            </div>
-            <div>
-              <div className="text-xs font-bold text-zinc-950">PDF Lecture Slides</div>
-              <p className="text-[11px] text-zinc-600">Upload course slides & extract exam questions</p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-lg bg-surface border border-surface-border flex items-center justify-center shrink-0">
-              <Clock className="w-4 h-4 text-zinc-700" />
-            </div>
-            <div>
-              <div className="text-xs font-bold text-zinc-950">Timed Speed Quizzes</div>
-              <p className="text-[11px] text-zinc-600">15s countdown with instant scientific rationale</p>
-            </div>
-          </div>
         </div>
       </div>
     </div>
