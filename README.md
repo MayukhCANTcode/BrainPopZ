@@ -1,11 +1,12 @@
-# 🧠 BrainPopZ — AI-Powered Active Recall & Study Platform
+# BrainPopZ — AI-Powered Active Recall & Study Platform
 
-[![Live Demo](https://img.shields.io/badge/Demo-Online-emerald?style=flat-square)](https://brainpopz.onrender.com)
+[![Live Demo](https://img.shields.io/badge/Demo-Online-emerald?style=flat-square)](https://brainpopz-1.onrender.com/)
 [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen?style=flat-square)](https://github.com/MayukhCANTcode/BrainPopZ)
 [![Tests](https://img.shields.io/badge/Tests-28%2F28%20Passed-blue?style=flat-square)](https://github.com/MayukhCANTcode/BrainPopZ)
 [![License: MIT](https://img.shields.io/badge/License-MIT-purple?style=flat-square)](LICENSE)
 
-> Built by **figmayukh** • Active Recall & Spaced Repetition Engine
+> Built by **figmayukh** • Active Recall & Spaced Repetition Engine  
+> **Live Deployment:** [https://brainpopz-1.onrender.com/](https://brainpopz-1.onrender.com/)
 
 **BrainPopZ** is a modern, high-performance study platform that transforms raw lecture notes, textbooks, PDF slides, and YouTube lectures into high-yield interactive flashcards and diagnostic practice quizzes using frontier AI models.
 
@@ -13,24 +14,32 @@ Built with an editorial aesthetic inspired by modern SaaS interfaces, BrainPopZ 
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 
-- [Quick Start in 60 Seconds](#-quick-start-in-60-seconds)
-- [Key Features](#-key-features)
-- [System Architecture](#-system-architecture)
-- [Tech Stack](#-tech-stack)
-- [Environment Variables](#-environment-variables)
-- [AI Synthesis & Schema Contracts](#-ai-synthesis--schema-contracts)
-- [Handling Failure & Bad AI Output (Core Evaluation)](#-handling-failure--bad-ai-output-core-evaluation)
-- [Academic Rank Progression & Gamification](#-academic-rank-progression--gamification)
-- [Automated Verification & Test Suite](#-automated-verification--test-suite)
-- [Known Limitations & Trade-offs](#-known-limitations--trade-offs)
-- [Honest AI Usage Disclosure](#-honest-ai-usage-disclosure)
-- [Development Time Breakdown](#-development-time-breakdown)
+- [Live Demo](#live-demo)
+- [Quick Start in 60 Seconds](#quick-start-in-60-seconds)
+- [Key Features](#key-features)
+- [System Architecture](#system-architecture)
+- [Tech Stack](#tech-stack)
+- [Environment Variables](#environment-variables)
+- [AI Synthesis & Schema Contracts](#ai-synthesis--schema-contracts)
+- [Handling Failure & Bad AI Output (Core Evaluation)](#handling-failure--bad-ai-output-core-evaluation)
+- [Academic Rank Progression & Gamification](#academic-rank-progression--gamification)
+- [Automated Verification & Test Suite](#automated-verification--test-suite)
+- [Known Limitations & Trade-offs](#known-limitations--trade-offs)
+- [Honest AI Usage Disclosure](#honest-ai-usage-disclosure)
+- [Development Time Breakdown](#development-time-breakdown)
 
 ---
 
-## ⚡ Quick Start in 60 Seconds
+## Live Demo
+
+The production application is live and accessible at:  
+**URL:** [https://brainpopz-1.onrender.com/](https://brainpopz-1.onrender.com/)
+
+---
+
+## Quick Start in 60 Seconds
 
 ### Prerequisites
 - **Node.js** (v18 or higher recommended; developed and tested on v22)
@@ -66,7 +75,7 @@ npm start
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
 ### 1. Multi-Modal Study Material Ingestion
 - **Concept Prompts**: Enter any concept (e.g. *"Quantum Superposition"* or *"Raft Consensus"*) to generate instant flashcards or quizzes.
@@ -84,11 +93,11 @@ npm start
 - **Dark Theme**: Deep midnight palette (`#0E0F17` / `#161724`) with subtle dot-matrix grids and high-contrast accents.
 - **Instant Persistence**: Easily toggled via the header Sun/Moon button; saved to `localStorage` and respects system preferences.
 
-### 4. Playful Academic Progression
+### 4. Academic Progression
 - **8-Tier Academic Rank Ladder**: Progress from *Novice Scholar* to *Legendary Mind* as you earn study XP.
 - **Streak & Freeze Protection**: Maintain daily momentum with streak counters. Missing a study day automatically consumes a **Streak Freeze** so your streak doesn't break.
 - **Earnable Freezes**: Automatically earn **+1 Freeze** on every 7-day streak milestone, every rank level-up, or by recharging with 100 XP (max 4 freezes).
-- **Monthly Heatmap**: GitHub/LeetCode-style activity matrix tracking your daily study volume across the month.
+- **Monthly Heatmap**: Activity matrix tracking your daily study volume across the month.
 
 ### 5. Secure Authentication & Session Safety
 - **Google Identity Services (GIS)**: One-click sign-in using Google OAuth.
@@ -97,51 +106,51 @@ npm start
 
 ---
 
-## 🏛️ System Architecture
+## System Architecture
 
 ```
-┌────────────────────────────────────────────────────────┐
-│             Frontend (React 19 + Vite @ 5173)          │
-│   - HeroGenerator / StudyModal / QuizzesView           │
-│   - AbortController request race condition guard       │
-│   - LocalStorage persistence sync                      │
-│   - Theme switcher (Light: #FAF7F0 / Dark: #0E0F17)    │
-└───────────────────────────┬────────────────────────────┘
-                            │ HTTP POST /api/generate
-                            │ JSON { notes, mode, difficulty, quantity }
-                            ▼
-┌────────────────────────────────────────────────────────┐
-│            Backend API (Node/Express @ 3001)           │
-│   - Strict CORS origin whitelisting                    │
-│   - Zod Input Request Validation (3-25,000 chars)      │
-│   - PDF extraction (pdf-parse) & YouTube oEmbed        │
-│   - Google OAuth ID token verification                 │
-└───────────────────────────┬────────────────────────────┘
-                            │ System Prompt & JSON Mode
-                            ▼
-┌────────────────────────────────────────────────────────┐
-│               AI Generative Model Layer                │
-│   Primary Model:  gemini-2.5-flash (ultra-low latency) │
-│   Fallback Model: gemini-3.5-flash (load balance)      │
-│   25-Second Network Timeout Safeguard                  │
-└───────────────────────────┬────────────────────────────┘
-                            │ Raw JSON text
-                            ▼
-┌────────────────────────────────────────────────────────┐
-│             Zod Output Schema Validation               │
-│   - Flashcards: non-empty question & answer            │
-│   - Quizzes: question, exactly 4 options, 0-3 index    │
-└───────────────────────────┬────────────────────────────┘
-                            │ 200 OK Validated Payload
-                            ▼
-┌────────────────────────────────────────────────────────┐
-│             BrainPopZ User Interface Render            │
-└────────────────────────────────────────────────────────┘
++--------------------------------------------------------+
+|             Frontend (React 19 + Vite @ 5173)          |
+|   - HeroGenerator / StudyModal / QuizzesView           |
+|   - AbortController request race condition guard       |
+|   - LocalStorage persistence sync                      |
+|   - Theme switcher (Light: #FAF7F0 / Dark: #0E0F17)    |
++---------------------------+----------------------------+
+                            | HTTP POST /api/generate
+                            | JSON { notes, mode, difficulty, quantity }
+                            v
++--------------------------------------------------------+
+|            Backend API (Node/Express @ 3001)           |
+|   - Strict CORS origin whitelisting                    |
+|   - Zod Input Request Validation (3-25,000 chars)      |
+|   - PDF extraction (pdf-parse) & YouTube oEmbed        |
+|   - Google OAuth ID token verification                 |
++---------------------------+----------------------------+
+                            | System Prompt & JSON Mode
+                            v
++--------------------------------------------------------+
+|               AI Generative Model Layer                |
+|   Primary Model:  gemini-2.5-flash (ultra-low latency) |
+|   Fallback Model: gemini-3.5-flash (load balance)      |
+|   25-Second Network Timeout Safeguard                  |
++---------------------------+----------------------------+
+                            | Raw JSON text
+                            v
++--------------------------------------------------------+
+|             Zod Output Schema Validation               |
+|   - Flashcards: non-empty question & answer            |
+|   - Quizzes: question, exactly 4 options, 0-3 index    |
++---------------------------+----------------------------+
+                            | 200 OK Validated Payload
+                            v
++--------------------------------------------------------+
+|             BrainPopZ User Interface Render            |
++--------------------------------------------------------+
 ```
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technologies |
 |---|---|
@@ -156,7 +165,7 @@ npm start
 
 ---
 
-## ⚙️ Environment Variables
+## Environment Variables
 
 ### Frontend Configuration (`.env`):
 A template is provided in `.env.example`:
@@ -182,7 +191,7 @@ A template is provided in `server/.env.example`:
 
 ---
 
-## 🤖 AI Synthesis & Schema Contracts
+## AI Synthesis & Schema Contracts
 
 ### 1. Flashcards Schema
 ```json
@@ -226,11 +235,11 @@ Every response is strictly validated through Zod:
 
 ---
 
-## 🛡️ Handling Failure & Bad AI Output (Core Evaluation)
+## Handling Failure & Bad AI Output (Core Evaluation)
 
 > *"Handles the model returning bad output — malformed JSON, wrong shape, empty, slow, or failed. No crashes; show an error or a retry; don't let a stale response overwrite a newer one. Most of the signal is in that fourth-from-last point. Handling failure well is what separates people who've built AI features from those who haven't."* — **Assignment Evaluation Requirement**
 
-BrainPopZ implements a rigorous defense-in-depth architecture to ensure the UI is completely resilient against unpredictable AI outputs:
+BrainPopZ implements a multi-layered defense system to ensure the UI is completely resilient against unpredictable AI outputs:
 
 | Failure Mode | How BrainPopZ Defends Against It | User Experience |
 |---|---|---|
@@ -244,9 +253,9 @@ BrainPopZ implements a rigorous defense-in-depth architecture to ensure the UI i
 
 ---
 
-## 🏆 Academic Rank Progression & Gamification
+## Academic Rank Progression & Gamification
 
-BrainPopZ uses a Duolingo-inspired academic progression system to foster consistent daily study habits:
+BrainPopZ uses an academic progression system to foster consistent daily study habits:
 
 ### 1. Rank Ladder (8 Tiers)
 | Tier | Rank Title | XP Range | Reward / Perk |
@@ -269,40 +278,40 @@ BrainPopZ uses a Duolingo-inspired academic progression system to foster consist
 
 ---
 
-## 🧪 Automated Verification & Test Suite
+## Automated Verification & Test Suite
 
 A comprehensive 28-test reliability audit was executed across all application layers (`node server/comprehensive-test.js`):
 
 | Test ID | Category | Description | Status |
 |---|---|---|:---:|
-| `SCHEMA-01` | Schema | Flashcard valid with `question` & `answer` | ✅ PASS |
-| `SCHEMA-02` | Schema | Flashcard schema strictly rejects legacy `ans` | ✅ PASS |
-| `SCHEMA-03` | Schema | Quiz schema accepts 0-based `correctAnswer` (0) | ✅ PASS |
-| `SCHEMA-04` | Schema | Quiz schema rejects `correctAnswer` >= 4 | ✅ PASS |
-| `SCHEMA-05` | Schema | Quiz schema enforces exactly 4 options | ✅ PASS |
-| `MODEL-01` | AI Models | Primary model (`gemini-2.5-flash`) live synthesis | ✅ PASS |
-| `MODEL-02` | AI Models | Fallback model (`gemini-3.5-flash`) live generation | ✅ PASS |
-| `MODEL-03` | AI Models | Unsupported legacy models correctly identified | ✅ PASS |
-| `E2E-01` | End-to-End | Generate 5 flashcards from notes via API | ✅ PASS |
-| `E2E-02` | End-to-End | Generate 10-question quiz via API | ✅ PASS |
-| `E2E-03` | End-to-End | Flashcards compatibility with StudyModal | ✅ PASS |
-| `E2E-04` | End-to-End | Deck saving & LocalStorage persistence | ✅ PASS |
-| `E2E-05` | End-to-End | Non-destructive multiple deck saves | ✅ PASS |
-| `E2E-06` | End-to-End | Quiz scoring & Incorrect answers retest queue | ✅ PASS |
-| `ERR-01` | Error Handling | Empty input rejected with 400 Bad Request | ✅ PASS |
-| `ERR-02` | Error Handling | Very short input (< 3 chars) rejected with 400 | ✅ PASS |
-| `ERR-03` | Error Handling | Long input (> 25,000 chars) rejected with 400 | ✅ PASS |
-| `ERR-04` | Error Handling | Invalid mode rejected with 400 | ✅ PASS |
-| `ERR-05` | Error Handling | Invalid difficulty rejected with 400 | ✅ PASS |
-| `ERR-06` | Error Handling | Missing API key handled safely | ✅ PASS |
-| `ERR-07` | Error Handling | Invalid API key rejected with clear error | ✅ PASS |
-| `ERR-08` | Error Handling | Malformed AI output triggers parser error | ✅ PASS |
-| `ERR-09` | Error Handling | Missing required fields fails Zod | ✅ PASS |
-| `ERR-10` | Error Handling | Empty cards array rejected by Zod | ✅ PASS |
-| `ERR-11` | Error Handling | AbortController cancels in-flight request | ✅ PASS |
-| `SEC-01` | Security | Gemini API key absent from frontend bundle | ✅ PASS |
-| `SEC-02` | Security | `.gitignore` rules exclude `.env` files | ✅ PASS |
-| `SEC-03` | Security | Error message sanitizer redacts sensitive keys | ✅ PASS |
+| `SCHEMA-01` | Schema | Flashcard valid with `question` & `answer` | PASS |
+| `SCHEMA-02` | Schema | Flashcard schema strictly rejects legacy `ans` | PASS |
+| `SCHEMA-03` | Schema | Quiz schema accepts 0-based `correctAnswer` (0) | PASS |
+| `SCHEMA-04` | Schema | Quiz schema rejects `correctAnswer` >= 4 | PASS |
+| `SCHEMA-05` | Schema | Quiz schema enforces exactly 4 options | PASS |
+| `MODEL-01` | AI Models | Primary model (`gemini-2.5-flash`) live synthesis | PASS |
+| `MODEL-02` | AI Models | Fallback model (`gemini-3.5-flash`) live generation | PASS |
+| `MODEL-03` | AI Models | Unsupported legacy models correctly identified | PASS |
+| `E2E-01` | End-to-End | Generate 5 flashcards from notes via API | PASS |
+| `E2E-02` | End-to-End | Generate 10-question quiz via API | PASS |
+| `E2E-03` | End-to-End | Flashcards compatibility with StudyModal | PASS |
+| `E2E-04` | End-to-End | Deck saving & LocalStorage persistence | PASS |
+| `E2E-05` | End-to-End | Non-destructive multiple deck saves | PASS |
+| `E2E-06` | End-to-End | Quiz scoring & Incorrect answers retest queue | PASS |
+| `ERR-01` | Error Handling | Empty input rejected with 400 Bad Request | PASS |
+| `ERR-02` | Error Handling | Very short input (< 3 chars) rejected with 400 | PASS |
+| `ERR-03` | Error Handling | Long input (> 25,000 chars) rejected with 400 | PASS |
+| `ERR-04` | Error Handling | Invalid mode rejected with 400 | PASS |
+| `ERR-05` | Error Handling | Invalid difficulty rejected with 400 | PASS |
+| `ERR-06` | Error Handling | Missing API key handled safely | PASS |
+| `ERR-07` | Error Handling | Invalid API key rejected with clear error | PASS |
+| `ERR-08` | Error Handling | Malformed AI output triggers parser error | PASS |
+| `ERR-09` | Error Handling | Missing required fields fails Zod | PASS |
+| `ERR-10` | Error Handling | Empty cards array rejected by Zod | PASS |
+| `ERR-11` | Error Handling | AbortController cancels in-flight request | PASS |
+| `SEC-01` | Security | Gemini API key absent from frontend bundle | PASS |
+| `SEC-02` | Security | `.gitignore` rules exclude `.env` files | PASS |
+| `SEC-03` | Security | Error message sanitizer redacts sensitive keys | PASS |
 
 **Test Result Summary: 28 / 28 Tests Passed (100.0% Success Rate)**
 
@@ -312,7 +321,7 @@ A comprehensive 28-test reliability audit was executed across all application la
 
 ---
 
-## ⚠️ Known Limitations & Trade-offs
+## Known Limitations & Trade-offs
 
 1. **API Rate Limits (429)**: The free tier of the AI API enforces request-per-minute limits. If a user rapidly re-clicks generate, a 429 status may occur. The UI displays an alert banner explaining this with a retry button.
 2. **Generation Latency**: Synthesizing 10 detailed multiple-choice questions with 4 distinct options and scientific explanations requires 8–15 seconds depending on model server load. A non-blocking progress indicator is displayed.
@@ -321,7 +330,7 @@ A comprehensive 28-test reliability audit was executed across all application la
 
 ---
 
-## 📝 Honest AI Usage Disclosure
+## Honest AI Usage Disclosure
 
 In compliance with assignment evaluation criteria:
 - **Assistance**: Antigravity (Google DeepMind coding agent) was utilized to pair-program, scaffold TypeScript/JavaScript types, audit component contracts, write automated test runners, and optimize Tailwind styling.
@@ -330,7 +339,7 @@ In compliance with assignment evaluation criteria:
 
 ---
 
-## ⏱️ Development Time Breakdown
+## Development Time Breakdown
 
 - **Phase 1: Foundation & Design System**: ~4 hours (Layout, sidebar, custom typography, initial mock structure).
 - **Phase 2: Interactive Modules & Accessibility**: ~3.5 hours (Study modal, 3D flip card, practice quiz drill, deck detail inspector).
