@@ -270,7 +270,7 @@ export default function MonthlyStreakHeatmap({ className = '' }) {
               <strong className="text-white font-mono">{activeDaysCount}d</strong>
             </span>
             <span className="text-gray-400">
-              Total: <strong className="text-brand-lime font-mono">{totalCardsInMonth}</strong>
+              Total: <strong className="text-brand-lime font-mono">{totalCardsInMonth} cards</strong>
             </span>
           </>
         )}
