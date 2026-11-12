@@ -214,7 +214,7 @@ export default function LoginView({ onLoginSuccess, isRestoringSession }) {
 
       {/* Footer */}
       <footer className="w-full px-6 py-6 border-t border-[#E8E2D5] text-center text-xs text-zinc-500">
-        <p>Built with AI • Active Recall & Spaced Repetition Engine</p>
+        <p>Built by figmayukh • Active Recall & Spaced Repetition Engine</p>
       </footer>
     </div>
   );
