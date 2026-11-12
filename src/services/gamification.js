@@ -212,7 +212,27 @@ export function recordCompletedActivity({
   const newQuizzesTaken = state.totalQuizzesTaken + (type === 'quiz' ? 1 : 0);
   const newCorrectAnswers = state.totalCorrectAnswers + correctAnswers;
 
-  // 4. Check for New Achievements
+  // 4. Earn New Freezes: Level Up or 7-Day Streak Milestones (Max 4 Freezes)
+  const MAX_FREEZES = 4;
+  let currentFreezes = state.freezes;
+  let earnedFreezes = 0;
+
+  const oldLevel = getLevelInfo(state.xp).level;
+  const newLevel = getLevelInfo(newTotalXp).level;
+
+  // Award +1 Freeze on rank level-up
+  if (newLevel > oldLevel && currentFreezes < MAX_FREEZES) {
+    currentFreezes += 1;
+    earnedFreezes += 1;
+  }
+
+  // Award +1 Freeze on every 7-day streak milestone (7d, 14d, 21d...)
+  if (newStreak > state.streak && newStreak > 0 && newStreak % 7 === 0 && currentFreezes < MAX_FREEZES) {
+    currentFreezes += 1;
+    earnedFreezes += 1;
+  }
+
+  // 5. Check for New Achievements
   const unlocked = [...state.unlockedAchievements];
   ACHIEVEMENTS_LIST.forEach((ach) => {
     if (unlocked.includes(ach.id)) return;
@@ -221,7 +241,7 @@ export function recordCompletedActivity({
     if (ach.reqStreak && newStreak >= ach.reqStreak) earned = true;
     if (ach.reqCards && newCardsMastered >= ach.reqCards) earned = true;
     if (ach.special === 'perfect_quiz' && isPerfectQuiz) earned = true;
-    if (ach.special === 'has_freeze' && state.freezes > 0) earned = true;
+    if (ach.special === 'has_freeze' && currentFreezes > 0) earned = true;
 
     if (earned) unlocked.push(ach.id);
   });
@@ -230,6 +250,7 @@ export function recordCompletedActivity({
     ...state,
     xp: newTotalXp,
     streak: newStreak,
+    freezes: currentFreezes,
     lastActiveDate: today,
     cardsReviewedToday: updatedDaily.cards,
     totalCardsMastered: newCardsMastered,
@@ -248,6 +269,7 @@ export function recordCompletedActivity({
     earnedXp,
     newStreak,
     usedFreeze,
+    earnedFreezes,
     totalXp: newTotalXp,
     levelInfo: getLevelInfo(newTotalXp),
   };
@@ -284,4 +306,28 @@ export function getWeeklyActivityView(dailyActivity = {}) {
 
   return days;
 }
+
+/**
+ * Recharges 1 Streak Freeze using earned XP (Cost: 100 XP, Max 4 Freezes).
+ */
+export function rechargeFreezeWithXp(cost = 100) {
+  const state = getGamificationState();
+  const MAX_FREEZES = 4;
+  if (state.freezes >= MAX_FREEZES) {
+    return { success: false, reason: 'You already have the maximum number of freezes (4).' };
+  }
+  if (state.xp < cost) {
+    return { success: false, reason: `Requires ${cost} XP to recharge a freeze. You currently have ${state.xp} XP.` };
+  }
+
+  const updatedState = {
+    ...state,
+    xp: state.xp - cost,
+    freezes: state.freezes + 1,
+  };
+
+  saveGamificationState(updatedState);
+  return { success: true, newFreezes: updatedState.freezes, remainingXp: updatedState.xp };
+}
+
 

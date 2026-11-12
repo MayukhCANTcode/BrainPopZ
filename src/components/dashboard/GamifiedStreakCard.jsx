@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Flame, Shield, Zap, Sparkles } from 'lucide-react';
 import Card from '../common/Card';
 import Mascot from '../common/Mascot';
-import { getGamificationState, getLevelInfo } from '../../services/gamification';
+import { getGamificationState, getLevelInfo, rechargeFreezeWithXp } from '../../services/gamification';
 
 export default function GamifiedStreakCard({ onOpenQuests }) {
   const [gameState, setGameState] = useState(() => getGamificationState());
@@ -81,13 +81,26 @@ export default function GamifiedStreakCard({ onOpenQuests }) {
           </div>
 
           {/* Streak Freeze Indicator */}
-          <div
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-cyan-700 text-xs font-medium cursor-help"
-            title="Streak Freezes automatically protect your streak if you miss a day."
-          >
-            <Shield className="w-3.5 h-3.5 text-cyan-600 shrink-0" />
-            <span className="font-mono font-semibold">{gameState.freezes}</span>
-            <span className="hidden sm:inline text-[11px]">Freezes</span>
+          <div className="flex items-center gap-1.5">
+            <div
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-cyan-700 text-xs font-medium cursor-help"
+              title="Streak Freezes protect your daily streak if you miss a day. Earn +1 on every 7-day streak or level-up! (Max 4)"
+            >
+              <Shield className="w-3.5 h-3.5 text-cyan-600 shrink-0" />
+              <span className="font-mono font-semibold">{gameState.freezes}</span>
+              <span className="hidden sm:inline text-[11px]">Freezes</span>
+            </div>
+
+            {gameState.freezes < 4 && gameState.xp >= 100 && (
+              <button
+                type="button"
+                onClick={() => rechargeFreezeWithXp(100)}
+                className="px-2 py-0.5 rounded-full bg-surface border border-cyan-500/30 text-cyan-700 hover:bg-cyan-50 text-[10px] font-semibold transition-all cursor-pointer shadow-xs"
+                title="Recharge +1 Freeze for 100 XP"
+              >
+                +1 (100 XP)
+              </button>
+            )}
           </div>
         </div>
 
