@@ -107,14 +107,19 @@ export default function GamifiedStreakCard({ onOpenQuests }) {
         {/* Level & XP Progression */}
         <div className="p-3 rounded-xl bg-surface-secondary/70 border border-surface-border mb-3">
           <div className="flex items-center justify-between text-xs mb-1.5">
-            <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={onOpenQuests}
+              className="flex items-center gap-1.5 text-left group cursor-pointer"
+              title="View all 8 academic rank tiers"
+            >
               <span className="px-1.5 py-0.5 rounded bg-brand-violet-lilac text-brand-violet-dark font-bold text-[10px] uppercase tracking-wide border border-[#C5AFFC]">
                 Lvl {levelInfo.level}
               </span>
-              <span className="text-zinc-900 font-semibold text-xs tracking-tight">
+              <span className="text-zinc-900 font-semibold text-xs tracking-tight group-hover:underline">
                 {levelInfo.title}
               </span>
-            </div>
+            </button>
 
             <div className="flex items-center gap-1 text-xs">
               <Zap className="w-3.5 h-3.5 text-emerald-600 fill-emerald-600" />
@@ -132,8 +137,21 @@ export default function GamifiedStreakCard({ onOpenQuests }) {
           </div>
 
           <div className="flex justify-between items-center text-[10px] text-zinc-500 mt-1.5">
-            <span>{levelInfo.percentage}% to Level {levelInfo.level + 1}</span>
-            <span>{levelInfo.xpRemaining} XP to unlock next tier</span>
+            <span className="font-medium text-zinc-700">
+              {levelInfo.percentage}% to Lvl {levelInfo.nextLevel}: <strong className="text-zinc-950 font-semibold">{levelInfo.nextTitle}</strong>
+            </span>
+            {onOpenQuests ? (
+              <button
+                type="button"
+                onClick={onOpenQuests}
+                className="text-blue-600 font-semibold hover:underline cursor-pointer"
+                title="View full rank ladder"
+              >
+                All 8 Tiers →
+              </button>
+            ) : (
+              <span>{levelInfo.xpRemaining} XP to unlock next tier</span>
+            )}
           </div>
         </div>
 

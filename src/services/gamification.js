@@ -57,24 +57,26 @@ export function saveGamificationState(state) {
   }
 }
 
+export const ALL_LEVELS = [
+  { level: 1, title: 'Novice Scholar', minXp: 0, maxXp: 100, reward: 'Starter 2 Freezes' },
+  { level: 2, title: 'Active Learner', minXp: 100, maxXp: 250, reward: '+1 Streak Freeze' },
+  { level: 3, title: 'Memory Apprentice', minXp: 250, maxXp: 500, reward: '+1 Streak Freeze' },
+  { level: 4, title: 'Synapse Builder', minXp: 500, maxXp: 900, reward: '+1 Streak Freeze' },
+  { level: 5, title: 'Cognitive Master', minXp: 900, maxXp: 1500, reward: '+1 Streak Freeze' },
+  { level: 6, title: 'Neuro Prodigy', minXp: 1500, maxXp: 2500, reward: '+1 Streak Freeze' },
+  { level: 7, title: 'Grandmaster of Recall', minXp: 2500, maxXp: 5000, reward: '+1 Streak Freeze' },
+  { level: 8, title: 'Legendary Mind', minXp: 5000, maxXp: 10000, reward: 'Maximum Rank' },
+];
+
 // Level computation (Duolingo style tiers)
 export function getLevelInfo(totalXp = 0) {
-  const levels = [
-    { level: 1, title: 'Novice Scholar', minXp: 0, maxXp: 100 },
-    { level: 2, title: 'Active Learner', minXp: 100, maxXp: 250 },
-    { level: 3, title: 'Memory Apprentice', minXp: 250, maxXp: 500 },
-    { level: 4, title: 'Synapse Builder', minXp: 500, maxXp: 900 },
-    { level: 5, title: 'Cognitive Master', minXp: 900, maxXp: 1500 },
-    { level: 6, title: 'Neuro Prodigy', minXp: 1500, maxXp: 2500 },
-    { level: 7, title: 'Grandmaster of Recall', minXp: 2500, maxXp: 5000 },
-  ];
-
-  for (let i = 0; i < levels.length; i++) {
-    const lvl = levels[i];
+  for (let i = 0; i < ALL_LEVELS.length; i++) {
+    const lvl = ALL_LEVELS[i];
     if (totalXp >= lvl.minXp && totalXp < lvl.maxXp) {
       const range = lvl.maxXp - lvl.minXp;
       const progressInLvl = totalXp - lvl.minXp;
       const percentage = Math.min(100, Math.round((progressInLvl / range) * 100));
+      const nextLvl = ALL_LEVELS[i + 1] || null;
       return {
         level: lvl.level,
         title: lvl.title,
@@ -83,6 +85,8 @@ export function getLevelInfo(totalXp = 0) {
         maxXp: lvl.maxXp,
         xpRemaining: lvl.maxXp - totalXp,
         percentage,
+        nextLevel: nextLvl ? nextLvl.level : 8,
+        nextTitle: nextLvl ? nextLvl.title : 'Legendary Mind',
       };
     }
   }
@@ -94,8 +98,10 @@ export function getLevelInfo(totalXp = 0) {
     currentXp: totalXp,
     minXp: 5000,
     maxXp: 10000,
-    xpRemaining: Math.max(0, 10000 - totalXp),
+    xpRemaining: 0,
     percentage: 100,
+    nextLevel: 8,
+    nextTitle: 'Legendary Mind',
   };
 }
 

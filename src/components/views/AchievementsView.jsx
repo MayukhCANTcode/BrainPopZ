@@ -15,6 +15,7 @@ import {
   getGamificationState,
   getLevelInfo,
   ACHIEVEMENTS_LIST,
+  ALL_LEVELS,
 } from '../../services/gamification';
 
 const renderBadgeIcon = (id) => {
@@ -136,6 +137,87 @@ export default function AchievementsView() {
           </div>
         </div>
       </Card>
+
+      {/* Academic Rank Ladder (All 8 Tiers) */}
+      <div>
+        <div className="mb-4">
+          <h3 className="text-sm font-semibold text-zinc-950 tracking-tight flex items-center gap-2">
+            <span>Academic Rank Ladder</span>
+            <Badge variant="blue" size="sm">
+              Tier {levelInfo.level} of 8
+            </Badge>
+          </h3>
+          <p className="text-xs text-zinc-500">
+            Earn study XP to advance your rank and unlock automatic streak freeze protections
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {ALL_LEVELS.map((lvl) => {
+            const isCompleted = gameState.xp >= lvl.maxXp;
+            const isCurrent = gameState.xp >= lvl.minXp && (gameState.xp < lvl.maxXp || lvl.level === 8);
+            const xpNeeded = Math.max(0, lvl.minXp - gameState.xp);
+
+            return (
+              <Card
+                key={lvl.level}
+                padding="p-3.5"
+                className={`relative flex flex-col justify-between transition-all ${
+                  isCurrent
+                    ? 'border-2 border-midnight-ink bg-white shadow-neo-sm ring-2 ring-blue-500/20'
+                    : isCompleted
+                    ? 'border border-surface-border bg-surface shadow-xs opacity-90'
+                    : 'border border-surface-border bg-surface-secondary/40 opacity-70'
+                }`}
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded-md font-mono ${
+                        isCurrent
+                          ? 'bg-blue-600 text-white'
+                          : isCompleted
+                          ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                          : 'bg-surface-secondary text-zinc-600 border border-surface-border'
+                      }`}
+                    >
+                      Tier {lvl.level}
+                    </span>
+
+                    {isCurrent ? (
+                      <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">
+                        Current
+                      </span>
+                    ) : isCompleted ? (
+                      <span className="flex items-center gap-1 text-[10px] text-emerald-700 font-medium">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                        <span>Completed</span>
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-1 text-[10px] text-zinc-400 font-mono">
+                        <Lock className="w-3 h-3" />
+                        <span>{xpNeeded} XP left</span>
+                      </span>
+                    )}
+                  </div>
+
+                  <h4 className="font-heading font-bold text-xs sm:text-sm text-zinc-950 truncate mb-1">
+                    {lvl.title}
+                  </h4>
+                  <p className="text-[11px] text-zinc-500 font-mono mb-2">
+                    {lvl.level === 8 ? `${lvl.minXp}+ XP` : `${lvl.minXp} – ${lvl.maxXp} XP`}
+                  </p>
+                </div>
+
+                <div className="pt-2 border-t border-surface-border/60 flex items-center justify-between text-[10px]">
+                  <span className="text-zinc-500">Reward</span>
+                  <span className="font-semibold text-zinc-900">{lvl.reward}</span>
+                </div>
+              </Card>
+            );
+          })}
+        </div>
+      </div>
 
       {/* Badges Grid */}
       <div>
