@@ -140,9 +140,9 @@ export default function LoginView({ onLoginSuccess, onGuestLogin, isRestoringSes
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F0] bg-dot-grid text-zinc-900 flex flex-col justify-between selection:bg-brand-violet-lilac selection:text-zinc-950">
+    <div className="min-h-screen bg-midnight bg-dot-grid text-zinc-900 dark:text-zinc-100 flex flex-col justify-between selection:bg-brand-violet-lilac selection:text-zinc-950">
       {/* Top Header - Clean logo only */}
-      <header className="w-full px-6 py-5 flex items-center justify-between border-b border-[#E8E2D5] max-w-7xl mx-auto">
+      <header className="w-full px-6 py-5 flex items-center justify-between border-b border-surface-border max-w-7xl mx-auto">
         <div className="flex items-center gap-2">
           <Logo size="sm" />
         </div>
@@ -153,19 +153,19 @@ export default function LoginView({ onLoginSuccess, onGuestLogin, isRestoringSes
         <div className="w-full max-w-[420px] mx-auto text-center space-y-6">
           {/* Hero Headlines with Editorial Styling */}
           <div className="space-y-3">
-            <h1 className="text-3xl sm:text-4xl font-heading font-extrabold text-zinc-950 tracking-tight leading-tight">
-              Build on the<br />BrainPopZ Platform. <span className="font-serif italic font-normal text-zinc-600">Learn effortlessly.</span>
+            <h1 className="text-3xl sm:text-4xl font-heading font-extrabold text-zinc-950 dark:text-white tracking-tight leading-tight">
+              Build on the<br />BrainPopZ Platform. <span className="font-serif italic font-normal text-zinc-600 dark:text-zinc-400">Learn effortlessly.</span>
             </h1>
-            <p className="text-xs sm:text-sm text-zinc-600 max-w-sm mx-auto leading-relaxed">
+            <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 max-w-sm mx-auto leading-relaxed">
               Create active recall flashcards and diagnostic quizzes with frontier AI models and managed study infrastructure.
             </p>
           </div>
 
           {/* Form Card */}
-          <div className="bg-white border-2 border-midnight-ink rounded-2xl p-6 sm:p-7 shadow-neo-lg text-left space-y-5">
+          <div className="bg-surface border-2 border-midnight-ink rounded-2xl p-6 sm:p-7 shadow-neo-lg text-left space-y-5">
             {/* Error Message Banner */}
             {errorMessage && (
-              <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs flex items-start gap-2 animate-fadeIn">
+              <div className="p-3 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 text-red-700 dark:text-red-300 text-xs flex items-start gap-2 animate-fadeIn">
                 <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5 stroke-[1.75]" />
                 <span className="leading-snug">{errorMessage}</span>
               </div>
@@ -211,8 +211,8 @@ export default function LoginView({ onLoginSuccess, onGuestLogin, isRestoringSes
 
             {/* Divider */}
             <div className="relative flex items-center justify-center my-2">
-              <div className="border-t border-zinc-200 w-full" />
-              <span className="bg-white px-3 text-[11px] font-semibold uppercase tracking-wider text-zinc-400 shrink-0">
+              <div className="border-t border-surface-border w-full" />
+              <span className="bg-surface px-3 text-[11px] font-semibold uppercase tracking-wider text-zinc-400 shrink-0">
                 or
               </span>
             </div>
@@ -222,33 +222,33 @@ export default function LoginView({ onLoginSuccess, onGuestLogin, isRestoringSes
               type="button"
               onClick={handleGuestClick}
               disabled={isLoading || isGuestLoading}
-              className="w-full h-11 px-4 rounded-xl bg-white hover:bg-[#F5EFE6] border-2 border-midnight-ink text-zinc-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-2.5 transition-all cursor-pointer shadow-neo-sm hover:translate-x-[1px] hover:translate-y-[1px] active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed group"
+              className="w-full h-11 px-4 rounded-xl bg-surface hover:bg-surface-secondary border-2 border-midnight-ink text-zinc-950 dark:text-zinc-100 font-bold text-xs sm:text-sm flex items-center justify-center gap-2.5 transition-all cursor-pointer shadow-neo-sm hover:translate-x-[1px] hover:translate-y-[1px] active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed group"
             >
               {isGuestLoading ? (
-                <Loader2 className="w-4 h-4 animate-spin text-zinc-600" />
+                <Loader2 className="w-4 h-4 animate-spin text-zinc-600 dark:text-zinc-400" />
               ) : (
-                <UserCheck className="w-4 h-4 text-zinc-700 group-hover:text-black transition-colors stroke-[2]" />
+                <UserCheck className="w-4 h-4 text-zinc-700 dark:text-zinc-300 group-hover:text-black dark:group-hover:text-white transition-colors stroke-[2]" />
               )}
               <span>Continue as Guest</span>
             </button>
 
-            <div className="flex items-center justify-center gap-1.5 text-[11px] text-zinc-500 text-center pt-0.5">
+            <div className="flex items-center justify-center gap-1.5 text-[11px] text-zinc-500 dark:text-zinc-400 text-center pt-0.5">
               <Sparkles className="w-3 h-3 text-brand-orange shrink-0" />
               <span>Instant access without a Google account</span>
             </div>
 
             {/* Terms and Privacy Policy Notice */}
-            <p className="text-[11px] text-zinc-500 text-center leading-normal pt-2">
+            <p className="text-[11px] text-zinc-500 dark:text-zinc-400 text-center leading-normal pt-2">
               By continuing, you agree to BrainPopZ's{' '}
-              <a href="#terms" className="text-zinc-800 underline hover:text-black">
+              <a href="#terms" className="text-zinc-800 dark:text-zinc-200 underline hover:text-black dark:hover:text-white">
                 Commercial Terms
               </a>{' '}
               and{' '}
-              <a href="#usage" className="text-zinc-800 underline hover:text-black">
+              <a href="#usage" className="text-zinc-800 dark:text-zinc-200 underline hover:text-black dark:hover:text-white">
                 Usage Policy
               </a>
               , and acknowledge our{' '}
-              <a href="#privacy" className="text-zinc-800 underline hover:text-black">
+              <a href="#privacy" className="text-zinc-800 dark:text-zinc-200 underline hover:text-black dark:hover:text-white">
                 Privacy Policy
               </a>
               .
@@ -258,7 +258,7 @@ export default function LoginView({ onLoginSuccess, onGuestLogin, isRestoringSes
       </main>
 
       {/* Footer */}
-      <footer className="w-full px-6 py-6 border-t border-[#E8E2D5] text-center text-xs text-zinc-500">
+      <footer className="w-full px-6 py-6 border-t border-surface-border text-center text-xs text-zinc-500 dark:text-zinc-400">
         <p>Built by figmayukh • Active Recall & Spaced Repetition Engine</p>
       </footer>
     </div>
