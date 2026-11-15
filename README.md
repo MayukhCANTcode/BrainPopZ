@@ -103,7 +103,8 @@ npm start
 
 ### 5. Secure Authentication & Session Safety
 - **Google Identity Services (GIS)**: One-click sign-in using Google OAuth.
-- **Backend Token Verification**: Server validates the Google ID token via `google-auth-library`.
+- **Guest Scholar Access**: Instant one-click guest access for users who prefer not to sign in with Google or Gmail, granting complete access with secure session management.
+- **Backend Token Verification**: Server validates Google ID tokens via `google-auth-library`.
 - **HMAC-SHA256 Signed Cookies**: Sessions are maintained through secure, HTTP-only signed cookies.
 
 ---

@@ -234,15 +234,15 @@ export default function Sidebar({
                 />
               ) : (
                 <div className="w-7 h-7 rounded-full bg-brand-violet-lilac text-midnight-ink flex items-center justify-center font-bold text-xs border border-[#C5AFFC] shrink-0">
-                  {user?.name ? user.name[0].toUpperCase() : 'U'}
+                  {user?.name ? user.name[0].toUpperCase() : (user?.isGuest ? 'G' : 'U')}
                 </div>
               )}
               <div className="truncate">
                 <p className="text-xs font-semibold text-zinc-900 truncate group-hover:text-zinc-700 transition-colors">
-                  {user?.name || 'Scholar'}
+                  {user?.name || (user?.isGuest ? 'Guest Scholar' : 'Scholar')}
                 </p>
                 <p className="text-[10px] text-zinc-500 truncate">
-                  {user?.email || 'scholar@university.edu'}
+                  {user?.isGuest ? 'Guest Account' : (user?.email || 'scholar@university.edu')}
                 </p>
               </div>
             </button>
@@ -250,7 +250,7 @@ export default function Sidebar({
             {onLogout && (
               <button
                 onClick={onLogout}
-                title="Sign out of Google"
+                title="Sign out"
                 className="p-1.5 text-zinc-400 hover:text-red-600 hover:bg-surface-secondary rounded-md transition-colors cursor-pointer shrink-0"
                 aria-label="Sign Out"
               >

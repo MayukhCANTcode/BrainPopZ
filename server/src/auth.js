@@ -99,7 +99,8 @@ export function createSessionToken(user) {
       sub: user.id,
       email: user.email,
       name: user.name,
-      picture: user.picture,
+      picture: user.picture || '',
+      isGuest: Boolean(user.isGuest),
       iat: Math.floor(Date.now() / 1000),
       exp: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60, // 7 days
     })
@@ -145,6 +146,7 @@ export function verifySessionToken(token) {
       email: data.email,
       name: data.name,
       picture: data.picture,
+      isGuest: Boolean(data.isGuest),
     };
   } catch {
     return null;
@@ -159,7 +161,7 @@ export function requireAuth(req, res, next) {
   if (!token) {
     return res.status(401).json({
       error: 'Unauthorized',
-      message: 'Authentication required. Please sign in with Google.',
+      message: 'Authentication required. Please sign in or continue as guest.',
     });
   }
 

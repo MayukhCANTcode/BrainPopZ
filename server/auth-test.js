@@ -228,6 +228,42 @@ async function runAuthTests() {
   const decksPreserved = reloadedDecks.length === 1 && reloadedDecks[0].title === 'Calculus III Integrals';
   recordTest('AUTH-09', 'Existing user decks in LocalStorage preserved independently of auth state', decksPreserved);
 
+  // 10. Guest login flow (POST /api/auth/guest)
+  try {
+    const res = await fetch(`${BASE_URL}/api/auth/guest`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const json = await res.json();
+    const guestCookie = res.headers.get('set-cookie') || '';
+    const guestPassed =
+      res.status === 200 &&
+      json.success &&
+      json.user?.isGuest === true &&
+      guestCookie.includes(COOKIE_NAME);
+
+    // Verify session restoration with guest cookie
+    let guestRestored = false;
+    if (guestPassed) {
+      const parsedCookie = guestCookie.split(';')[0];
+      const meRes = await fetch(`${BASE_URL}/api/auth/me`, {
+        method: 'GET',
+        headers: { Cookie: parsedCookie },
+      });
+      const meJson = await meRes.json();
+      guestRestored = meRes.status === 200 && meJson.authenticated && meJson.user?.isGuest === true;
+    }
+
+    recordTest(
+      'AUTH-10',
+      'Guest user login creates valid session and restores via /api/auth/me',
+      guestPassed && guestRestored,
+      `Guest user: ${json.user?.name} (${json.user?.id})`
+    );
+  } catch (err) {
+    recordTest('AUTH-10', 'Guest user login flow', false, err.message);
+  }
+
   console.log('\n=====================================================');
   console.log('              AUTH TEST SUITE SUMMARY               ');
   console.log('=====================================================');

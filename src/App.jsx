@@ -10,7 +10,7 @@ import SettingsView from './components/views/SettingsView';
 import AchievementsView from './components/views/AchievementsView';
 import StudyModal from './components/dashboard/StudyModal';
 import { recentDecks } from './data/mockData';
-import { getCurrentUser, loginWithGoogle, logoutUser } from './services/api';
+import { getCurrentUser, loginWithGoogle, loginAsGuest, logoutUser } from './services/api';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -70,6 +70,12 @@ function App() {
   const handleLoginSuccess = async (credential) => {
     const authenticatedUser = await loginWithGoogle(credential);
     setUser(authenticatedUser);
+    setCurrentTab('dashboard');
+  };
+
+  const handleGuestLogin = async () => {
+    const guestUser = await loginAsGuest();
+    setUser(guestUser);
     setCurrentTab('dashboard');
   };
 
@@ -232,6 +238,7 @@ function App() {
     return (
       <LoginView
         onLoginSuccess={handleLoginSuccess}
+        onGuestLogin={handleGuestLogin}
         isRestoringSession={isRestoringSession}
       />
     );

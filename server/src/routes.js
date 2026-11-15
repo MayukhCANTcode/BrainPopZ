@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import multer from 'multer';
+import crypto from 'crypto';
 import { GenerateRequestSchema } from './validators.js';
 import { generateStudyAsset } from './gemini.js';
 import { getYouTubeTranscript } from './youtube.js';
@@ -70,6 +71,35 @@ apiRouter.post('/auth/google', async (req, res) => {
     return res.status(err.status || 401).json({
       error: 'Authentication Failed',
       message: safeMessage,
+    });
+  }
+});
+
+// POST /api/auth/guest - Create a guest session without Google account
+apiRouter.post('/auth/guest', (req, res) => {
+  try {
+    const guestHex = crypto.randomBytes(4).toString('hex');
+    const guestUser = {
+      id: `guest-${guestHex}`,
+      email: `guest-${guestHex}@brainpopz.local`,
+      name: 'Guest Scholar',
+      picture: '',
+      isGuest: true,
+    };
+
+    const sessionToken = createSessionToken(guestUser);
+    res.cookie(COOKIE_NAME, sessionToken, getCookieOptions());
+
+    return res.status(200).json({
+      success: true,
+      message: 'Guest session created successfully',
+      user: guestUser,
+    });
+  } catch (err) {
+    console.error('[AUTH] Guest login error:', err.message);
+    return res.status(500).json({
+      error: 'Guest Sign-In Failed',
+      message: 'Failed to initialize guest session. Please try again.',
     });
   }
 });

@@ -93,23 +93,31 @@ export default function SettingsView({ user, onResetDecks }) {
       <Card padding="p-5" className="border-surface-border bg-surface shadow-xs space-y-5">
         {/* Profile section */}
         <div className="flex items-center gap-3.5 pb-4 border-b border-surface-border">
-          <img
-            src={user?.picture || currentUser.avatarUrl}
-            alt={user?.name || currentUser.name}
-            className="w-12 h-12 rounded-full object-cover border border-surface-border bg-surface-secondary"
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = currentUser.avatarUrl;
-            }}
-          />
+          {user?.picture ? (
+            <img
+              src={user.picture}
+              alt={user?.name || currentUser.name}
+              className="w-12 h-12 rounded-full object-cover border border-surface-border bg-surface-secondary"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = currentUser.avatarUrl;
+              }}
+            />
+          ) : (
+            <div className="w-12 h-12 rounded-full bg-brand-violet-lilac text-midnight-ink flex items-center justify-center font-bold text-base border-2 border-midnight-ink shrink-0">
+              {user?.name ? user.name[0].toUpperCase() : (user?.isGuest ? 'G' : 'U')}
+            </div>
+          )}
           <div>
             <h2 className="text-sm font-semibold text-zinc-950">
-              {user?.name || currentUser.name}
+              {user?.name || (user?.isGuest ? 'Guest Scholar' : currentUser.name)}
             </h2>
-            <p className="text-xs text-zinc-500">{user?.email || currentUser.email}</p>
+            <p className="text-xs text-zinc-500">
+              {user?.isGuest ? 'Guest Session (All features unlocked)' : (user?.email || currentUser.email)}
+            </p>
             <div className="mt-1">
-              <Badge variant={user?.id ? 'lime' : 'default'} size="sm">
-                {user?.id ? 'Verified Google Scholar' : currentUser.role}
+              <Badge variant={user?.isGuest ? 'amber' : user?.id ? 'lime' : 'default'} size="sm">
+                {user?.isGuest ? 'Guest Scholar' : user?.id ? 'Verified Google Scholar' : currentUser.role}
               </Badge>
             </div>
           </div>

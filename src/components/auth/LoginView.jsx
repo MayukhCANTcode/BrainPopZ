@@ -1,15 +1,16 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { AlertCircle, Loader2 } from 'lucide-react';
+import { AlertCircle, Loader2, UserCheck, Sparkles } from 'lucide-react';
 import Logo from '../common/Logo';
 
 /**
  * Minimalist, standard LoginView for BrainPopZ.
- * Features pure Google OAuth authentication, dark backdrop with subtle dot grid,
- * and clean typography.
+ * Features Google OAuth authentication, Guest session sign-in,
+ * dark backdrop with subtle dot grid, and clean typography.
  */
-export default function LoginView({ onLoginSuccess, isRestoringSession }) {
+export default function LoginView({ onLoginSuccess, onGuestLogin, isRestoringSession }) {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isGuestLoading, setIsGuestLoading] = useState(false);
   const googleBtnRef = useRef(null);
 
   const googleClientId =
@@ -107,6 +108,22 @@ export default function LoginView({ onLoginSuccess, isRestoringSession }) {
     }
   };
 
+  // Guest Sign-In click
+  const handleGuestClick = async () => {
+    setIsGuestLoading(true);
+    setErrorMessage('');
+    try {
+      if (onGuestLogin) {
+        await onGuestLogin();
+      }
+    } catch (err) {
+      console.error('Guest login error:', err);
+      setErrorMessage(err.message || 'Guest sign-in failed. Please try again.');
+    } finally {
+      setIsGuestLoading(false);
+    }
+  };
+
   if (isRestoringSession) {
     return (
       <div className="min-h-screen bg-midnight bg-dot-grid flex flex-col items-center justify-center p-4">
@@ -163,8 +180,8 @@ export default function LoginView({ onLoginSuccess, isRestoringSession }) {
               <button
                 type="button"
                 onClick={handleFallbackGoogleSignIn}
-                disabled={isLoading}
-                className="w-full h-11 px-4 rounded-xl bg-white hover:bg-zinc-50 border-2 border-midnight-ink text-zinc-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-3 transition-all cursor-pointer shadow-neo-sm hover:translate-x-[1px] hover:translate-y-[1px] active:scale-[0.99]"
+                disabled={isLoading || isGuestLoading}
+                className="w-full h-11 px-4 rounded-xl bg-white hover:bg-zinc-50 border-2 border-midnight-ink text-zinc-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-3 transition-all cursor-pointer shadow-neo-sm hover:translate-x-[1px] hover:translate-y-[1px] active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
                   <Loader2 className="w-4 h-4 animate-spin text-zinc-600" />
@@ -191,6 +208,34 @@ export default function LoginView({ onLoginSuccess, isRestoringSession }) {
                 <span>Continue with Google</span>
               </button>
             )}
+
+            {/* Divider */}
+            <div className="relative flex items-center justify-center my-2">
+              <div className="border-t border-zinc-200 w-full" />
+              <span className="bg-white px-3 text-[11px] font-semibold uppercase tracking-wider text-zinc-400 shrink-0">
+                or
+              </span>
+            </div>
+
+            {/* Guest Login Button */}
+            <button
+              type="button"
+              onClick={handleGuestClick}
+              disabled={isLoading || isGuestLoading}
+              className="w-full h-11 px-4 rounded-xl bg-white hover:bg-[#F5EFE6] border-2 border-midnight-ink text-zinc-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-2.5 transition-all cursor-pointer shadow-neo-sm hover:translate-x-[1px] hover:translate-y-[1px] active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed group"
+            >
+              {isGuestLoading ? (
+                <Loader2 className="w-4 h-4 animate-spin text-zinc-600" />
+              ) : (
+                <UserCheck className="w-4 h-4 text-zinc-700 group-hover:text-black transition-colors stroke-[2]" />
+              )}
+              <span>Continue as Guest</span>
+            </button>
+
+            <div className="flex items-center justify-center gap-1.5 text-[11px] text-zinc-500 text-center pt-0.5">
+              <Sparkles className="w-3 h-3 text-brand-orange shrink-0" />
+              <span>Instant access without a Google account</span>
+            </div>
 
             {/* Terms and Privacy Policy Notice */}
             <p className="text-[11px] text-zinc-500 text-center leading-normal pt-2">

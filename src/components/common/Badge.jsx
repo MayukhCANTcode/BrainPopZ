@@ -18,6 +18,7 @@ export default function Badge({
     violet: 'bg-purple-50 text-purple-800 border-purple-200 font-semibold shadow-xs',
     lime: 'bg-emerald-50 text-emerald-800 border-emerald-200 font-semibold shadow-xs',
     orange: 'bg-amber-50 text-amber-800 border-amber-200 font-semibold shadow-xs',
+    amber: 'bg-amber-50 text-amber-800 border-amber-200 font-semibold shadow-xs',
     dark: 'bg-midnight-ink text-white border-midnight-ink font-medium shadow-xs',
     outline: 'bg-transparent text-zinc-600 border-surface-border',
   };

@@ -122,6 +122,43 @@ export async function loginWithGoogle(credential) {
 }
 
 /**
+ * Authenticates as a guest user without Google credentials.
+ * Sets a secure HTTP-only cookie on the client.
+ */
+export async function loginAsGuest() {
+  let res;
+  try {
+    res = await fetch(`${API_BASE_URL}/auth/guest`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    });
+  } catch {
+    // Graceful offline fallback in client-only preview environments
+    return {
+      id: `guest-${Math.random().toString(36).substring(2, 9)}`,
+      email: 'guest@brainpopz.local',
+      name: 'Guest Scholar',
+      picture: '',
+      isGuest: true,
+    };
+  }
+
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    throw new APIError('Authentication server returned an unparseable response.', res.status);
+  }
+
+  if (!res.ok || !data.success) {
+    throw new APIError(data.message || 'Guest sign-in failed.', res.status);
+  }
+
+  return data.user;
+}
+
+/**
  * Restores the active user session from the HTTP-only cookie.
  */
 export async function getCurrentUser() {
