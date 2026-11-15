@@ -1,12 +1,14 @@
 # BrainPopZ — AI-Powered Active Recall & Study Platform
 
 [![Live Demo](https://img.shields.io/badge/Demo-Online-emerald?style=flat-square)](https://brainpopz-1.onrender.com/)
+[![Video Walkthrough](https://img.shields.io/badge/Video%20Demo-Loom-blue?style=flat-square)](https://www.loom.com/share/ebbedf98441f44189b1b3f699f5e84b8)
 [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen?style=flat-square)](https://github.com/MayukhCANTcode/BrainPopZ)
 [![Tests](https://img.shields.io/badge/Tests-28%2F28%20Passed-blue?style=flat-square)](https://github.com/MayukhCANTcode/BrainPopZ)
 [![License: MIT](https://img.shields.io/badge/License-MIT-purple?style=flat-square)](LICENSE)
 
 > Built by **figmayukh** • Active Recall & Spaced Repetition Engine  
-> **Live Deployment:** [https://brainpopz-1.onrender.com/](https://brainpopz-1.onrender.com/)
+> **Live Deployment:** [https://brainpopz-1.onrender.com/](https://brainpopz-1.onrender.com/)  
+> **Video Walkthrough (Loom):** [https://www.loom.com/share/ebbedf98441f44189b1b3f699f5e84b8](https://www.loom.com/share/ebbedf98441f44189b1b3f699f5e84b8)
 
 **BrainPopZ** is a modern, high-performance study platform that transforms raw lecture notes, textbooks, PDF slides, and YouTube lectures into high-yield interactive flashcards and diagnostic practice quizzes using frontier AI models.
 
@@ -16,7 +18,7 @@ Built with an editorial aesthetic inspired by modern SaaS interfaces, BrainPopZ 
 
 ## Table of Contents
 
-- [Live Demo](#live-demo)
+- [Live Demo & Video Walkthrough](#live-demo--video-walkthrough)
 - [Quick Start in 60 Seconds](#quick-start-in-60-seconds)
 - [Key Features](#key-features)
 - [System Architecture](#system-architecture)
@@ -32,10 +34,10 @@ Built with an editorial aesthetic inspired by modern SaaS interfaces, BrainPopZ 
 
 ---
 
-## Live Demo
+## Live Demo & Video Walkthrough
 
-The production application is live and accessible at:  
-**URL:** [https://brainpopz-1.onrender.com/](https://brainpopz-1.onrender.com/)
+- **Live Production App:** [https://brainpopz-1.onrender.com/](https://brainpopz-1.onrender.com/)
+- **Video Walkthrough (Loom):** [https://www.loom.com/share/ebbedf98441f44189b1b3f699f5e84b8](https://www.loom.com/share/ebbedf98441f44189b1b3f699f5e84b8)
 
 ---
 
